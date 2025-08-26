@@ -1,7 +1,7 @@
 package com.hoho.leave.domain.leave.handover.entity;
 
 import com.hoho.leave.config.BaseEntity;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -26,6 +26,6 @@ public class HandoverRecipient extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "recipient_id", nullable = false)
-    private UserEntity recipient;        // FK 필수
+    private User recipient;        // FK 필수
 }
 

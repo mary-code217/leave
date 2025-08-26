@@ -1,7 +1,7 @@
 package com.hoho.leave.domain.leave.request.entity;
 
 import com.hoho.leave.config.BaseEntity;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -37,6 +37,6 @@ public class LeaveRequestAttachment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "uploaded_by_id", nullable = false)
-    private UserEntity uploadedBy;            // 업로더(필수)
+    private User uploadedBy;            // 업로더(필수)
 }
 

@@ -1,7 +1,7 @@
 package com.hoho.leave.domain.leave.request.entity;
 
 import com.hoho.leave.config.BaseEntity;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -27,7 +27,7 @@ public class LeaveRequestApproval extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "approver_id", nullable = false)
-    private UserEntity approver;            // 지정된 승인자(원 승인자, 위임 전 기준)
+    private User approver;            // 지정된 승인자(원 승인자, 위임 전 기준)
 
     @Column(name = "step_no", nullable = false)
     private Integer stepNo;             // 결재 단계(1,2)
@@ -42,7 +42,7 @@ public class LeaveRequestApproval extends BaseEntity {
     // 실제 승인/반려를 수행한 사용자(위임 시 delegate가 될 수 있음)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acted_by_id")
-    private UserEntity actedBy;         // 실제 처리자(위임 시 수임자, 없으면 approver)
+    private User actedBy;         // 실제 처리자(위임 시 수임자, 없으면 approver)
 
     @Column(name = "acted_at")
     private LocalDateTime actedAt;        // 실제 처리 시각

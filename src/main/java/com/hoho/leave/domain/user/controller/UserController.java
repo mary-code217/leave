@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody UserJoinRequest userJoinRequest) {
 
-
+        System.out.println(userJoinRequest.getUsername());
+        System.out.println(userJoinRequest.getEmail());
+        System.out.println(userJoinRequest.getHireDate());
 
         return  ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
     }

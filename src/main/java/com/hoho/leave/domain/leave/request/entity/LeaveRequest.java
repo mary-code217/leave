@@ -2,7 +2,7 @@ package com.hoho.leave.domain.leave.request.entity;
 
 import com.hoho.leave.config.BaseEntity;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -17,24 +17,29 @@ public class LeaveRequest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    /** 신청자 (필수) */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_type_id")
+    /** 휴가 유형 (필수) */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "leave_type_id", nullable = false)
     private LeaveType leaveType;
 
-    @Column(name = "status")
+    /** 상태 (기본 PENDING) */
     @Enumerated(EnumType.STRING)
-    private LeaveRequestStatus status;
+    @Column(name = "status", nullable = false, length = 16)
+    private LeaveRequestStatus status = LeaveRequestStatus.PENDING;
 
-    @Column(name = "start_day")
-    private LocalDate  startDay;
+    /** 시작/종료일 (종료일 없으면 단일일) */
+    @Column(name = "start_day", nullable = false)
+    private LocalDate startDay;
 
     @Column(name = "end_day")
     private LocalDate endDay;
 
+    /** 시간 단위 사용 시(반차/시간연차 등), 같은 날일 때만 의미 있음 */
     @Column(name = "start_time")
     private LocalTime startTime;
 

@@ -2,7 +2,7 @@ package com.hoho.leave.domain.leave.handover.entity;
 
 import com.hoho.leave.config.BaseEntity;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -23,7 +23,7 @@ public class HandoverNote extends BaseEntity {
     /** 작성자 (필수) */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
-    private UserEntity author;
+    private User author;
 
     /** 제목 (필수) */
     @Column(name = "title", nullable = false, length = 200)

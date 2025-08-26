@@ -1,7 +1,7 @@
 package com.hoho.leave.domain.notification.entity;
 
 import com.hoho.leave.config.BaseEntity;
-import com.hoho.leave.domain.user.entity.UserEntity;
+import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ public class Notification extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "recipient_id", nullable = false)
-    private UserEntity recipient;
+    private User recipient;
 
     @Column(name = "content", nullable = false)
     private String content;

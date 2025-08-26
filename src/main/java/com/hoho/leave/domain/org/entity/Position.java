@@ -6,13 +6,16 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "position")
+@Table(
+        name = "position",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_position_name", columnNames = "position_name")
+        }
+)
 public class Position extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "position_name", unique = true)
+    @Column(name = "position_name", nullable = false)
     private String positionName;
 }

@@ -6,15 +6,19 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "grade")
+@Table(
+        name = "grade",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_grade_name", columnNames = "grade_name"),
+        }
+)
 public class Grade extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "grade_name", unique = true)
+    @Column(name = "grade_name", nullable = false)
     private String gradeName;
 
-    @Column(name="order_no")
+    @Column(name = "order_no")
     private Integer orderNo;
 }
