@@ -6,4 +6,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    // org 도메인 관련 조회
+    boolean existsByTeamId(Long teamId);
+    boolean existsByGradeId(Long gradeId);
+    boolean existsByPositionId(Long positionId);
+    Long countByTeamId(Long teamId);
+
 }
