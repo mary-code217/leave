@@ -3,6 +3,7 @@ package com.hoho.leave.domain.org.entity;
 import com.hoho.leave.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -21,4 +22,20 @@ public class Grade extends BaseEntity {
 
     @Column(name = "order_no")
     private Integer orderNo;
+
+    protected Grade() {}
+
+    public Grade(String gradeName, Integer orderNo) {
+        this.gradeName = gradeName;
+        this.orderNo = orderNo;
+    }
+
+    public static Grade create(String gradeName, Integer orderNo) {
+        if (gradeName == null || gradeName.isBlank())
+            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
+        if (orderNo != null && orderNo < 0)
+            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
+
+        return new Grade(gradeName, orderNo);
+    }
 }

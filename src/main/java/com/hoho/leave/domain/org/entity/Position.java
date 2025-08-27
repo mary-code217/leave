@@ -18,4 +18,24 @@ public class Position extends BaseEntity {
 
     @Column(name = "position_name", nullable = false)
     private String positionName;
+
+    // 선택값: 지정 안 하면 null (UI에선 이름순 보조 정렬)
+    @Column(name = "order_no")
+    private Integer orderNo;
+
+    protected Position() {}
+
+    public Position(String positionName, Integer orderNo) {
+        this.positionName = positionName;
+        this.orderNo = orderNo;
+    }
+
+    public static Position create(String positionName, Integer orderNo) {
+        if (positionName == null || positionName.isBlank())
+            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
+        if (orderNo != null && orderNo < 0)
+            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
+
+        return new Position(positionName, orderNo);
+    }
 }
