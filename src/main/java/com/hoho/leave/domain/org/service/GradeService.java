@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,16 +70,20 @@ public class GradeService {
     @Transactional(readOnly = true)
     public GradeListResponse getAllGrades(Integer size, Integer page) {
 
-        Pageable pageable = PageRequest.of(page-1, size);
+        Sort sort = Sort.by(Sort.Order.asc("orderNo"));
+        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         Page<Grade> grades = gradeRepository.findAll(pageable);
 
         List<GradeDetailResponse> list = grades.getContent().stream().map(GradeDetailResponse::from).toList();
 
-        return GradeListResponse.from(page, size, list);
+        return GradeListResponse.from(
+                page,
+                size,
+                list,
+                grades.getTotalPages(),
+                grades.getTotalElements(),
+                grades.isFirst(),
+                grades.isLast());
     }
-
-
-
-
 }

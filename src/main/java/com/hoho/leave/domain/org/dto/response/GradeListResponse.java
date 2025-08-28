@@ -13,18 +13,13 @@ public class GradeListResponse {
     Integer size;
     List<GradeDetailResponse> grades;
     Integer totalPage;
-    Integer totalElement;
+    Long totalElement;
     Boolean firstPage;
     Boolean lastPage;
 
-    public GradeListResponse(Integer page, Integer size, List<GradeDetailResponse> grades) {
-        this.page = page;
-        this.size = size;
-        this.grades = grades;
-    }
-
     public static  GradeListResponse from(Integer page, Integer size,
-                                          List<GradeDetailResponse> grades) {
-        return new GradeListResponse(page, size, grades);
+                                          List<GradeDetailResponse> grades, Integer totalPage, Long totalElement,
+                                          Boolean firstPage, Boolean lastPage) {
+        return new GradeListResponse(page, size, grades, totalPage, totalElement, firstPage, lastPage);
     }
 }
