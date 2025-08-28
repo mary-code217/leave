@@ -26,16 +26,29 @@ public class Position extends BaseEntity {
     protected Position() {}
 
     public Position(String positionName, Integer orderNo) {
+        if (positionName == null || positionName.isBlank())
+            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
+        if (orderNo != null && orderNo < 0)
+            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
         this.positionName = positionName;
         this.orderNo = orderNo;
     }
 
     public static Position create(String positionName, Integer orderNo) {
-        if (positionName == null || positionName.isBlank())
-            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
+        return new Position(positionName, orderNo);
+    }
+
+    public void changeOrderNo(Integer orderNo) {
         if (orderNo != null && orderNo < 0)
             throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
 
-        return new Position(positionName, orderNo);
+        this.orderNo = orderNo;
+    }
+
+    public void rename(String newPositionName) {
+        if (positionName == null || positionName.isBlank())
+            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
+
+        this.positionName = newPositionName;
     }
 }

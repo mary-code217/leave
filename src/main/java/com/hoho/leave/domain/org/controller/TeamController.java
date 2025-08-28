@@ -21,15 +21,23 @@ public class TeamController {
 
         teamService.createTeam(teamCreateRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("부서 등록 성공");
+        return ResponseEntity.status(HttpStatus.OK).body("부서 등록 성공");
     }
     
-    @PatchMapping("{teamId}")
+    @PutMapping("/{teamId}")
     public ResponseEntity<?> updateTeam(@PathVariable Long teamId,
                                         @RequestBody @Valid TeamUpdateRequest teamUpdateRequest) {
 
         teamService.updateTeam(teamId, teamUpdateRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("부서 변경 성공");
+        return ResponseEntity.status(HttpStatus.OK).body("부서 변경 성공");
+    }
+
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long teamId) {
+
+        teamService.deleteTeam(teamId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("부서 삭제 성공");
     }
 }
