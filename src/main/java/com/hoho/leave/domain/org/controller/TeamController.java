@@ -2,6 +2,7 @@ package com.hoho.leave.domain.org.controller;
 
 import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
 import com.hoho.leave.domain.org.dto.request.TeamUpdateRequest;
+import com.hoho.leave.domain.org.dto.response.TeamDetailResponse;
 import com.hoho.leave.domain.org.service.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +41,13 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body("부서 삭제 성공");
     }
+
+    @GetMapping("/{teamId}")
+    public ResponseEntity<TeamDetailResponse> getTeam(@PathVariable Long teamId) {
+
+        TeamDetailResponse response = teamService.getTeam(teamId);
+
+        return new ResponseEntity<TeamDetailResponse>(response, HttpStatus.OK);
+    }
+
 }

@@ -15,9 +15,9 @@ public class ExceptionHandleConfig {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException e, HttpServletRequest req) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
-                "status", 409,
-                "error", "Conflict",
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "status", 400,
+                "error", "BAD_REQUEST",
                 "message", e.getMessage(),
                 "path", req.getRequestURI(),
                 "timestamp", Instant.now().toString()

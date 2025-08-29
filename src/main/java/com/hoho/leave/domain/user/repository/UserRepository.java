@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByTeamId(Long teamId);
     boolean existsByGradeId(Long gradeId);
     boolean existsByPositionId(Long positionId);
+    Long countByTeamId(Long teamId);
+
 }

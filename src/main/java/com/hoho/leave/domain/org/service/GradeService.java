@@ -84,6 +84,7 @@ public class GradeService {
                 grades.getTotalPages(),
                 grades.getTotalElements(),
                 grades.isFirst(),
-                grades.isLast());
+                grades.isLast()
+        );
     }
 }

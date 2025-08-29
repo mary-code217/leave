@@ -28,7 +28,7 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "parent",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @OrderBy("teamName ASC")
+    @OrderBy("orderNo ASC")
     private List<Team> children = new ArrayList<>();
 
     @Column(name = "order_no")

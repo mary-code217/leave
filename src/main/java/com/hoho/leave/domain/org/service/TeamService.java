@@ -2,6 +2,7 @@ package com.hoho.leave.domain.org.service;
 
 import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
 import com.hoho.leave.domain.org.dto.request.TeamUpdateRequest;
+import com.hoho.leave.domain.org.dto.response.TeamDetailResponse;
 import com.hoho.leave.domain.org.entity.Team;
 import com.hoho.leave.domain.org.repository.TeamRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
@@ -20,14 +21,14 @@ public class TeamService {
 
     @Transactional
     public void createTeam(TeamCreateRequest teamCreateRequest) {
-        if(teamRepository.existsByTeamName(teamCreateRequest.getTeamName())) {
+        if (teamRepository.existsByTeamName(teamCreateRequest.getTeamName())) {
             throw new BusinessException("생성 실패 - 이미 존재하는 부서명 입니다.");
         }
 
         Team team;
-        if(teamCreateRequest.getParentId() == null) {
+        if (teamCreateRequest.getParentId() == null) {
             team = Team.createTeam(teamCreateRequest.getTeamName(), teamCreateRequest.getOrderNo());
-        }else {
+        } else {
             Team parent = teamRepository.findById(teamCreateRequest.getParentId())
                     .orElseThrow(() -> new BusinessException("생성 실패 - 존재 하지않는 상위 부서명 입니다."));
             team = parent.createChild(teamCreateRequest.getTeamName(), teamCreateRequest.getOrderNo());
@@ -41,7 +42,7 @@ public class TeamService {
         Team findTeam = teamRepository.findById(teamId)
                 .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 부서 입니다."));
 
-        if(teamRepository.existsByTeamNameAndIdNot(teamUpdateRequest.getTeamName(), teamId)) {
+        if (teamRepository.existsByTeamNameAndIdNot(teamUpdateRequest.getTeamName(), teamId)) {
             throw new BusinessException("수정 실패 - 이미 존재하는 부서명 입니다.");
         }
 
@@ -64,12 +65,34 @@ public class TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new BusinessException("삭제 실패 - 존재하지 않는 부서 입니다."));
 
-        if(teamRepository.existsByParentId(teamId)) {
+        if (teamRepository.existsByParentId(teamId)) {
             throw new BusinessException("삭제 실패 - 하위 부서가 존재합니다.");
-        }else if(userRepository.existsByTeamId(teamId)) {
+        } else if (userRepository.existsByTeamId(teamId)) {
             throw new BusinessException("삭제 실패 - 부서에 소속된 유저가 존재합니다.");
         }
 
         teamRepository.delete(team);
     }
+
+    @Transactional(readOnly = true)
+    public TeamDetailResponse getTeam(Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 부서 입니다."));
+
+        Long userCount = userRepository.countByTeamId(teamId);
+        Long childrenCount = teamRepository.countByParentId(teamId);
+
+        return TeamDetailResponse.from(
+                team.getId(),
+                team.getTeamName(),
+                team.getOrderNo(),
+                (team.getParent()) == null ? 0L : team.getParent().getId(),
+                (team.getParent()) == null ? "" : team.getParent().getTeamName(),
+                userCount,
+                childrenCount
+        );
+    }
+
+
+
 }
