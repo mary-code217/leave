@@ -17,4 +17,9 @@ public class RefreshEntity {
     private String refresh;
     private String expiration;
 
+    public RefreshEntity(String userEmail, String refresh, String expiration) {
+        this.userEmail = userEmail;
+        this.refresh = refresh;
+        this.expiration = expiration;
+    }
 }
