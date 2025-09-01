@@ -1,11 +1,13 @@
 package com.hoho.leave.domain.user.entity;
 
-import com.hoho.leave.config.BaseEntity;
+import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
+import com.hoho.leave.domain.user.dto.request.UserJoinRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -18,6 +20,7 @@ import java.time.LocalDate;
                 @UniqueConstraint(name = "uq_users_employee_no", columnNames = "employee_no")
         }
 )
+@NoArgsConstructor
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,4 +59,45 @@ public class User extends BaseEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;            // 활성 여부(기본 true)
+
+
+    public User(String username, String password, String email, String employeeNo, LocalDate hireDate, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.employeeNo = employeeNo;
+        this.hireDate = hireDate;
+        this.role = role;
+    }
+
+    public static User create(UserJoinRequest userJoinRequest) {
+        return new User(
+                userJoinRequest.getUsername(),
+                userJoinRequest.getPassword(),
+                userJoinRequest.getEmail(),
+                userJoinRequest.getEmployeeNo(),
+                userJoinRequest.getHireDate(),
+                UserRole.valueOf("ROLE_"+userJoinRequest.getRole())
+        );
+    }
+
+    public void assignGrade(Grade grade) {
+        this.grade = grade;
+    }
+
+    public void assignPosition(Position position) {
+        this.position = position;
+    }
+
+    public void assignTeam(Team team) {
+        this.team = team;
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void updateUsername(String username) {
+        this.username = username;
+    }
 }

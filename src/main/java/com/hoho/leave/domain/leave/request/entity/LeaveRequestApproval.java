@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.request.entity;
 
-import com.hoho.leave.config.BaseEntity;
+import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
