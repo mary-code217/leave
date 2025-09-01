@@ -3,14 +3,22 @@ package com.hoho.leave.domain.org.service;
 import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
 import com.hoho.leave.domain.org.dto.request.TeamUpdateRequest;
 import com.hoho.leave.domain.org.dto.response.TeamDetailResponse;
+import com.hoho.leave.domain.org.dto.response.TeamListResponse;
 import com.hoho.leave.domain.org.entity.Team;
 import com.hoho.leave.domain.org.repository.TeamRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
 import com.hoho.leave.util.exception.BusinessException;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +101,37 @@ public class TeamService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public TeamListResponse getAllTeams(Integer size, Integer page) {
+        Sort sort = Sort.by(Sort.Order.asc("orderNo"));
+        Pageable pageable = PageRequest.of(page-1, size, sort);
 
+        Page<Team> teams = teamRepository.findAll(pageable);
+        List<TeamDetailResponse> list = new ArrayList<>();
 
+        for(Team t : teams.toList()) {
+            Long userCount = userRepository.countByTeamId(t.getId());
+            Long childrenCount = teamRepository.countByParentId(t.getId());
+
+            list.add(TeamDetailResponse.from(
+                    t.getId(),
+                    t.getTeamName(),
+                    t.getOrderNo(),
+                    t.getParent() == null ? 0 : t.getParent().getId(),
+                    t.getParent() == null ? "" : t.getParent().getTeamName(),
+                    userCount,
+                    childrenCount
+            ));
+        }
+
+        return TeamListResponse.from(
+                page,
+                size,
+                list,
+                teams.getTotalPages(),
+                teams.getTotalElements(),
+                teams.isFirst(),
+                teams.isLast()
+        );
+    }
 }

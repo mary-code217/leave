@@ -3,8 +3,11 @@ package com.hoho.leave.domain.org.controller;
 import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
 import com.hoho.leave.domain.org.dto.request.TeamUpdateRequest;
 import com.hoho.leave.domain.org.dto.response.TeamDetailResponse;
+import com.hoho.leave.domain.org.dto.response.TeamListResponse;
 import com.hoho.leave.domain.org.service.TeamService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +51,15 @@ public class TeamController {
         TeamDetailResponse response = teamService.getTeam(teamId);
 
         return new ResponseEntity<TeamDetailResponse>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<TeamListResponse> getAllTeams(@RequestParam(defaultValue = "5") @Min(1) @Max(20) Integer size,
+                                                        @RequestParam(defaultValue = "1") @Min(1) Integer page) {
+
+        TeamListResponse response = teamService.getAllTeams(size, page);
+
+        return new ResponseEntity<TeamListResponse>(response, HttpStatus.OK);
     }
 
 }

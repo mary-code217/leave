@@ -1,14 +1,12 @@
 package com.hoho.leave.domain.org.entity;
 
-import com.hoho.leave.config.BaseEntity;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.config.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter

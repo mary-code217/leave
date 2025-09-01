@@ -13,4 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByPositionId(Long positionId);
     Long countByTeamId(Long teamId);
 
+    // 유저 도메인 관련
+    boolean existsByEmail(String email);
+
 }
