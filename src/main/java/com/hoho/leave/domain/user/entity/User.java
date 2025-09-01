@@ -70,6 +70,11 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
+    public User(String email, UserRole role) {
+        this.email = email;
+        this.role = role;
+    }
+
     public static User create(UserJoinRequest userJoinRequest) {
         return new User(
                 userJoinRequest.getUsername(),
