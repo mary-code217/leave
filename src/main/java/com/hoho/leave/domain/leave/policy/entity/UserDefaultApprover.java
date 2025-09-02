@@ -8,12 +8,12 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(
-        name = "user_detail_approver",
+        name = "user_default_approver",
         uniqueConstraints = {
                 @UniqueConstraint(name = "uq_uda_user_step", columnNames = {"user_id", "step_no"})
         }
 )
-public class UserDetailApprover extends BaseEntity {
+public class UserDefaultApprover extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -30,14 +30,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final RefreshRepository refreshRepository;
 
     { // 생성자나 초기화 블록
-        setFilterProcessesUrl("/login");   // 기본값이지만 명시 권장(바꾸고 싶으면 여기를 변경)
-        setUsernameParameter("email");     // ★ 폼 name="email" 을 읽도록
+        setFilterProcessesUrl("/login");
+        setUsernameParameter("email");
         setPasswordParameter("password");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
+        System.out.println("LoginFilter.attemptAuthentication 호출");
+        
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
@@ -48,6 +50,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+
+        System.out.println("LoginFilter.successfulAuthentication 호출");
+
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
@@ -73,6 +78,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+
+        System.out.println("LoginFilter.unsuccessfulAuthentication 호출");
+        
         //로그인 실패시 401 응답 코드 반환
         response.setStatus(401);
     }
