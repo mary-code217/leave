@@ -1,7 +1,8 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
 import com.hoho.leave.config.jpa.BaseEntity;
-import com.hoho.leave.domain.leave.policy.dto.LeaveTypeCreateRequest;
+import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeCreateRequest;
+import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -66,5 +67,14 @@ public class LeaveType extends BaseEntity {
                 LeaveCode.valueOf(req.getLeaveCode()),
                 req.getLeaveDescription()
         );
+    }
+
+    public void Update(LeaveTypeUpdateRequest req) {
+        this.leaveName = req.getLeaveTypeName();
+        this.unitDays = req.getUnitDays();
+        this.leaveDecrement = req.isLeaveDecrement();
+        this.requiresAttachment = req.isRequiresAttachment();
+        this.leaveCode = LeaveCode.valueOf(req.getLeaveCode());
+        this.leaveDescription = req.getLeaveDescription();
     }
 }

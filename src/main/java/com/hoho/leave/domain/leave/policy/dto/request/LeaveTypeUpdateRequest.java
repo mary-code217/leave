@@ -1,6 +1,5 @@
-package com.hoho.leave.domain.leave.policy.dto;
+package com.hoho.leave.domain.leave.policy.dto.request;
 
-import com.hoho.leave.domain.leave.policy.entity.LeaveCode;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -14,8 +13,10 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeaveTypeCreateRequest {
-    @NotBlank @NotNull
+public class LeaveTypeUpdateRequest {
+
+    @NotBlank
+    @NotNull
     String leaveTypeName;
 
     @NotBlank @NotNull
@@ -30,4 +31,5 @@ public class LeaveTypeCreateRequest {
     boolean requiresAttachment = false;
 
     private String leaveDescription;
+
 }

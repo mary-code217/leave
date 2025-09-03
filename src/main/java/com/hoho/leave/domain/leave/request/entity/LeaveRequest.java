@@ -2,15 +2,18 @@ package com.hoho.leave.domain.leave.request.entity;
 
 import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
+import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "leave_request")
 public class LeaveRequest extends BaseEntity {
     @Id
@@ -45,4 +48,33 @@ public class LeaveRequest extends BaseEntity {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    public LeaveRequest(LocalDate startDay, LocalDate endDay,
+                        LocalTime startTime, LocalTime endTime) {
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public static LeaveRequest create(LeaveRequestCreateRequest req) {
+        return new LeaveRequest(
+            req.getStartDay(),
+            req.getEndDay(),
+            req.getStartTime(),
+            req.getEndTime()
+        );
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    public void addLeaveType(LeaveType leaveType) {
+        this.leaveType = leaveType;
+    }
+
+    public void updateStatus(LeaveRequestStatus status) {
+        this.status = status;
+    }
 }
