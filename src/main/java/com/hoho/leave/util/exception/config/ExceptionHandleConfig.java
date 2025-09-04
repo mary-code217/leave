@@ -1,7 +1,9 @@
 package com.hoho.leave.util.exception.config;
 
+import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.util.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +13,10 @@ import java.time.Instant;
 import java.util.Map;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ExceptionHandleConfig {
+
+    private final AuditLogService auditLogService;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException e, HttpServletRequest req) {
@@ -23,5 +28,4 @@ public class ExceptionHandleConfig {
                 "timestamp", Instant.now().toString()
         ));
     }
-
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/leave/policy")
-public class LeavePolicyController {
+public class LeaveTypeController {
 
     private final LeaveTypeService leaveTypeService;
 

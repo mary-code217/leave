@@ -27,38 +27,38 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(name = "username", nullable = false)
-    private String username;                  // 로그인/표시 이름(전사 유니크 필요하면 여기에 unique 추가 X, 위 테이블 레벨로)
+    private String username;
 
     @Column(name = "password", nullable = false)
-    private String password;                  // 해시 저장(BCrypt 60자, 여유를 두어 100)
+    private String password;
 
     @Column(name = "email", nullable = false)
-    private String email;                     // 로그인에 이메일을 쓴다면 NOT NULL + UNIQUE
+    private String email;
 
     @Column(name = "employee_no", nullable = false)
-    private String employeeNo;                // 사번(전사 유니크)
+    private String employeeNo;
 
     @Column(name = "hire_date")
-    private LocalDate hireDate;               // 선택(입사 전 생성 가능성 있으면 NULL 허용)
+    private LocalDate hireDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role;                    // ADMIN/APPROVER/USER (Security와 문자열 일치시킬 것)
+    private UserRole role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    private Team team;                        // 필수면 nullable=false
+    private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
-    private Position position;                // 필수면 nullable=false
+    private Position position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grade_id")
-    private Grade grade;                      // 필수면 nullable=false
+    private Grade grade;
 
     @Column(name = "is_active", nullable = false)
-    private boolean active = true;            // 활성 여부(기본 true)
+    private boolean active = true;
 
 
     public User(String username, String password, String email, String employeeNo, LocalDate hireDate, UserRole role) {
