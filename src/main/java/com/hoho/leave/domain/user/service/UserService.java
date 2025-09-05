@@ -1,5 +1,8 @@
 package com.hoho.leave.domain.user.service;
 
+import com.hoho.leave.domain.audit.entity.Action;
+import com.hoho.leave.domain.audit.service.AuditLogService;
+import com.hoho.leave.domain.audit.service.AuditObjectType;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
@@ -37,6 +40,8 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final AuditLogService auditLogService;
+
     @Transactional
     public void createUser(UserJoinRequest userJoinRequest) {
         if(userRepository.existsByEmail(userJoinRequest.getEmail())) {
@@ -57,7 +62,9 @@ public class UserService {
         user.assignPosition(position);
         user.assignTeam(team);
 
-        userRepository.save(user);
+        User saveUser = userRepository.save(user);
+
+        auditLogService.createLog(Action.USER_JOIN, 7L, AuditObjectType.USER, saveUser.getId(), "관리자에 의한 유저 생성");
     }
 
     @Transactional(readOnly = true)
