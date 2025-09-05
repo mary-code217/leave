@@ -1,9 +1,11 @@
 package com.hoho.leave.domain.leave.handover.entity;
 
 import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -14,18 +16,27 @@ import lombok.Getter;
                 @UniqueConstraint(name = "uq_hnr_handover_recipient", columnNames = {"handover_id", "recipient_id"})
         }
 )
+@NoArgsConstructor
 public class HandoverRecipient extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "handover_id", nullable = false)
-    private HandoverNote handoverNote;   // FK 필수
+    private HandoverNote handoverNote;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipient_id", nullable = false)
-    private User recipient;        // FK 필수
+    private User recipient;
+
+    public HandoverRecipient(HandoverNote handoverNote, User recipient) {
+        this.handoverNote = handoverNote;
+        this.recipient = recipient;
+    }
+
+    public static HandoverRecipient create(HandoverNote handoverNote, User recipient) {
+        return new HandoverRecipient(handoverNote, recipient);
+    }
 }
 

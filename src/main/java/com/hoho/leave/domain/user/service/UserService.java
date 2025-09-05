@@ -1,5 +1,8 @@
 package com.hoho.leave.domain.user.service;
 
+import com.hoho.leave.domain.audit.entity.Action;
+import com.hoho.leave.domain.audit.service.AuditLogService;
+import com.hoho.leave.domain.audit.service.AuditObjectType;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
@@ -37,27 +40,41 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final AuditLogService auditLogService;
+
     @Transactional
     public void createUser(UserJoinRequest userJoinRequest) {
         if(userRepository.existsByEmail(userJoinRequest.getEmail())) {
             throw new BusinessException("회원 가입 실패 - 이미 존재하는 이메일 입니다.");
         }
 
-        Team team = teamRepository.findById(userJoinRequest.getTeamId())
-                .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 부서 입니다."));
-        Position position = positionRepository.findById(userJoinRequest.getPositionId())
-                .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직책 입니다."));
-        Grade grade = gradeRepository.findById(userJoinRequest.getGradeId())
-                .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직급 입니다."));
-
         userJoinRequest.setPassword(bCryptPasswordEncoder.encode(userJoinRequest.getPassword()));
 
         User user = User.create(userJoinRequest);
-        user.assignGrade(grade);
-        user.assignPosition(position);
-        user.assignTeam(team);
+        if(userJoinRequest.getTeamId() != null) {
+            Team team = teamRepository.findById(userJoinRequest.getTeamId())
+                    .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 부서 입니다."));
+            user.assignTeam(team);
+        }
+        if(userJoinRequest.getPositionId() != null) {
+            Position position = positionRepository.findById(userJoinRequest.getPositionId())
+                    .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직책 입니다."));
+            user.assignPosition(position);
+        }
+        if(userJoinRequest.getGradeId() != null) {
+            Grade grade = gradeRepository.findById(userJoinRequest.getGradeId())
+                    .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직급 입니다."));
+            user.assignGrade(grade);
+        }
 
-        userRepository.save(user);
+        User saveUser = userRepository.save(user);
+
+        auditLogService.createLog(
+                Action.USER_JOIN,
+                null,
+                AuditObjectType.USER,
+                saveUser.getId(),
+                "관리자에 의한 유저 "+ saveUser.getUsername() +"("+saveUser.getEmployeeNo()+") 생성");
     }
 
     @Transactional(readOnly = true)

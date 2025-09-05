@@ -3,7 +3,6 @@ package com.hoho.leave.domain.audit.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.entity.AuditLog;
-import com.hoho.leave.domain.audit.entity.Result;
 import com.hoho.leave.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 public class AuditLogResponse {
     Long id;
     Action action; // 행위코드
-    Result result; // 결과코드
 
     Long userId;
     String username; // 행위자
@@ -25,8 +23,6 @@ public class AuditLogResponse {
 
     Long objectId;
     String objectType;
-
-    String reasonCode;
 
     String summary; // 결과 한줄
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -36,13 +32,11 @@ public class AuditLogResponse {
         return new AuditLogResponse(
                 auditLog.getId(),
                 auditLog.getAction(),
-                auditLog.getResult(),
-                user.getId(),
-                user.getUsername(),
-                user.getEmployeeNo(),
+                user != null ? user.getId() : null,
+                user != null ? user.getUsername() : "관리자",
+                user != null ? user.getEmployeeNo() : null,
                 auditLog.getObjectId(),
                 auditLog.getObjectType(),
-                auditLog.getReasonCode() == null ? "-" : auditLog.getReasonCode(),
                 auditLog.getSummary(),
                 auditLog.getCreatedAt()
         );
