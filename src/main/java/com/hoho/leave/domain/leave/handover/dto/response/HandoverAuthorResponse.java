@@ -23,6 +23,6 @@ public class HandoverAuthorResponse {
     public static HandoverAuthorResponse from(Long handoverNoteId, String authorName,
                                               List<String> recipientName, String title,
                                               String content, LocalDateTime occurredAt) {
-        return new HandoverAuthorResponse();
+        return new HandoverAuthorResponse(handoverNoteId, authorName, recipientName, title, content, occurredAt);
     }
 }

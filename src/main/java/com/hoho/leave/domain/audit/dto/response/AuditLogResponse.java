@@ -32,9 +32,9 @@ public class AuditLogResponse {
         return new AuditLogResponse(
                 auditLog.getId(),
                 auditLog.getAction(),
-                user.getId(),
-                user.getUsername(),
-                user.getEmployeeNo(),
+                user != null ? user.getId() : null,
+                user != null ? user.getUsername() : "관리자",
+                user != null ? user.getEmployeeNo() : null,
                 auditLog.getObjectId(),
                 auditLog.getObjectType(),
                 auditLog.getSummary(),

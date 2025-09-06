@@ -26,6 +26,7 @@ public class HandoverController {
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 등록 성공");
     }
 
+    // 발신목록
     @GetMapping("/user/{userId}")
     public ResponseEntity<HandoverAuthorListResponse> getHandoverAuthorList(
             @PathVariable("userId") Long userId,
@@ -36,4 +37,6 @@ public class HandoverController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    // 수신목록
 }

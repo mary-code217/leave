@@ -16,34 +16,31 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserJoinRequest {
 
-    @NotBlank @NotNull
+    @NotBlank
     @Size(min = 8, max = 15)
     String username;
 
-    @NotBlank @NotNull
+    @NotBlank
     @Size(min = 8, max = 15)
     String password;
 
-    @NotBlank @NotNull
+    @NotBlank
     @Email
     String email;
 
-    @NotNull @NotBlank
+    @NotBlank
     String employeeNo;
 
-    @NotNull @NotBlank
+    @NotBlank
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
 
-    @NotNull @NotBlank
+    @NotBlank
     String role;
 
-    @NotNull @NotBlank
     Long teamId;
 
-    @NotNull @NotBlank
     Long gradeId;
 
-    @NotNull @NotBlank
     Long positionId;
 }

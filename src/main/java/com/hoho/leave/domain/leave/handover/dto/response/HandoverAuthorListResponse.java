@@ -17,4 +17,11 @@ public class HandoverAuthorListResponse {
     Long totalElement;
     Boolean firstPage;
     Boolean lastPage;
+
+    public static HandoverAuthorListResponse from(Integer page, Integer size,
+                                                  List<HandoverAuthorResponse> handoverNotes,
+                                                  Integer totalPage, Long totalElement,
+                                                  Boolean firstPage, Boolean lastPage) {
+        return new HandoverAuthorListResponse(page, size, handoverNotes, totalPage, totalElement, firstPage, lastPage);
+    }
 }

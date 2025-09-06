@@ -48,11 +48,13 @@ public class AuditLogService {
 
         List<AuditLogResponse> responses = new ArrayList<>();
         for(AuditLog auditLog : findList.getContent()) {
-            User user = userRepository.findById(auditLog.getActorId())
-                    .orElseThrow(() -> new BusinessException("로그 조회 실패 - 존재하지 않는 유저 입니다."));
-
-            AuditLogResponse dto = AuditLogResponse.from(auditLog, user);
-            responses.add(dto);
+            if(auditLog.getActorId() != null) {
+                User user = userRepository.findById(auditLog.getActorId())
+                        .orElseThrow(() -> new BusinessException("로그 조회 실패 - 존재하지 않는 유저 입니다."));
+                responses.add(AuditLogResponse.from(auditLog, user));
+            }else {
+                responses.add(AuditLogResponse.from(auditLog, null));
+            }
         }
 
         return AuditLogListResponse.from(
