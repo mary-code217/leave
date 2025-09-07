@@ -14,6 +14,7 @@ import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
 import com.hoho.leave.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,26 +42,33 @@ public class HandoverService {
 
         HandoverNote saveNote = handoverNoteRepository.save(HandoverNote.create(author, dto.getTitle(), dto.getContent()));
 
-        for(Long recipientId : dto.getRecipientIds()) {
-            User recipient = userRepository.findById(recipientId)
-                    .orElseThrow(() -> new BusinessException("발신 실패 - 존재하지 않는 수신자 입니다."));
+        List<User> findRecipients = userRepository.findAllById(dto.getRecipientIds());
 
-            handoverRecipientRepository.save(HandoverRecipient.create(saveNote, recipient));
+        List<HandoverRecipient> handoverRecipients = findRecipients.stream()
+                .map(u -> HandoverRecipient.create(saveNote, u))
+                .toList();
+        handoverRecipientRepository.saveAll(handoverRecipients);
 
-            auditLogService.createLog(
-                    Action.HANDOVER_CREATE,
-                    author.getId(),
-                    AuditObjectType.HANDOVER,
-                    saveNote.getId(),
-                    author.getUsername()+"이(가) "+recipient.getUsername()+"에게 인수인계를 남겼습니다."
-            );
-        }
+        auditLogService.createLog(
+                Action.HANDOVER_CREATE,
+                author.getId(),
+                AuditObjectType.HANDOVER,
+                saveNote.getId(),
+                "["+author.getUsername()+"]님이 ["+getNames(findRecipients)+"]에게 인수인계를 남겼습니다."
+        );
+    }
+
+    // 수신자 이름 조인 메서드
+    private String getNames(List<User> findRecipients) {
+        return findRecipients.stream()
+                .map(User::getUsername)
+                .collect(Collectors.joining(", "));
     }
 
     // 발신목록
     @Transactional(readOnly = true)
     public HandoverAuthorListResponse getHandoverAuthorList(Long authorId, Integer page, Integer size) {
-        Sort sort = Sort.by(Sort.Order.asc("createdAt"));
+        Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page-1, size, sort);
 
         Page<HandoverNote> pageList = handoverNoteRepository.findByAuthorId(authorId, pageable);
@@ -67,6 +76,7 @@ public class HandoverService {
         List<HandoverAuthorResponse> list = new ArrayList<>();
         for(HandoverNote note : pageList.getContent()) {
             List<HandoverRecipient> recipients = handoverRecipientRepository.findAllByHandoverNoteId(note.getId());
+
             List<String> recipientNames = new ArrayList<>();
             for(HandoverRecipient recipient : recipients) {
                 recipientNames.add(recipient.getRecipient().getUsername());
@@ -93,6 +103,6 @@ public class HandoverService {
                 pageList.isLast()
         );
     }
-    
+
     // 수신목록
 }
