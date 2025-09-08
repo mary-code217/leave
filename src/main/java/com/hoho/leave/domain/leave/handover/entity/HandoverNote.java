@@ -35,5 +35,10 @@ public class HandoverNote extends BaseEntity {
     public static HandoverNote create(User author, String title, String content) {
         return new HandoverNote(author, title, content);
     }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
 

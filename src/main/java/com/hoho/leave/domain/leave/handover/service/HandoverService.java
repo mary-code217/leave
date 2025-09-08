@@ -4,8 +4,11 @@ import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
 import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
+import com.hoho.leave.domain.leave.handover.dto.request.HandoverUpdateRequest;
 import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorListResponse;
 import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorResponse;
+import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientListResponse;
+import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientResponse;
 import com.hoho.leave.domain.leave.handover.entity.HandoverNote;
 import com.hoho.leave.domain.leave.handover.entity.HandoverRecipient;
 import com.hoho.leave.domain.leave.handover.repository.HandoverNoteRepository;
@@ -13,6 +16,8 @@ import com.hoho.leave.domain.leave.handover.repository.HandoverRecipientReposito
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
 import com.hoho.leave.util.exception.BusinessException;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -22,8 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,30 +72,32 @@ public class HandoverService {
     // 발신목록
     @Transactional(readOnly = true)
     public HandoverAuthorListResponse getHandoverAuthorList(Long authorId, Integer page, Integer size) {
-        Sort sort = Sort.by(Sort.Order.desc("createdAt"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
-
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<HandoverNote> pageList = handoverNoteRepository.findByAuthorId(authorId, pageable);
 
-        List<HandoverAuthorResponse> list = new ArrayList<>();
-        for(HandoverNote note : pageList.getContent()) {
-            List<HandoverRecipient> recipients = handoverRecipientRepository.findAllByHandoverNoteId(note.getId());
+        List<Long> noteIds = pageList.getContent().stream()
+                .map(HandoverNote::getId)
+                .toList();
 
-            List<String> recipientNames = new ArrayList<>();
-            for(HandoverRecipient recipient : recipients) {
-                recipientNames.add(recipient.getRecipient().getUsername());
-            }
+        List<HandoverRecipientRepository.RecipientUsernameRow> rows =
+                handoverRecipientRepository.findRecipientUsernamesByNoteIds(noteIds);
 
-            HandoverAuthorResponse response = HandoverAuthorResponse.from(
-                    note.getId(),
-                    note.getAuthor().getUsername(),
-                    recipientNames,
-                    note.getTitle(),
-                    note.getContent(),
-                    note.getCreatedAt()
-            );
-            list.add(response);
-        }
+        Map<Long, List<String>> recipientsByNoteId = rows.stream()
+                .collect(Collectors.groupingBy(
+                        HandoverRecipientRepository.RecipientUsernameRow::getNoteId,
+                        Collectors.mapping(HandoverRecipientRepository.RecipientUsernameRow::getUsername, Collectors.toList())
+                ));
+
+        List<HandoverAuthorResponse> list = pageList.getContent().stream()
+                .map(note -> HandoverAuthorResponse.from(
+                        note.getId(),
+                        note.getAuthor().getUsername(),
+                        recipientsByNoteId.getOrDefault(note.getId(), List.of()),
+                        note.getTitle(),
+                        note.getContent(),
+                        note.getCreatedAt()
+                ))
+                .toList();
 
         return HandoverAuthorListResponse.from(
                 page,
@@ -105,4 +111,62 @@ public class HandoverService {
     }
 
     // 수신목록
+    @Transactional(readOnly = true)
+    public HandoverRecipientListResponse getRecipientList(Long recipientId, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")));
+        Page<HandoverRecipient> pageList = handoverRecipientRepository.findByRecipientId(recipientId, pageable);
+
+        List<HandoverRecipientResponse> list = pageList.getContent().stream()
+                .map(h -> {
+                    return HandoverRecipientResponse.from(h.getHandoverNote());
+                }).toList();
+
+
+        return HandoverRecipientListResponse.from(
+                page,
+                size,
+                list,
+                pageList.getTotalPages(),
+                pageList.getTotalElements(),
+                pageList.isFirst(),
+                pageList.isLast()
+        );
+    }
+
+    // 인수인계 수정
+    @Transactional
+    public void updateHandover(Long handoverId, HandoverUpdateRequest dto) {
+        HandoverNote handoverNote = handoverNoteRepository.findByIdWithAuthor(handoverId)
+                .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 인수인계 입니다."));
+
+        handoverNote.update(dto.getTitle(), dto.getContent());
+
+        List<HandoverRecipient> recipients = handoverRecipientRepository.findAllByHandoverNoteId(handoverNote.getId());
+
+        Set<Long> existingIds = recipients.stream()
+                .map(hr -> hr.getRecipient().getId())
+                .collect(Collectors.toSet());
+        Set<Long> desiredIds = new HashSet<>(dto.getRecipientIds());
+
+        Set<Long> toAdd = new HashSet<>(desiredIds);
+        toAdd.removeAll(existingIds);
+        Set<Long> toRemove = new HashSet<>(existingIds);
+        toRemove.removeAll(desiredIds);
+
+        List<HandoverRecipient> newRecipients = toAdd.stream()
+                .map(u -> HandoverRecipient.create(handoverNote, userRepository.findById(u)
+                        .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 사용자 입니다."))))
+                .toList();
+        handoverRecipientRepository.saveAll(newRecipients);
+
+        handoverRecipientRepository.deleteByNoteIdAndRecipientIds(handoverNote.getId(), toRemove);
+
+        auditLogService.createLog(
+                Action.HANDOVER_UPDATE,
+                handoverNote.getAuthor().getId(),
+                AuditObjectType.HANDOVER,
+                handoverNote.getId(),
+                "["+handoverNote.getAuthor().getUsername()+"]님이 인수인계를 수정하였습니다."
+        );
+    }
 }
