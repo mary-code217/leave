@@ -15,15 +15,16 @@ import java.util.List;
 public interface HandoverRecipientRepository extends JpaRepository<HandoverRecipient, Long> {
 
     @Query("""
-        select hr.handoverNote.id as noteId,
-               hr.recipient.username as username
-        from HandoverRecipient hr
-        where hr.handoverNote.id in :noteIds
-        """)
+            select hr.handoverNote.id as noteId,
+                   hr.recipient.username as username
+            from HandoverRecipient hr
+            where hr.handoverNote.id in :noteIds
+            """)
     List<RecipientUsernameRow> findRecipientUsernamesByNoteIds(@Param("noteIds") Collection<Long> noteIds);
 
     interface RecipientUsernameRow {
         Long getNoteId();
+
         String getUsername();
     }
 
@@ -34,10 +35,21 @@ public interface HandoverRecipientRepository extends JpaRepository<HandoverRecip
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
-        delete from HandoverRecipient hr
-        where hr.handoverNote.id = :noteId
-          and hr.recipient.id in :recipientIds
-        """)
+            delete from HandoverRecipient hr
+            where hr.handoverNote.id = :noteId
+              and hr.recipient.id in :recipientIds
+            """)
     void deleteByNoteIdAndRecipientIds(@Param("noteId") Long noteId,
                                        @Param("recipientIds") Collection<Long> recipientIds);
+
+    void deleteByHandoverNoteId(Long handoverNoteId);
+
+    @Query("""
+            select u.username
+            from HandoverRecipient r
+            join r.recipient u
+            where r.handoverNote.id = :handoverNoteId
+            order by r.id
+            """)
+    List<String> findRecipientNamesByHandoverNoteId(Long handoverNoteId);
 }

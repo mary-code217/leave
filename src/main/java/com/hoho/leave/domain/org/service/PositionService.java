@@ -2,11 +2,8 @@ package com.hoho.leave.domain.org.service;
 
 import com.hoho.leave.domain.org.dto.request.PositionCreateRequest;
 import com.hoho.leave.domain.org.dto.request.PositionUpdateRequest;
-import com.hoho.leave.domain.org.dto.response.GradeDetailResponse;
-import com.hoho.leave.domain.org.dto.response.GradeListResponse;
 import com.hoho.leave.domain.org.dto.response.PositionDetailResponse;
 import com.hoho.leave.domain.org.dto.response.PositionListResponse;
-import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.repository.PositionRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;

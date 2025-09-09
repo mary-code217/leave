@@ -12,10 +12,10 @@ public class HandoverCreateRequest {
     @NotNull
     Long authorId;
 
-    @NotEmpty
+    @NotEmpty(message = "수신자를 1명 이상 설정해주세요.")
     List<@NotNull Long> recipientIds;
-    @NotBlank
+    @NotBlank(message = "제목은 필수 입력 입니다.")
     String title;
-    @NotBlank
+    @NotBlank(message = "본문은 필수 입력 입니다.")
     String content;
 }

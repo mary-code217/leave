@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody UserJoinRequest userJoinRequest) {
+    public ResponseEntity<?> createUser(@RequestBody UserJoinRequest userJoinRequest) {
 
         userService.createUser(userJoinRequest);
 
@@ -32,7 +32,7 @@ public class UserController {
 
         UserDetailResponse response = userService.getUser(userId);
 
-        return new ResponseEntity<UserDetailResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{userId}")
@@ -44,12 +44,13 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<UserListResponse> getUsers(@RequestParam(defaultValue = "5") @Min(1) @Max(20) Integer size,
-                                                     @RequestParam(defaultValue = "1") @Min(1) Integer page) {
+    public ResponseEntity<UserListResponse> getAllUsers(
+            @RequestParam(defaultValue = "5") @Min(1) @Max(20) Integer size,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page) {
 
         UserListResponse response = userService.getAllUsers(size, page);
 
-        return new ResponseEntity<UserListResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
     @DeleteMapping("/{userId}")

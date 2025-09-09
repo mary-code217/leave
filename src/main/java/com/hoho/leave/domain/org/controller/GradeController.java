@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public class GradeController {
 
         GradeDetailResponse response = gradeService.getGrade(gradeId);
 
-        return new ResponseEntity<GradeDetailResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 전체 조회
@@ -65,6 +64,6 @@ public class GradeController {
 
         GradeListResponse response = gradeService.getAllGrades(size, page);
 
-        return new ResponseEntity<GradeListResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

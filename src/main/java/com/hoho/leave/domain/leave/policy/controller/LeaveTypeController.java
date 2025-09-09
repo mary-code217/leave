@@ -49,7 +49,7 @@ public class LeaveTypeController {
 
         LeaveTypeDetailResponse response = leaveTypeService.getLeaveType(leaveTypeId);
 
-        return new ResponseEntity<LeaveTypeDetailResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -58,6 +58,6 @@ public class LeaveTypeController {
 
         LeaveTypeListResponse response = leaveTypeService.getAllLeaveTypes(page, size);
 
-        return new ResponseEntity<LeaveTypeListResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
