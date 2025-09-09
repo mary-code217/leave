@@ -5,21 +5,17 @@ import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
 import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
 import com.hoho.leave.domain.leave.handover.dto.request.HandoverUpdateRequest;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorListResponse;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorResponse;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientListResponse;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientResponse;
+import com.hoho.leave.domain.leave.handover.dto.response.*;
 import com.hoho.leave.domain.leave.handover.entity.HandoverNote;
 import com.hoho.leave.domain.leave.handover.entity.HandoverRecipient;
 import com.hoho.leave.domain.leave.handover.repository.HandoverNoteRepository;
 import com.hoho.leave.domain.leave.handover.repository.HandoverRecipientRepository;
+import com.hoho.leave.domain.notification.entity.NotificationType;
+import com.hoho.leave.domain.notification.service.NotificationService;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
 import com.hoho.leave.util.exception.BusinessException;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +34,7 @@ public class HandoverService {
     private final HandoverRecipientRepository handoverRecipientRepository;
     private final UserRepository userRepository;
     private final AuditLogService auditLogService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createHandover(HandoverCreateRequest dto) {
@@ -53,6 +50,11 @@ public class HandoverService {
                 .toList();
         handoverRecipientRepository.saveAll(handoverRecipients);
 
+        notificationService.createManyNotification(
+                findRecipients,
+                NotificationType.HANDOVER_ASSIGNED,
+                "인수인계가 도착하였습니다."
+        );
         auditLogService.createLog(
                 Action.HANDOVER_CREATE,
                 author.getId(),
@@ -133,6 +135,24 @@ public class HandoverService {
         );
     }
 
+    // 단건조회
+    @Transactional(readOnly = true)
+    public HandoverDetailResponse getHandover(Long handoverId) {
+        HandoverNote handoverNote = handoverNoteRepository.findByIdWithAuthor(handoverId)
+                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 인수인계 입니다."));
+
+        List<String> recipients = handoverRecipientRepository.findRecipientNamesByHandoverNoteId(handoverNote.getId());
+
+        return HandoverDetailResponse.from(
+                handoverNote.getId(),
+                handoverNote.getAuthor().getUsername(),
+                recipients,
+                handoverNote.getTitle(),
+                handoverNote.getContent(),
+                handoverNote.getCreatedAt()
+        );
+    }
+
     // 인수인계 수정
     @Transactional
     public void updateHandover(Long handoverId, HandoverUpdateRequest dto) {
@@ -168,5 +188,15 @@ public class HandoverService {
                 handoverNote.getId(),
                 "["+handoverNote.getAuthor().getUsername()+"]님이 인수인계를 수정하였습니다."
         );
+    }
+
+    //삭제
+    @Transactional
+    public void deleteHandover(Long handoverId) {
+        HandoverNote handoverNote = handoverNoteRepository.findById(handoverId)
+                .orElseThrow(() -> new BusinessException("삭제 실패 - 존재하지 않는 인수인계 입니다."));
+
+        handoverRecipientRepository.deleteByHandoverNoteId(handoverNote.getId());
+        handoverNoteRepository.delete(handoverNote);
     }
 }

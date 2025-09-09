@@ -3,6 +3,7 @@ package com.hoho.leave.domain.leave.handover.controller;
 import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
 import com.hoho.leave.domain.leave.handover.dto.request.HandoverUpdateRequest;
 import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorListResponse;
+import com.hoho.leave.domain.leave.handover.dto.response.HandoverDetailResponse;
 import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientListResponse;
 import com.hoho.leave.domain.leave.handover.service.HandoverService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class HandoverController {
     private final HandoverService handoverService;
 
     @PostMapping("")
-    public ResponseEntity<?> createHandoverNote(@RequestBody @Valid HandoverCreateRequest handoverCreateRequest) {
+    public ResponseEntity<?> createHandover(@RequestBody @Valid HandoverCreateRequest handoverCreateRequest) {
         
         handoverService.createHandover(handoverCreateRequest);
 
@@ -52,8 +53,17 @@ public class HandoverController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 단건조회
+    @GetMapping("/{handoverId}")
+    public ResponseEntity<HandoverDetailResponse> getHandover(@PathVariable("handoverId") Long handoverId) {
+
+        HandoverDetailResponse response = handoverService.getHandover(handoverId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     // 수정
-    @PutMapping("{handoverId}")
+    @PutMapping("/{handoverId}")
     public ResponseEntity<?> updateHandover(
             @PathVariable("handoverId") Long handoverId,
             @RequestBody @Valid HandoverUpdateRequest handoverUpdateRequest) {
@@ -64,5 +74,11 @@ public class HandoverController {
     }
 
     // 삭제
+    @DeleteMapping("/{handoverId}")
+    public ResponseEntity<?> deleteHandover(@PathVariable("handoverId") Long handoverId) {
 
+        handoverService.deleteHandover(handoverId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("인수인계 삭제 성공");
+    }
 }

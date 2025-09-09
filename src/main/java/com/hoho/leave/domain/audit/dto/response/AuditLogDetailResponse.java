@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuditLogResponse {
+public class AuditLogDetailResponse {
     Long id;
     Action action; // 행위코드
 
@@ -28,8 +28,8 @@ public class AuditLogResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime occurredAt; // 행위시간
 
-    public static AuditLogResponse from(AuditLog auditLog, User user) {
-        return new AuditLogResponse(
+    public static AuditLogDetailResponse from(AuditLog auditLog, User user) {
+        return new AuditLogDetailResponse(
                 auditLog.getId(),
                 auditLog.getAction(),
                 user != null ? user.getId() : null,

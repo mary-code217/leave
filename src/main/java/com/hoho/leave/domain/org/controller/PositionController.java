@@ -51,7 +51,7 @@ public class PositionController {
 
         PositionDetailResponse response = positionService.getPosition(positionId);
 
-        return new ResponseEntity<PositionDetailResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Validated
@@ -61,7 +61,7 @@ public class PositionController {
 
         PositionListResponse response = positionService.getAllPositions(size, page);
 
-        return new ResponseEntity<PositionListResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

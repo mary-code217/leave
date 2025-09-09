@@ -1,7 +1,7 @@
 package com.hoho.leave.domain.audit.service;
 
 import com.hoho.leave.domain.audit.dto.response.AuditLogListResponse;
-import com.hoho.leave.domain.audit.dto.response.AuditLogResponse;
+import com.hoho.leave.domain.audit.dto.response.AuditLogDetailResponse;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.entity.AuditLog;
 import com.hoho.leave.domain.audit.repository.AuditLogRepository;
@@ -37,7 +37,7 @@ public class AuditLogService {
     }
 
     @Transactional(readOnly = true)
-    public AuditLogListResponse getLogs(Integer page, Integer size, String objectType) {
+    public AuditLogListResponse getAllLogs(Integer page, Integer size, String objectType) {
         Sort sort = Sort.by(Sort.Order.asc("createdAt"));
         Pageable pageable = PageRequest.of(page-1, size, sort);
 
@@ -46,14 +46,14 @@ public class AuditLogService {
                 auditLogRepository.findAll(pageable) :
                 auditLogRepository.findAllByObjectType(objectType, pageable);
 
-        List<AuditLogResponse> responses = new ArrayList<>();
+        List<AuditLogDetailResponse> responses = new ArrayList<>();
         for(AuditLog auditLog : findList.getContent()) {
             if(auditLog.getActorId() != null) {
                 User user = userRepository.findById(auditLog.getActorId())
                         .orElseThrow(() -> new BusinessException("로그 조회 실패 - 존재하지 않는 유저 입니다."));
-                responses.add(AuditLogResponse.from(auditLog, user));
+                responses.add(AuditLogDetailResponse.from(auditLog, user));
             }else {
-                responses.add(AuditLogResponse.from(auditLog, null));
+                responses.add(AuditLogDetailResponse.from(auditLog, null));
             }
         }
 

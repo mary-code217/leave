@@ -50,7 +50,7 @@ public class TeamController {
 
         TeamDetailResponse response = teamService.getTeam(teamId);
 
-        return new ResponseEntity<TeamDetailResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -59,7 +59,7 @@ public class TeamController {
 
         TeamListResponse response = teamService.getAllTeams(size, page);
 
-        return new ResponseEntity<TeamListResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

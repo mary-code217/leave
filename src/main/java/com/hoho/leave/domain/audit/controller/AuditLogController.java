@@ -20,11 +20,11 @@ public class AuditLogController {
     private final AuditLogService auditLogService;
 
     @GetMapping("")
-    public ResponseEntity<AuditLogListResponse> getLogs(@RequestParam(defaultValue = "1") @Min(1) Integer page,
+    public ResponseEntity<AuditLogListResponse> getAllLogs(@RequestParam(defaultValue = "1") @Min(1) Integer page,
                                                         @RequestParam(defaultValue = "10") @Min(1) @Max(20) Integer size,
                                                         @RequestParam(defaultValue = "all") String objectType) {
 
-        AuditLogListResponse response = auditLogService.getLogs(page, size, objectType);
+        AuditLogListResponse response = auditLogService.getAllLogs(page, size, objectType);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
