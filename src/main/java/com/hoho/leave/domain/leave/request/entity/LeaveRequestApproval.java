@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 public class LeaveRequestApproval extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;            //pk
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_request_id", nullable = false)
     private LeaveRequest leaveRequest;          // 대상 휴가 신청건
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approver_id", nullable = false)
     private User approver;            // 지정된 승인자(원 승인자, 위임 전 기준)
 
@@ -39,7 +39,7 @@ public class LeaveRequestApproval extends BaseEntity {
     @Column(name = "comment")
     private String comment;             // 사유 메모
 
-    // 실제 승인/반려를 수행한 사용자(위임 시 delegate가 될 수 있음)
+    // 실제 승인/반려를 수행한 사용자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acted_by_id")
     private User actedBy;         // 실제 처리자(위임 시 수임자, 없으면 approver)
