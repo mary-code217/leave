@@ -5,9 +5,11 @@ import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -21,21 +23,25 @@ public class LeaveRequest extends BaseEntity {
     private Long id;
 
     /** 신청자 (필수) */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /** 휴가 유형 (필수) */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_type_id", nullable = false)
     private LeaveType leaveType;
 
     /** 상태 (기본 PENDING) */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 16)
+    @Column(name = "status", nullable = false)
     private LeaveRequestStatus status = LeaveRequestStatus.PENDING;
 
-    /** 시작/종료일 (종료일 없으면 단일일) */
+    /** 총 사용량 */
+    @Column(name = "quantity_days", nullable = false, precision = 5, scale = 2)
+    private BigDecimal quantityDays; 
+
+    /** 시작/종료일 */
     @Column(name = "start_day", nullable = false)
     private LocalDate startDay;
 
@@ -49,8 +55,14 @@ public class LeaveRequest extends BaseEntity {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    public LeaveRequest(LocalDate startDay, LocalDate endDay,
-                        LocalTime startTime, LocalTime endTime) {
+    /** 첨부파일이 있으면 사용 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leave_request_attachment_id", nullable = false)
+    private LeaveRequestAttachment attachment = null;
+
+    @Builder
+    public LeaveRequest(BigDecimal quantityDays, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime) {
+        this.quantityDays = quantityDays;
         this.startDay = startDay;
         this.endDay = endDay;
         this.startTime = startTime;
@@ -58,12 +70,13 @@ public class LeaveRequest extends BaseEntity {
     }
 
     public static LeaveRequest create(LeaveRequestCreateRequest req) {
-        return new LeaveRequest(
-            req.getStartDay(),
-            req.getEndDay(),
-            req.getStartTime(),
-            req.getEndTime()
-        );
+        return LeaveRequest.builder()
+                .quantityDays(req.getQuantityDays())
+                .startDay(req.getStartDay())
+                .endDay(req.getEndDay())
+                .startTime(req.getStartTime())
+                .endTime(req.getEndTime())
+                .build();
     }
 
     public void addUser(User user) {
@@ -72,6 +85,10 @@ public class LeaveRequest extends BaseEntity {
 
     public void addLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
+    }
+
+    public void addAttachment(LeaveRequestAttachment attachment) {
+        this.attachment = attachment;
     }
 
     public void updateStatus(LeaveRequestStatus status) {

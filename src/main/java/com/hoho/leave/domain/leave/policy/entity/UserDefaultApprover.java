@@ -17,14 +17,14 @@ public class UserDefaultApprover extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;                     // 대상 사용자
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approver_id", nullable = false)
-    private User approver;                 // 지정 결재자
+    private User approver;
 
     @Column(name = "step_no", nullable = false)
-    private Integer stepNo;                // 1 또는 2
+    private Integer stepNo;
 }

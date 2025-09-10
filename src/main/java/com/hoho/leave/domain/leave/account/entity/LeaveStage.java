@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.policy.entity;
+package com.hoho.leave.domain.leave.account.entity;
 
 public enum LeaveStage {
     MONTHLY,

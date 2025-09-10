@@ -19,7 +19,7 @@ public class LeaveRequestAttachment extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_request_id", nullable = false)
     private LeaveRequest leaveRequest;        // FK 필수
 
@@ -35,7 +35,7 @@ public class LeaveRequestAttachment extends BaseEntity {
     @Column(name = "size_bytes", nullable = false)
     private Long sizeBytes;                   // 바이트 크기(>=0)
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploaded_by_id", nullable = false)
     private User uploadedBy;            // 업로더(필수)
 }

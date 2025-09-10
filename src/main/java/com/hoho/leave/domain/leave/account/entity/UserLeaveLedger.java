@@ -19,19 +19,20 @@ public class UserLeaveLedger extends BaseEntity {
     @JoinColumn(name = "user_leaves_id")
     private UserLeaves userLeaves;
 
-    @Column(name = "tx_date")
-    private LocalDateTime txDate;
+    @Column(name = "effective_at")
+    private LocalDateTime effectiveAt;
 
     @Column(name = "amount")
     private String amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "reason")
-    private String reason;
+    private ReasonCode reasonCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_request_id")
     private LeaveRequest leaveRequest;
 
-    @Column(name = "note")
+    @Column(name = "note", nullable = false)
     private String note;
 }

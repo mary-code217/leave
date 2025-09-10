@@ -22,29 +22,23 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 대상 팀 (필수)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "team_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    // 대상 휴가 유형 (필수)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "leave_type_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leave_type_id")
     private LeaveType leaveType;
 
-    // 동시에 휴가 가능한 최대 인원(0=전면 금지 허용), null 금지
-    @Column(name = "max_concurrent", nullable = false)
+    @Column(name = "max_concurrent")
     private Integer maxConcurrent;
 
-    // 적용 시작일(필수)
-    @Column(name = "effective_from", nullable = false)
+    @Column(name = "effective_from")
     private LocalDate effectiveFrom;
 
-    // 적용 종료일(선택; null=무기한)
-    @Column(name = "effective_to")
+    @Column(name = "effective_to", nullable = false)
     private LocalDate effectiveTo;
 
-    // 유효일자 판단 (도메인 편의)
     public boolean isEffectiveOn(LocalDate date) {
         if (date == null) return false;
         boolean fromOk = !date.isBefore(effectiveFrom);
