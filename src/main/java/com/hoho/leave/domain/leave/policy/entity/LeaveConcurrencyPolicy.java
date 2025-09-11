@@ -3,7 +3,9 @@ package com.hoho.leave.domain.leave.policy.entity;
 import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.org.entity.Team;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -17,26 +19,27 @@ import java.time.LocalDate;
                         columnNames = {"team_id", "leave_type_id", "effective_from"})
         }
 )
+@NoArgsConstructor
 public class LeaveConcurrencyPolicy extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_type_id")
+    @JoinColumn(name = "leave_type_id", nullable = false)
     private LeaveType leaveType;
 
-    @Column(name = "max_concurrent")
+    @Column(name = "max_concurrent", nullable = false)
     private Integer maxConcurrent;
 
-    @Column(name = "effective_from")
+    @Column(name = "effective_from", nullable = false)
     private LocalDate effectiveFrom;
 
-    @Column(name = "effective_to", nullable = false)
+    @Column(name = "effective_to")
     private LocalDate effectiveTo;
 
     public boolean isEffectiveOn(LocalDate date) {
@@ -44,6 +47,26 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
         boolean fromOk = !date.isBefore(effectiveFrom);
         boolean toOk = (effectiveTo == null) || !date.isAfter(effectiveTo);
         return fromOk && toOk;
+    }
+
+    @Builder
+    public LeaveConcurrencyPolicy(Team team, LeaveType leaveType, Integer maxConcurrent, LocalDate effectiveFrom, LocalDate effectiveTo) {
+        this.team = team;
+        this.leaveType = leaveType;
+        this.maxConcurrent = maxConcurrent;
+        this.effectiveFrom = effectiveFrom;
+        this.effectiveTo = effectiveTo;
+    }
+
+    public static LeaveConcurrencyPolicy create(Team team, LeaveType leaveType,
+                                                Integer maxConcurrent,  LocalDate effectiveFrom,
+                                                LocalDate effectiveTo) {
+        return LeaveConcurrencyPolicy.builder()
+                .team(team)
+                .leaveType(leaveType)
+                .maxConcurrent(maxConcurrent)
+                .effectiveFrom(effectiveFrom)
+                .effectiveTo(effectiveTo).build();
     }
 }
 

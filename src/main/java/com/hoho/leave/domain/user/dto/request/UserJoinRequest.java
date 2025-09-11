@@ -1,14 +1,12 @@
 package com.hoho.leave.domain.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -16,26 +14,26 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserJoinRequest {
 
-    @NotBlank
-    @Size(min = 8, max = 15)
+    @NotBlank(message = "이름은 필수 입력 입니다.")
+    @Size(min = 2, max = 10, message = "이름은 2~10자 입니다.")
     String username;
 
-    @NotBlank
-    @Size(min = 8, max = 15)
+    @NotBlank(message = "비밀번호는 필수 입력 입니다.")
+    @Size(min = 8, max = 15, message = "비밀번호는 8~15자 입니다.")
     String password;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "이메일은 필수 입력 입니다.")
+    @Email(message = "이메일 형식에 맞지 않습니다.")
     String email;
 
-    @NotBlank
+    @NotBlank(message = "사번은 필수 입력 입니다.")
     String employeeNo;
 
-    @NotBlank
+    @NotNull(message = "입사일은 필수 입력 입니다.")
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
 
-    @NotBlank
+    @NotBlank(message = "사용자 권한은 필수 입력 입니다.")
     String role;
 
     Long teamId;
@@ -43,4 +41,9 @@ public class UserJoinRequest {
     Long gradeId;
 
     Long positionId;
+
+    @NotNull(message = "초기 휴가 설정은 필수 입니다.")
+    @Digits(integer = 3, fraction = 2)
+    @DecimalMin(value = "0.00", message = "휴가 일수는 음수가 될 수 없습니다.")
+    BigDecimal balanceDays;
 }

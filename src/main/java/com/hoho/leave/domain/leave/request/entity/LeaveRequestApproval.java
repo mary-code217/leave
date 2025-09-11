@@ -3,7 +3,9 @@ package com.hoho.leave.domain.leave.request.entity;
 import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
                 @UniqueConstraint(name = "uq_lra_request_step", columnNames = {"leave_request_id", "step_no"})
         }
 )
+@NoArgsConstructor
 public class LeaveRequestApproval extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +33,7 @@ public class LeaveRequestApproval extends BaseEntity {
     private User approver;            // 지정된 승인자(원 승인자, 위임 전 기준)
 
     @Column(name = "step_no", nullable = false)
-    private Integer stepNo;             // 결재 단계(1,2)
+    private Integer stepNo;             // 결재 단계(1,2 ~)
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -46,4 +49,26 @@ public class LeaveRequestApproval extends BaseEntity {
 
     @Column(name = "acted_at")
     private LocalDateTime actedAt;        // 실제 처리 시각
+
+    @Builder
+    public LeaveRequestApproval(LeaveRequest leaveRequest, User approver, Integer stepNo) {
+        this.leaveRequest = leaveRequest;
+        this.approver = approver;
+        this.stepNo = stepNo;
+    }
+
+    public static LeaveRequestApproval create(LeaveRequest leaveRequest, User approver, Integer stepNo) {
+        return LeaveRequestApproval.builder()
+                .leaveRequest(leaveRequest)
+                .approver(approver)
+                .stepNo(stepNo)
+                .build();
+    }
+
+    public void update(ApprovalStatus status, String comment) {
+        this.status = status;
+        this.comment = comment;
+        this.actedBy = null;
+        this.actedAt = LocalDateTime.now();
+    }
 }

@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -76,8 +77,7 @@ public class LeaveRequestService {
     @Transactional(readOnly = true)
     public LeaveRequestListResponse getUserLeaveRequests(Long userId, Integer page, Integer size) {
 
-        Sort sort = Sort.by(Sort.Order.asc("startDay"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.asc("startDay")));
 
         Page<LeaveRequest> requests = leaveRequestRepository.findByUserId(userId, pageable);
 
@@ -103,8 +103,7 @@ public class LeaveRequestService {
     @Transactional(readOnly = true)
     public LeaveRequestListResponse getAllLeaveRequests(Integer page, Integer size) {
 
-        Sort sort = Sort.by(Sort.Order.asc("startDay"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.asc("startDay")));
 
         Page<LeaveRequest> requests = leaveRequestRepository.findAll(pageable);
 

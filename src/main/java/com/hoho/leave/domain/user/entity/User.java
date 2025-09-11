@@ -6,6 +6,7 @@ import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
 import com.hoho.leave.domain.user.dto.request.UserJoinRequest;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import java.time.LocalDate;
         }
 )
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +40,7 @@ public class User extends BaseEntity {
     @Column(name = "employee_no", nullable = false)
     private String employeeNo;
 
-    @Column(name = "hire_date")
+    @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
     @Enumerated(EnumType.STRING)
