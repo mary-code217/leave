@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     @Column(name = "employee_no", nullable = false)
     private String employeeNo;
 
-    @Column(name = "hire_date")
+    @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
     @Enumerated(EnumType.STRING)

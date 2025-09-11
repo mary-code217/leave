@@ -5,6 +5,7 @@ import com.hoho.leave.domain.user.dto.request.UserUpdateRequest;
 import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
 import com.hoho.leave.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> createUser(@RequestBody UserJoinRequest userJoinRequest) {
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserJoinRequest userJoinRequest) {
 
         userService.createUser(userJoinRequest);
 

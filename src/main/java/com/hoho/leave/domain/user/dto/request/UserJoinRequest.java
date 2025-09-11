@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 public class UserJoinRequest {
 
     @NotBlank
-    @Size(min = 8, max = 15)
+    @Size(min = 2, max = 10)
     String username;
 
     @NotBlank
@@ -43,4 +44,6 @@ public class UserJoinRequest {
     Long gradeId;
 
     Long positionId;
+
+    BigDecimal balanceDays;
 }
