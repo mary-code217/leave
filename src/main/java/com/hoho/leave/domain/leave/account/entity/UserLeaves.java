@@ -29,10 +29,6 @@ public class UserLeaves extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_type_id", nullable = false)
-    private LeaveType leaveType;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "leave_stage", nullable = false)
     private LeaveStage leaveStage = LeaveStage.NONE;
@@ -44,21 +40,19 @@ public class UserLeaves extends BaseEntity {
     private BigDecimal balanceDays = new BigDecimal("0.00");
 
     @Builder
-    public UserLeaves(User user, LeaveType leaveType, LeaveStage leaveStage, LocalDate nextAccrualAt, BigDecimal balanceDays) {
+    public UserLeaves(User user, LeaveStage leaveStage, LocalDate nextAccrualAt, BigDecimal balanceDays) {
         this.user = user;
-        this.leaveType = leaveType;
         this.leaveStage = leaveStage;
         this.nextAccrualAt = nextAccrualAt;
         this.balanceDays = balanceDays;
     }
 
-    public static UserLeaves create(User user, LeaveType leaveType, LeaveStage leaveStage, LocalDate nextAccrualAt) {
+    public static UserLeaves create(User user, LeaveStage leaveStage, LocalDate nextAccrualAt, BigDecimal balanceDays) {
         return UserLeaves.builder()
                 .user(user)
-                .leaveType(leaveType)
                 .leaveStage(leaveStage)
                 .nextAccrualAt(nextAccrualAt)
-                .balanceDays(BigDecimal.ZERO)
+                .balanceDays(balanceDays)
                 .build();
     }
 }

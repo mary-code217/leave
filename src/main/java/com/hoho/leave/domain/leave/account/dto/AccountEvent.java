@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.account.service;
+package com.hoho.leave.domain.leave.account.dto;
 
 import com.hoho.leave.domain.leave.account.entity.LeaveStage;
 import lombok.AllArgsConstructor;

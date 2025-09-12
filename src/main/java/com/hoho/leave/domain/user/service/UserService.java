@@ -1,8 +1,5 @@
 package com.hoho.leave.domain.user.service;
 
-import com.hoho.leave.domain.audit.entity.Action;
-import com.hoho.leave.domain.audit.service.AuditLogService;
-import com.hoho.leave.domain.audit.service.AuditObjectType;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
@@ -40,41 +37,31 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final AuditLogService auditLogService;
-
-    @Transactional
-    public void createUser(UserJoinRequest userJoinRequest) {
-        if(userRepository.existsByEmail(userJoinRequest.getEmail())) {
+    public User createUser(UserJoinRequest userJoinRequest) {
+        if (userRepository.existsByEmail(userJoinRequest.getEmail())) {
             throw new BusinessException("회원 가입 실패 - 이미 존재하는 이메일 입니다.");
         }
 
         userJoinRequest.setPassword(bCryptPasswordEncoder.encode(userJoinRequest.getPassword()));
 
         User user = User.create(userJoinRequest);
-        if(userJoinRequest.getTeamId() != null) {
+        if (userJoinRequest.getTeamId() != null) {
             Team team = teamRepository.findById(userJoinRequest.getTeamId())
                     .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 부서 입니다."));
             user.assignTeam(team);
         }
-        if(userJoinRequest.getPositionId() != null) {
+        if (userJoinRequest.getPositionId() != null) {
             Position position = positionRepository.findById(userJoinRequest.getPositionId())
                     .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직책 입니다."));
             user.assignPosition(position);
         }
-        if(userJoinRequest.getGradeId() != null) {
+        if (userJoinRequest.getGradeId() != null) {
             Grade grade = gradeRepository.findById(userJoinRequest.getGradeId())
                     .orElseThrow(() -> new BusinessException("회원 가입 실패 - 존재하지 않는 직급 입니다."));
             user.assignGrade(grade);
         }
 
-        User saveUser = userRepository.save(user);
-
-        auditLogService.createLog(
-                Action.USER_JOIN,
-                null,
-                AuditObjectType.USER,
-                saveUser.getId(),
-                "관리자에 의한 유저 "+ saveUser.getUsername() +"("+saveUser.getEmployeeNo()+") 생성");
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -99,12 +86,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserListResponse getAllUsers(Integer size, Integer page) {
         Sort sort = Sort.by(Sort.Order.asc("hireDate"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         Page<User> users = userRepository.findAll(pageable);
         List<UserDetailResponse> list = new ArrayList<>();
 
-        for(User u : users.getContent()) {
+        for (User u : users.getContent()) {
             list.add(UserDetailResponse.from(
                     u.getId(),
                     u.getUsername(),

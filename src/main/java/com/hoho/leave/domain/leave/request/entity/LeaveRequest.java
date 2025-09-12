@@ -57,7 +57,7 @@ public class LeaveRequest extends BaseEntity {
 
     /** 첨부파일이 있으면 사용 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_request_attachment_id", nullable = false)
+    @JoinColumn(name = "leave_request_attachment_id")
     private LeaveRequestAttachment attachment = null;
 
     @Builder

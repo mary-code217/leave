@@ -1,15 +1,14 @@
 package com.hoho.leave.domain.leave.account.service;
 
-import com.hoho.leave.domain.leave.account.entity.LeaveStage;
+import com.hoho.leave.domain.leave.account.dto.AccountEvent;
 import com.hoho.leave.domain.leave.account.entity.UserLeaves;
 import com.hoho.leave.domain.leave.account.repository.UserLeavesRepository;
-import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +18,13 @@ public class LeaveAccountService {
 
     private final AccrualPolicyEngine engine;
 
-    public void createUserLeaves(User user, LeaveType leaveType, LeaveStage stage, LocalDate nextAccrualAt) {
-        if(userLeavesRepository.existsByUserIdAndLeaveTypeId(user.getId(), leaveType.getId())) {
-           throw new BusinessException("생성 실패 - 이미 존재하는 휴가 계정 입니다.");
+    public UserLeaves firstCreateUserLeaves(User user, BigDecimal balanceDays) {
+        if (userLeavesRepository.existsByUserId(user.getId())) {
+            throw new BusinessException("생성 실패 - 휴가 계정이 존재하는 유저 입니다.");
         }
 
-        userLeavesRepository.save(UserLeaves.create(user, leaveType, stage, nextAccrualAt));
+        AccountEvent accountEvent = engine.getAccountEvent(user);
+        UserLeaves leaves = UserLeaves.create(user, accountEvent.getLeaveStage(), accountEvent.getNextAccrualAt(), balanceDays);
+        return userLeavesRepository.save(leaves);
     }
 }
