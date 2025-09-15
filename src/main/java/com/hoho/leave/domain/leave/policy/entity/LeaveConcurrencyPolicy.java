@@ -36,7 +36,7 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
     @Column(name = "effective_from")
     private LocalDate effectiveFrom;
 
-    @Column(name = "effective_to", nullable = false)
+    @Column(name = "effective_to")
     private LocalDate effectiveTo;
 
     public boolean isEffectiveOn(LocalDate date) {
