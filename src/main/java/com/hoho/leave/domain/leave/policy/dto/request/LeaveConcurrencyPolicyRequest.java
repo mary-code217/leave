@@ -17,7 +17,7 @@ public class LeaveConcurrencyPolicyRequest {
     Long teamId;
     @NotNull
     Long leaveTypeId;
-    @NotNull @Min(1)
+    @NotNull @Min(0)
     Integer maxConcurrent;
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate effectiveFrom;

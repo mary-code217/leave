@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class LeaveApplicationService {
+public class LeaveRequestApplicationService {
 
     private final LeaveAccountService leaveAccountService;
     private final LeaveLedgerService leaveLedgerService;
@@ -30,7 +30,7 @@ public class LeaveApplicationService {
         // 휴가 신청서 분석 -> 휴가타입(연차,기타휴가), 차감여부, 증빙여부 파악 (O)
         // 차감휴가의 경우
         // 휴가계정(O)
-        // 동시정책
+        // 동시정책(O)
         // 공휴일 체크
         // 결재선 등록(O)
         // 휴가 원장 등록(O)

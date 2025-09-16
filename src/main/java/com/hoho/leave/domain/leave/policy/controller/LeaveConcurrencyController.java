@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.policy.controller;
 
+import com.hoho.leave.domain.leave.facade.ConcurrencyPolicyApplicationService;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveConcurrencyPolicyRequest;
 import com.hoho.leave.domain.leave.policy.service.LeaveConcurrencyPolicyService;
 import jakarta.validation.Valid;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/concurrency")
 public class LeaveConcurrencyController {
 
-    private final LeaveConcurrencyPolicyService leaveConcurrencyPolicyService;
+    private final ConcurrencyPolicyApplicationService service;
 
     public ResponseEntity<?> createLeaveConcurrency(
             @RequestBody @Valid LeaveConcurrencyPolicyRequest request) {
 
-        leaveConcurrencyPolicyService.createLeaveConcurrencyPolicy(request);
+        service.createLeaveConcurrencyPolicy(request);
 
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.OK).body("휴가 정책 생성");
     }
 }

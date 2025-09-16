@@ -82,6 +82,7 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
+    /** 단일 조회용(화면) **/
     @Transactional(readOnly = true)
     public TeamDetailResponse getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId)
@@ -101,10 +102,10 @@ public class TeamService {
         );
     }
 
+    /** 리스트 조회용(화면) **/
     @Transactional(readOnly = true)
     public TeamListResponse getAllTeams(Integer size, Integer page) {
-        Sort sort = Sort.by(Sort.Order.asc("orderNo"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.asc("orderNo")));
 
         Page<Team> teams = teamRepository.findAll(pageable);
         List<TeamDetailResponse> list = new ArrayList<>();
@@ -133,5 +134,10 @@ public class TeamService {
                 teams.isFirst(),
                 teams.isLast()
         );
+    }
+
+    public Team getTeamEntity(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 부서 입니다."));
     }
 }

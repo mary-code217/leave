@@ -25,7 +25,7 @@ public class LeaveTypeService {
 
     @Transactional
     public void LeaveTypeCreate(LeaveTypeCreateRequest leaveTypeCreateRequest) {
-        if(leaveTypeRepository.existsByLeaveName(leaveTypeCreateRequest.getLeaveTypeName())) {
+        if (leaveTypeRepository.existsByLeaveName(leaveTypeCreateRequest.getLeaveTypeName())) {
             throw new BusinessException("생성 실패 - 이미 존재하는 유형 입니다.");
         }
 
@@ -59,7 +59,7 @@ public class LeaveTypeService {
     @Transactional(readOnly = true)
     public LeaveTypeListResponse getAllLeaveTypes(Integer page, Integer size) {
         Sort sort = Sort.by(Sort.Order.desc("unitDays"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         Page<LeaveType> leaveTypes = leaveTypeRepository.findAll(pageable);
 
@@ -74,5 +74,10 @@ public class LeaveTypeService {
                 leaveTypes.isFirst(),
                 leaveTypes.isLast()
         );
+    }
+
+    public LeaveType getLeaveTypeEntity(Long leaveTypeId) {
+        return leaveTypeRepository.findById(leaveTypeId)
+                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 유형 입니다."));
     }
 }
