@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.handover.dto.response;
+package com.hoho.leave.domain.handover.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

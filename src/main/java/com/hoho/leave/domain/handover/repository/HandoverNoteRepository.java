@@ -1,6 +1,6 @@
-package com.hoho.leave.domain.leave.handover.repository;
+package com.hoho.leave.domain.handover.repository;
 
-import com.hoho.leave.domain.leave.handover.entity.HandoverNote;
+import com.hoho.leave.domain.handover.entity.HandoverNote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
