@@ -9,5 +9,4 @@ public class LeaveApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LeaveApplication.class, args);
 	}
-
 }

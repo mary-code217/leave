@@ -1,11 +1,11 @@
-package com.hoho.leave.domain.leave.handover.controller;
+package com.hoho.leave.domain.handover.controller;
 
-import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
-import com.hoho.leave.domain.leave.handover.dto.request.HandoverUpdateRequest;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverAuthorListResponse;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverDetailResponse;
-import com.hoho.leave.domain.leave.handover.dto.response.HandoverRecipientListResponse;
-import com.hoho.leave.domain.leave.handover.service.HandoverService;
+import com.hoho.leave.domain.handover.dto.request.HandoverCreateRequest;
+import com.hoho.leave.domain.handover.dto.request.HandoverUpdateRequest;
+import com.hoho.leave.domain.handover.dto.response.HandoverAuthorListResponse;
+import com.hoho.leave.domain.handover.dto.response.HandoverDetailResponse;
+import com.hoho.leave.domain.handover.dto.response.HandoverRecipientListResponse;
+import com.hoho.leave.domain.handover.service.HandoverService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.request.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -28,8 +29,15 @@ public class LeaveRequestCreateRequest {
     BigDecimal quantityDays;
 
     @NotBlank
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate startDay;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate endDay;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalTime startTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalTime endTime;
 }

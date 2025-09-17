@@ -1,15 +1,15 @@
-package com.hoho.leave.domain.leave.handover.service;
+package com.hoho.leave.domain.handover.service;
 
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.leave.handover.dto.request.HandoverCreateRequest;
-import com.hoho.leave.domain.leave.handover.dto.request.HandoverUpdateRequest;
-import com.hoho.leave.domain.leave.handover.dto.response.*;
-import com.hoho.leave.domain.leave.handover.entity.HandoverNote;
-import com.hoho.leave.domain.leave.handover.entity.HandoverRecipient;
-import com.hoho.leave.domain.leave.handover.repository.HandoverNoteRepository;
-import com.hoho.leave.domain.leave.handover.repository.HandoverRecipientRepository;
+import com.hoho.leave.domain.handover.dto.request.HandoverCreateRequest;
+import com.hoho.leave.domain.handover.dto.request.HandoverUpdateRequest;
+import com.hoho.leave.domain.handover.dto.response.*;
+import com.hoho.leave.domain.handover.entity.HandoverNote;
+import com.hoho.leave.domain.handover.entity.HandoverRecipient;
+import com.hoho.leave.domain.handover.repository.HandoverNoteRepository;
+import com.hoho.leave.domain.handover.repository.HandoverRecipientRepository;
 import com.hoho.leave.domain.notification.entity.NotificationType;
 import com.hoho.leave.domain.notification.service.NotificationService;
 import com.hoho.leave.domain.user.entity.User;

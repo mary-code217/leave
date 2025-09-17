@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.handover.dto.response;
+package com.hoho.leave.domain.handover.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
