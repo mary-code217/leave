@@ -56,16 +56,14 @@ public class HolidayApiService {
                 .retrieve()
                 .toEntity(String.class);
 
-        if (!res.getStatusCode().is2xxSuccessful() || res.getBody() == null) {
-            return Collections.emptyList();
-        }
+        if (!res.getStatusCode().is2xxSuccessful() || res.getBody() == null) return Collections.emptyList();
+
 
         try {
             JsonNode root = objectMapper.readTree(res.getBody());
             JsonNode items = root.path("response").path("body").path("items").path("item");
-            if (items.isMissingNode() || items.isNull()) {
-                return Collections.emptyList();
-            }
+            if (items.isMissingNode() || items.isNull()) return Collections.emptyList();
+
 
             List<HolidayImportDto> result = new ArrayList<>();
             if (items.isArray()) {
@@ -84,9 +82,8 @@ public class HolidayApiService {
     private void mapIfHoliday(JsonNode n, List<HolidayImportDto> acc) {
         String isHoliday = n.path("isHoliday").asText("");
         String dateKind = n.path("dateKind").asText("");
-        if (!"Y".equalsIgnoreCase(isHoliday) || !"01".equals(dateKind)) {
-            return;
-        }
+        if (!"Y".equalsIgnoreCase(isHoliday) || !"01".equals(dateKind)) return;
+
         String name = n.path("dateName").asText("");
         int loc = n.path("locdate").asInt(0);
         if (loc <= 0 || name.isBlank()) return;

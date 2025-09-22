@@ -2,6 +2,7 @@ package com.hoho.leave.domain.leave.holiday.entity;
 
 import com.hoho.leave.config.jpa.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class Holiday extends BaseEntity {
     @Column(name = "holiday_name", nullable = false)
     private String holidayName;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     public Holiday(LocalDate holidayDate, String holidayName) {
         this.holidayDate = holidayDate;
         this.holidayName = holidayName;
