@@ -13,18 +13,24 @@ public class LeaveConcurrencyPolicyService {
 
     private final LeaveConcurrencyPolicyRepository policyRepository;
 
-    public LeaveConcurrencyPolicy createLeaveConcurrencyPolicy(CreateConcurrencyPolicy event) {
+    // 동시휴가정책 생성
+    public LeaveConcurrencyPolicy createLeaveConcurrencyPolicy(CreateConcurrencyPolicy dto) {
         boolean isErr = policyRepository.existsOverlappingHalfOpen(
-                event.getTeam().getId(), event.getLeaveType().getId(),
-                event.getEffectiveFrom(), event.getEffectiveTo());
-        if(isErr) throw new BusinessException("생성 실패 - 날짜가 겹치는 정책이 존재합니다.");
+                dto.getTeam().getId(), dto.getLeaveType().getId(),
+                dto.getEffectiveFrom(), dto.getEffectiveTo());
+        if (isErr) throw new BusinessException("생성 실패 - 날짜가 겹치는 정책이 존재합니다.");
 
         return policyRepository.save(LeaveConcurrencyPolicy.create(
-                event.getTeam(),
-                event.getLeaveType(),
-                event.getMaxConcurrent(),
-                event.getEffectiveFrom(),
-                event.getEffectiveTo()
+                dto.getTeam(),
+                dto.getLeaveType(),
+                dto.getMaxConcurrent(),
+                dto.getEffectiveFrom(),
+                dto.getEffectiveTo()
         ));
     }
+
+    // 동시휴가정책 가져오기(전체 - 현재 유효한 정책 and 미래에 실행될 정책 - 메인화면 표시용도)
+    
+
+    // 동시휴가정책 가져오기(부서 - 휴가기간사이의 정책 - 휴가신청시 확인용도)
 }
