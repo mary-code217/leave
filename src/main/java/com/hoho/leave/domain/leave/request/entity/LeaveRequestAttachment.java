@@ -3,7 +3,7 @@ package com.hoho.leave.domain.leave.request.entity;
 import com.hoho.leave.config.jpa.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -14,29 +14,54 @@ import lombok.Getter;
                 @UniqueConstraint(name = "uq_lra_file_path", columnNames = {"file_path"})
         }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LeaveRequestAttachment extends BaseEntity {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_request_id", nullable = false)
-    private LeaveRequest leaveRequest;        // FK 필수
+    private LeaveRequest leaveRequest;
 
-    @Column(name = "file_name", nullable = false)
-    private String fileName;                  // 원본 파일명(표시용)
+    @Column(name = "original_name", nullable = false)
+    private String originalName;
+
+    @Column(name = "store_Name", nullable = false)
+    private String storeName;
 
     @Column(name = "file_path", nullable = false)
-    private String filePath;                  // 스토리지 키/경로(유일)
+    private String filePath;
 
     @Column(name = "content_type", nullable = false)
-    private String contentType;               // MIME 타입
+    private String contentType;
 
     @Column(name = "size_bytes", nullable = false)
-    private Long sizeBytes;                   // 바이트 크기(>=0)
+    private Long sizeBytes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploaded_by_id", nullable = false)
-    private User uploadedBy;            // 업로더(필수)
+    private User uploadedBy;
+
+    @Builder(access = AccessLevel.PROTECTED)
+    public LeaveRequestAttachment(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
+        this.leaveRequest = leaveRequest;
+        this.originalName = originalName;
+        this.storeName = storeName;
+        this.filePath = filePath;
+        this.contentType = contentType;
+        this.sizeBytes = sizeBytes;
+        this.uploadedBy = uploadedBy;
+    }
+
+    public static LeaveRequestAttachment create(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
+        return LeaveRequestAttachment.builder()
+                .leaveRequest(leaveRequest)
+                .originalName(originalName)
+                .storeName(storeName)
+                .filePath(filePath)
+                .contentType(contentType)
+                .sizeBytes(sizeBytes)
+                .uploadedBy(uploadedBy).build();
+    }
 }
 
