@@ -26,6 +26,7 @@ public class AttachmentController {
             @RequestPart("files") List<MultipartFile> files,
             @RequestPart("request") @Valid AttachmentUploadRequest request) throws Exception {
 
+
         return ResponseEntity.status(HttpStatus.OK).body("파일 업로드 성공");
     }
 }
