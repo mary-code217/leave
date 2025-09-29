@@ -53,7 +53,7 @@ public class LeaveRequestAttachment extends BaseEntity {
         this.uploadedBy = uploadedBy;
     }
 
-    public LeaveRequestAttachment create(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
+    public static LeaveRequestAttachment create(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
         return LeaveRequestAttachment.builder()
                 .leaveRequest(leaveRequest)
                 .originalName(originalName)
