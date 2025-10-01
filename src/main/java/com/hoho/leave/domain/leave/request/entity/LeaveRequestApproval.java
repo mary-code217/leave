@@ -33,7 +33,7 @@ public class LeaveRequestApproval extends BaseEntity {
     private User approver;            // 지정된 승인자(원 승인자, 위임 전 기준)
 
     @Column(name = "step_no", nullable = false)
-    private Integer stepNo;             // 결재 단계(1,2 ~)
+    private Integer stepNo;             // 결재 단계
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
