@@ -22,12 +22,12 @@ public class ApproverDelegation extends BaseEntity {
     private Long id;
 
     /** 위임자(원 승인자) - 필수 */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "delegator_id", nullable = false)
     private User delegator;
 
     /** 수임자(대신 결재) - 필수 */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delegate_id", nullable = false)
     private User delegate;
 

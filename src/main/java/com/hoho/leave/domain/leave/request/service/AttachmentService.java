@@ -128,13 +128,14 @@ public class AttachmentService {
         return file == null || file.isEmpty();
     }
 
-    /** 허용 MIME */
+    /** 허용 MIME 목록 */
     private static final Set<String> ALLOWED_MIME = Set.of(
             "application/pdf",
             "image/png",
             "image/jpeg"
     );
 
+    /** 허용 MIME 확인*/
     private boolean isAllowedMime(String mime) {
         return ALLOWED_MIME.contains(mime);
     }

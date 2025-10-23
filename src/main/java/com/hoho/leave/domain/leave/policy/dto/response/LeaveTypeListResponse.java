@@ -18,10 +18,10 @@ public class LeaveTypeListResponse {
     Boolean firstPage;
     Boolean lastPage;
 
-    public static LeaveTypeListResponse from(Integer page, Integer size,
-                                             List<LeaveTypeDetailResponse> leaveTypes,
-                                             Integer totalPage, Long totalElement,
-                                             Boolean firstPage, Boolean lastPage) {
+    public static LeaveTypeListResponse of(Integer page, Integer size,
+                                           List<LeaveTypeDetailResponse> leaveTypes,
+                                           Integer totalPage, Long totalElement,
+                                           Boolean firstPage, Boolean lastPage) {
 
         return new LeaveTypeListResponse(page, size, leaveTypes, totalPage, totalElement, firstPage, lastPage);
     }

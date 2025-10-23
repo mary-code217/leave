@@ -65,7 +65,7 @@ public class LeaveTypeService {
 
         List<LeaveTypeDetailResponse> list = leaveTypes.getContent().stream().map(LeaveTypeDetailResponse::from).toList();
 
-        return LeaveTypeListResponse.from(
+        return LeaveTypeListResponse.of(
                 page,
                 size,
                 list,
