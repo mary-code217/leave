@@ -24,6 +24,7 @@ public class ConcurrencyPolicyApplicationService {
     private final LeaveConcurrencyPolicyService leaveConcurrencyPolicyService;
     private final AuditLogService auditLogService;
 
+    /** 휴가 동시 제한 */
     @Transactional
     public void createLeaveConcurrencyPolicy(LeaveConcurrencyPolicyRequest req) {
         Team team = teamService.getTeamEntity(req.getTeamId());
@@ -31,7 +32,15 @@ public class ConcurrencyPolicyApplicationService {
         LeaveType leaveType = leaveTypeService.getLeaveTypeEntity(req.getLeaveTypeId());
 
         LeaveConcurrencyPolicy savePolicy =
-                leaveConcurrencyPolicyService.createLeaveConcurrencyPolicy(new CreateConcurrencyPolicy(team, leaveType, req.getMaxConcurrent(), req.getEffectiveFrom(), req.getEffectiveTo()));
+                leaveConcurrencyPolicyService.createLeaveConcurrencyPolicy(
+                        new CreateConcurrencyPolicy(
+                                team,
+                                leaveType,
+                                req.getMaxConcurrent(),
+                                req.getEffectiveFrom(),
+                                req.getEffectiveTo()
+                        )
+                );
 
         auditLogService.createLog(
                 Action.LEAVE_POLICY_CONCURRENCY_CREATE,
