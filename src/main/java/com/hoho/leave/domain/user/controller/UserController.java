@@ -48,7 +48,7 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<UserListResponse> getAllUsers(
-            @RequestParam(defaultValue = "5") @Min(1) @Max(20) Integer size,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(20) Integer size,
             @RequestParam(defaultValue = "1") @Min(1) Integer page) {
 
         UserListResponse response = userService.getAllUsers(size, page);

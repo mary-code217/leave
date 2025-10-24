@@ -5,7 +5,9 @@ import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
 import com.hoho.leave.domain.user.dto.request.UserJoinRequest;
+import com.hoho.leave.domain.user.service.PasswordEncoder;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,15 @@ import java.time.LocalDate;
                 @UniqueConstraint(name = "uq_users_employee_no", columnNames = "employee_no")
         }
 )
-@NoArgsConstructor
-@AllArgsConstructor
+@NamedEntityGraph(
+        name = "User.withOrg",
+        attributeNodes = {
+                @NamedAttributeNode("team"),
+                @NamedAttributeNode("grade"),
+                @NamedAttributeNode("position")
+        }
+)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,30 +71,22 @@ public class User extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
-
-    public User(String username, String password, String email, String employeeNo, LocalDate hireDate, UserRole role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.employeeNo = employeeNo;
-        this.hireDate = hireDate;
-        this.role = role;
-    }
-
     public User(String email, UserRole role) {
         this.email = email;
         this.role = role;
     }
 
-    public static User create(UserJoinRequest userJoinRequest) {
-        return new User(
-                userJoinRequest.getUsername(),
-                userJoinRequest.getPassword(),
-                userJoinRequest.getEmail(),
-                userJoinRequest.getEmployeeNo(),
-                userJoinRequest.getHireDate(),
-                UserRole.valueOf("ROLE_"+userJoinRequest.getRole())
-        );
+    public static User create(UserJoinRequest userJoinRequest, PasswordEncoder encoder) {
+        User user = new User();
+
+        user.username = userJoinRequest.getUsername();
+        user.password = encoder.encode(userJoinRequest.getPassword());
+        user.email = userJoinRequest.getEmail();
+        user.employeeNo = userJoinRequest.getEmployeeNo();
+        user.hireDate = userJoinRequest.getHireDate();
+        user.role = UserRole.valueOf("ROLE_"+userJoinRequest.getRole());
+
+        return user;
     }
 
     public void assignGrade(Grade grade) {
@@ -100,8 +101,8 @@ public class User extends BaseEntity {
         this.team = team;
     }
 
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
+    public void updatePassword(String newPassword, PasswordEncoder encoder) {
+        this.password = encoder.encode(newPassword);
     }
 
     public void updateUsername(String username) {
