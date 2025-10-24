@@ -1,13 +1,7 @@
 package com.hoho.leave.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hoho.leave.domain.org.entity.Grade;
-import com.hoho.leave.domain.org.entity.Position;
-import com.hoho.leave.domain.org.entity.Team;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.hoho.leave.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserDetailResponse {
     Long id;
     String username;
@@ -30,22 +22,20 @@ public class UserDetailResponse {
     String positionName;
     String active;
     
-    public static UserDetailResponse from(Long id, String username,
-                                          String email, String employeeNo,
-                                          LocalDate hireDate, String role, 
-                                          String teamName, String gradeName, String positionName, boolean active) {
-        
-        return new UserDetailResponse(
-                id,
-                username,
-                email,
-                employeeNo,
-                hireDate,
-                role,
-                teamName,
-                gradeName,
-                positionName,
-                active ? "재직" : "휴직"
-        );
+    public static UserDetailResponse of(User user) {
+        UserDetailResponse response = new UserDetailResponse();
+
+        response.id = user.getId();
+        response.username = user.getUsername();
+        response.email = user.getEmail();
+        response.employeeNo = user.getEmployeeNo();
+        response.hireDate = user.getHireDate();
+        response.role = user.getRole().toString();
+        response.teamName = user.getTeam() != null ? user.getTeam().getTeamName() : "";
+        response.gradeName = user.getGrade() != null ? user.getGrade().getGradeName() : "";
+        response.positionName = user.getPosition() != null ? user.getPosition().getPositionName() : "";
+        response.active = user.isActive() ? "재직" : "휴직or퇴직";
+
+        return response;
     }
 }

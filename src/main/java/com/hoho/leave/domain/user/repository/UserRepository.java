@@ -1,7 +1,11 @@
 package com.hoho.leave.domain.user.repository;
 
 import com.hoho.leave.domain.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,5 +22,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 유저 도메인 관련
     boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);
+
+    @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select u from User u")
+    Page<User> findPageWithOrg(Pageable pageable);
+
+    @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select u from User u where u.id = :userId")
+    Optional<User> findByIdWithOrg(Long userId);
 
 }

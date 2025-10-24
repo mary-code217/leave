@@ -36,14 +36,32 @@ public class UserJoinRequest {
     @NotBlank(message = "사용자 권한은 필수 입력 입니다.")
     String role;
 
-    Long teamId;
+    String teamName;
 
-    Long gradeId;
+    String gradeName;
 
-    Long positionId;
+    String positionName;
 
     @NotNull(message = "초기 휴가 설정은 필수 입니다.")
     @Digits(integer = 3, fraction = 2)
     @DecimalMin(value = "0.00", message = "휴가 일수는 음수가 될 수 없습니다.")
     BigDecimal balanceDays;
+
+    public void setTeamName(String teamName) {
+        this.teamName = blankToNull(teamName);
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = blankToNull(gradeName);
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = blankToNull(positionName);
+    }
+
+    private static String blankToNull(String s) {
+        if (s == null) return null;
+        String t = s.trim();
+        return t.isEmpty() ? null : t;
+    }
 }

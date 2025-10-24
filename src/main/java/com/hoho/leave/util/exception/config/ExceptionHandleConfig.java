@@ -1,6 +1,8 @@
 package com.hoho.leave.util.exception.config;
 
 import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.util.exception.DuplicateEmailException;
+import com.hoho.leave.util.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +21,16 @@ public class ExceptionHandleConfig {
     @ExceptionHandler(BusinessException.class)
     public ProblemDetail handleBusiness(BusinessException e) {
         return getProblemDetail(HttpStatus.BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ProblemDetail handleDuplicateEmail(DuplicateEmailException e) {
+        return getProblemDetail(HttpStatus.CONFLICT, e);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ProblemDetail handleNotFound(NotFoundException e) {
+        return getProblemDetail(HttpStatus.NOT_FOUND, e);
     }
 
     private static ProblemDetail getProblemDetail(HttpStatus status, Exception e) {
