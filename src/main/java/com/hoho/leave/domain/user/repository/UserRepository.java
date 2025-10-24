@@ -19,12 +19,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByPositionId(Long positionId);
     Long countByTeamId(Long teamId);
 
+    // 유저 도메인 관련
+    boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
+
     @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select u from User u")
     Page<User> findPageWithOrg(Pageable pageable);
 
-    // 유저 도메인 관련
-    boolean existsByEmail(String email);
-    Optional<User> findByEmail(String email);
+    @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select u from User u where u.id = :userId")
+    Optional<User> findByIdWithOrg(Long userId);
 
 }

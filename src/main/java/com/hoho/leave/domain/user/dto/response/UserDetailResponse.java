@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserDetailResponse {
     Long id;
     String username;
@@ -33,9 +31,9 @@ public class UserDetailResponse {
         response.employeeNo = user.getEmployeeNo();
         response.hireDate = user.getHireDate();
         response.role = user.getRole().toString();
-        response.teamName = user.getTeam() != null ? user.getTeam().getTeamName() : null;
-        response.gradeName = user.getGrade() != null ? user.getGrade().getGradeName() : null;
-        response.positionName = user.getPosition() != null ? user.getPosition().getPositionName() : null;
+        response.teamName = user.getTeam() != null ? user.getTeam().getTeamName() : "";
+        response.gradeName = user.getGrade() != null ? user.getGrade().getGradeName() : "";
+        response.positionName = user.getPosition() != null ? user.getPosition().getPositionName() : "";
         response.active = user.isActive() ? "재직" : "휴직or퇴직";
 
         return response;
