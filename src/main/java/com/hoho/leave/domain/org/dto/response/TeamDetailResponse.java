@@ -1,28 +1,38 @@
 package com.hoho.leave.domain.org.dto.response;
 
-import lombok.AllArgsConstructor;
+import com.hoho.leave.domain.org.entity.Team;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class TeamDetailResponse {
 
     Long teamId;
+
     String teamName;
+
     Integer orderNo;
+
     Long parentId;
+
     String parentName;
 
     Long userCount;
+
     Long childrenCount;
 
-    public static TeamDetailResponse from(Long teamId, String teamName,
-                                          Integer orderNo, Long parentId,
-                                          String parentName, Long userCount,
-                                          Long childrenCount) {
+    public static TeamDetailResponse of(Team team, Long userCount,
+                                        Long childrenCount) {
 
-        return new TeamDetailResponse(teamId, teamName, orderNo, parentId, parentName, userCount, childrenCount);
+        TeamDetailResponse response = new TeamDetailResponse();
+
+        response.teamId = team.getId();
+        response.teamName = team.getTeamName();
+        response.orderNo = team.getOrderNo();
+        response.parentId = team.getParent() == null ? 0L : team.getParent().getId();
+        response.parentName = team.getParent() == null ? "" : team.getParent().getTeamName();
+        response.userCount = userCount;
+        response.childrenCount = childrenCount;
+
+        return response;
     }
 }

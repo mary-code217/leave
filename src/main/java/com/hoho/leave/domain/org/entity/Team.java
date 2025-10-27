@@ -1,7 +1,10 @@
 package com.hoho.leave.domain.org.entity;
 
 import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
+import com.hoho.leave.util.exception.BusinessException;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +13,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "team")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Team extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,23 +35,19 @@ public class Team extends BaseEntity {
     @Column(name = "order_no")
     private Integer orderNo;
 
-    public Team(String teamName, Integer orderNo) {
-        if(teamName == null || teamName.isBlank())
-            throw new IllegalArgumentException("부서명은 필수 입력 입니다.");
-        if(orderNo != null && orderNo < 0)
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-        this.teamName = teamName;
-        this.orderNo = orderNo;
-    }
-
     // 루트 부서 생성
-    public static Team createTeam(String teamName, Integer orderNo) {
-        return new Team(teamName, orderNo);
+    public static Team createTeam(TeamCreateRequest request) {
+        Team team = new Team();
+
+        team.teamName = request.getTeamName();
+        team.orderNo = request.getOrderNo();
+
+        return team;
     }
 
     // 자식 부서 생성
-    public Team createChild(String teamName, Integer orderNo) {
-        Team child = new Team(teamName, orderNo);
+    public Team createChild(TeamCreateRequest request) {
+        Team child = createTeam(request);
         child.parent = this;
         this.children.add(child);
         return child;
@@ -56,24 +55,20 @@ public class Team extends BaseEntity {
 
     // 부서명 변경
     public void rename(String newName) {
-        if (newName == null || newName.isBlank()) {
-            throw new IllegalArgumentException("팀명은 비어 있을 수 없습니다.");
-        }
+        if (newName == null || newName.isBlank()) throw new BusinessException("팀명은 비어 있을 수 없습니다.");
+
         this.teamName = newName;
     }
 
     // 정렬기준 변경
     public void changeOrder(Integer newOrderNo) {
-        if (newOrderNo != null && newOrderNo < 0) {
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-        }
-        this.orderNo = newOrderNo;
+        if(newOrderNo != null) this.orderNo = newOrderNo;
     }
 
     // 상위부서 이동
     public void moveTo(Team newParent) {
         if (this == newParent) {
-            throw new IllegalArgumentException("자기 자신을 상위 부서로 지정할 수 없습니다.");
+            throw new BusinessException("자기 자신을 상위 부서로 지정할 수 없습니다.");
         }
         // 동일 parent면 변경 없음
         if (java.util.Objects.equals(this.parent, newParent)) {
@@ -82,7 +77,7 @@ public class Team extends BaseEntity {
         // (선택) 사이클 방지: newParent의 조상에 this가 있는지 확인
         for (Team p = newParent; p != null; p = p.getParent()) {
             if (p == this) {
-                throw new IllegalStateException("하위 부서로 이동할 수 없습니다.");
+                throw new BusinessException("하위 부서로 이동할 수 없습니다.");
             }
         }
         // 기존 부모의 children에서 제거

@@ -12,7 +12,7 @@ import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.DuplicateEmailException;
+import com.hoho.leave.util.exception.DuplicateException;
 import com.hoho.leave.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -100,7 +100,7 @@ public class UserService {
 
     private void checkDuplicateEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new DuplicateEmailException("Duplicate Email : " + email);
+            throw new DuplicateException("Duplicate Email : " + email);
         }
     }
 
