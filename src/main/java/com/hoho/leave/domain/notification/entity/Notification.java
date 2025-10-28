@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.notification.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;

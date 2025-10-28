@@ -4,7 +4,7 @@ import com.hoho.leave.domain.leave.account.dto.AccountEvent;
 import com.hoho.leave.domain.leave.account.entity.UserLeaves;
 import com.hoho.leave.domain.leave.account.repository.UserLeavesRepository;
 import com.hoho.leave.domain.user.entity.User;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

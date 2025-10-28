@@ -1,4 +1,4 @@
-package com.hoho.leave.config.security;
+package com.hoho.leave.domain.auth;
 
 
 import lombok.RequiredArgsConstructor;

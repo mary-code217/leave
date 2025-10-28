@@ -7,7 +7,7 @@ import com.hoho.leave.domain.notification.entity.NotificationType;
 import com.hoho.leave.domain.notification.repository.NotificationRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,6 @@ public class NotificationService {
     private final UserRepository userRepository;
 
     public void createNotification(User user, NotificationType type, String content) {
-
         notificationRepository.save(Notification.create(user, type, content));
     }
 

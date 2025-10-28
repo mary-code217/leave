@@ -1,4 +1,4 @@
-package com.hoho.leave.config.security;
+package com.hoho.leave.common.security.principal;
 
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;

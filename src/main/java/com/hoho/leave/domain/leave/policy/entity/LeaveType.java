@@ -1,10 +1,9 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeCreateRequest;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

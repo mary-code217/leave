@@ -1,4 +1,4 @@
-package com.hoho.leave.util.exception;
+package com.hoho.leave.common.exception;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message) {

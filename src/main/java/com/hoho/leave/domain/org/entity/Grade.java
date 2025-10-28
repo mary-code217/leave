@@ -1,8 +1,11 @@
 package com.hoho.leave.domain.org.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.org.dto.request.GradeCreateRequest;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -12,6 +15,7 @@ import lombok.Getter;
                 @UniqueConstraint(name = "uq_grade_name", columnNames = "grade_name"),
         }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Grade extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,32 +26,18 @@ public class Grade extends BaseEntity {
     @Column(name = "order_no")
     private Integer orderNo;
 
-    protected Grade() {}
+    public static Grade create(GradeCreateRequest request) {
+        Grade grade = new Grade();
 
-    public Grade(String gradeName, Integer orderNo) {
-        if (gradeName == null || gradeName.isBlank())
-            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
-        if (orderNo != null && orderNo < 0)
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-        this.gradeName = gradeName;
-        this.orderNo = orderNo;
+        grade.gradeName = request.getGradeName();
+        grade.orderNo = request.getOrderNo();
+
+        return grade;
     }
-
-    public static Grade create(String gradeName, Integer orderNo) {
-        return new Grade(gradeName, orderNo);
-    }
-
     public void changeOrderNo(Integer orderNo) {
-        if (orderNo != null && orderNo < 0)
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-
-        this.orderNo = orderNo;
+        if(orderNo != null) this.orderNo = orderNo;
     }
-
     public void rename(String gradeName) {
-        if (gradeName == null || gradeName.isBlank())
-            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
-
         this.gradeName = gradeName;
     }
 }

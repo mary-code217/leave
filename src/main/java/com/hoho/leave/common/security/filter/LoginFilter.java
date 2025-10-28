@@ -1,8 +1,9 @@
-package com.hoho.leave.config.security;
+package com.hoho.leave.common.security.filter;
 
-import com.hoho.leave.config.jwt.JWTUtil;
-import com.hoho.leave.config.jwt.RefreshEntity;
-import com.hoho.leave.config.jwt.RefreshRepository;
+import com.hoho.leave.common.security.jwt.JWTUtil;
+import com.hoho.leave.common.security.principal.CustomUserDetails;
+import com.hoho.leave.domain.auth.RefreshEntity;
+import com.hoho.leave.domain.auth.RefreshRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

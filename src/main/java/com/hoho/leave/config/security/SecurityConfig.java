@@ -1,8 +1,10 @@
 package com.hoho.leave.config.security;
 
-import com.hoho.leave.config.jwt.JWTFilter;
-import com.hoho.leave.config.jwt.JWTUtil;
-import com.hoho.leave.config.jwt.RefreshRepository;
+import com.hoho.leave.common.security.filter.CustomLogoutFilter;
+import com.hoho.leave.common.security.filter.JWTFilter;
+import com.hoho.leave.common.security.filter.LoginFilter;
+import com.hoho.leave.common.security.jwt.JWTUtil;
+import com.hoho.leave.domain.auth.RefreshRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

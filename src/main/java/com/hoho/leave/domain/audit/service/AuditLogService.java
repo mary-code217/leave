@@ -7,7 +7,7 @@ import com.hoho.leave.domain.audit.entity.AuditLog;
 import com.hoho.leave.domain.audit.repository.AuditLogRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

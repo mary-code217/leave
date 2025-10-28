@@ -8,7 +8,7 @@ import com.hoho.leave.domain.leave.request.repository.AttachmentRepository;
 import com.hoho.leave.domain.leave.request.repository.LeaveRequestRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.hoho.leave.util.exception;
+package com.hoho.leave.common.exception;
 
 public class DuplicateException extends RuntimeException {
     public DuplicateException(String message) {

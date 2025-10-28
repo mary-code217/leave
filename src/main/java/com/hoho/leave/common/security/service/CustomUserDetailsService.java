@@ -1,5 +1,6 @@
-package com.hoho.leave.config.security;
+package com.hoho.leave.common.security.service;
 
+import com.hoho.leave.common.security.principal.CustomUserDetails;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

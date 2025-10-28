@@ -1,8 +1,9 @@
 package com.hoho.leave.domain.handover.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
                 @UniqueConstraint(name = "uq_hnr_handover_recipient", columnNames = {"handover_id", "recipient_id"})
         }
 )
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HandoverRecipient extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +30,13 @@ public class HandoverRecipient extends BaseEntity {
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
 
-    public HandoverRecipient(HandoverNote handoverNote, User recipient) {
-        this.handoverNote = handoverNote;
-        this.recipient = recipient;
-    }
-
     public static HandoverRecipient create(HandoverNote handoverNote, User recipient) {
-        return new HandoverRecipient(handoverNote, recipient);
+        HandoverRecipient handoverRecipient = new HandoverRecipient();
+
+        handoverRecipient.handoverNote = handoverNote;
+        handoverRecipient.recipient = recipient;
+
+        return handoverRecipient;
     }
 }
 

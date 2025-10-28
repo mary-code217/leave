@@ -3,7 +3,7 @@ package com.hoho.leave.domain.leave.policy.service;
 import com.hoho.leave.domain.leave.policy.dto.request.CreateConcurrencyPolicy;
 import com.hoho.leave.domain.leave.policy.entity.LeaveConcurrencyPolicy;
 import com.hoho.leave.domain.leave.policy.repository.LeaveConcurrencyPolicyRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
