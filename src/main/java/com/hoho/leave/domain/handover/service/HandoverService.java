@@ -1,20 +1,14 @@
 package com.hoho.leave.domain.handover.service;
 
-import com.hoho.leave.domain.audit.entity.Action;
-import com.hoho.leave.domain.audit.service.AuditLogService;
-import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.handover.dto.request.HandoverCreateRequest;
-import com.hoho.leave.domain.handover.dto.request.HandoverUpdateRequest;
-import com.hoho.leave.domain.handover.dto.response.*;
+import com.hoho.leave.common.exception.NotFoundException;
+import com.hoho.leave.domain.handover.dto.response.HandoverAuthorListResponse;
+import com.hoho.leave.domain.handover.dto.response.HandoverAuthorResponse;
+import com.hoho.leave.domain.handover.dto.response.HandoverDetailResponse;
 import com.hoho.leave.domain.handover.entity.HandoverNote;
-import com.hoho.leave.domain.handover.entity.HandoverRecipient;
 import com.hoho.leave.domain.handover.repository.HandoverNoteRepository;
 import com.hoho.leave.domain.handover.repository.HandoverRecipientRepository;
-import com.hoho.leave.domain.notification.entity.NotificationType;
-import com.hoho.leave.domain.notification.service.NotificationService;
+import com.hoho.leave.domain.handover.repository.HandoverRecipientRepository.RecipientUsernameRow;
 import com.hoho.leave.domain.user.entity.User;
-import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,180 +17,95 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 인수인계 서비스
+ */
 @Service
 @RequiredArgsConstructor
 public class HandoverService {
 
-    private final HandoverNoteRepository handoverNoteRepository;
-    private final HandoverRecipientRepository handoverRecipientRepository;
-    private final UserRepository userRepository;
-    private final AuditLogService auditLogService;
-    private final NotificationService notificationService;
+    private final HandoverNoteRepository noteRepository;
+    private final HandoverRecipientRepository recipientRepository;
 
-    @Transactional
-    public void createHandover(HandoverCreateRequest dto) {
-        User author = userRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new BusinessException("작성 실패 - 존재하지 않는 유저 입니다."));
-
-        HandoverNote saveNote = handoverNoteRepository.save(HandoverNote.create(author, dto.getTitle(), dto.getContent()));
-
-        List<User> findRecipients = userRepository.findAllById(dto.getRecipientIds());
-
-        List<HandoverRecipient> handoverRecipients = findRecipients.stream()
-                .map(u -> HandoverRecipient.create(saveNote, u))
-                .toList();
-        handoverRecipientRepository.saveAll(handoverRecipients);
-
-        notificationService.createManyNotification(
-                findRecipients,
-                NotificationType.HANDOVER_ASSIGNED,
-                "인수인계가 도착하였습니다."
-        );
-        auditLogService.createLog(
-                Action.HANDOVER_CREATE,
-                author.getId(),
-                AuditObjectType.HANDOVER,
-                saveNote.getId(),
-                "["+author.getUsername()+"]님이 ["+getNames(findRecipients)+"]에게 인수인계를 남겼습니다."
-        );
+    public HandoverNote createHandover(User author, String title, String content) {
+        return noteRepository.save(HandoverNote.create(author, title, content));
     }
 
-    // 수신자 이름 조인 메서드
-    private String getNames(List<User> findRecipients) {
-        return findRecipients.stream()
-                .map(User::getUsername)
-                .collect(Collectors.joining(", "));
+    public HandoverNote updateHandover(Long handoverId, String title, String content) {
+        HandoverNote handoverNote = getHandoverNoteEntity(handoverId);
+        handoverNote.update(title, content);
+
+        return handoverNote;
+    }
+
+    public void deleteHandover(Long handoverId) {
+        HandoverNote handoverNote = getHandoverNoteEntity(handoverId);
+        noteRepository.delete(handoverNote);
     }
 
     // 발신목록
     @Transactional(readOnly = true)
     public HandoverAuthorListResponse getHandoverAuthorList(Long authorId, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<HandoverNote> pageList = handoverNoteRepository.findByAuthorId(authorId, pageable);
+        Pageable pageable = getPageable(page, size);
+        Page<HandoverNote> pageList = noteRepository.findByAuthorId(authorId, pageable);
 
-        List<Long> noteIds = pageList.getContent().stream()
-                .map(HandoverNote::getId)
-                .toList();
+        List<Long> noteIds = pageList.getContent().stream().map(HandoverNote::getId).toList();
 
-        List<HandoverRecipientRepository.RecipientUsernameRow> rows =
-                handoverRecipientRepository.findRecipientUsernamesByNoteIds(noteIds);
+        List<RecipientUsernameRow> rows = recipientRepository.findRecipientUsernamesByNoteIds(noteIds);
 
-        Map<Long, List<String>> recipientsByNoteId = rows.stream()
-                .collect(Collectors.groupingBy(
-                        HandoverRecipientRepository.RecipientUsernameRow::getNoteId,
-                        Collectors.mapping(HandoverRecipientRepository.RecipientUsernameRow::getUsername, Collectors.toList())
-                ));
+        List<HandoverAuthorResponse> list = getHandoverAuthorResponses(rows, pageList);
 
-        List<HandoverAuthorResponse> list = pageList.getContent().stream()
-                .map(note -> HandoverAuthorResponse.from(
-                        note.getId(),
-                        note.getAuthor().getUsername(),
-                        recipientsByNoteId.getOrDefault(note.getId(), List.of()),
-                        note.getTitle(),
-                        note.getContent(),
-                        note.getCreatedAt()
-                ))
-                .toList();
-
-        return HandoverAuthorListResponse.from(
-                page,
-                size,
-                list,
-                pageList.getTotalPages(),
-                pageList.getTotalElements(),
-                pageList.isFirst(),
-                pageList.isLast()
-        );
-    }
-
-    // 수신목록
-    @Transactional(readOnly = true)
-    public HandoverRecipientListResponse getRecipientList(Long recipientId, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<HandoverRecipient> pageList = handoverRecipientRepository.findByRecipientId(recipientId, pageable);
-
-        List<HandoverRecipientResponse> list = pageList.getContent().stream()
-                .map(h -> {
-                    return HandoverRecipientResponse.from(h.getHandoverNote());
-                }).toList();
-
-
-        return HandoverRecipientListResponse.from(
-                page,
-                size,
-                list,
-                pageList.getTotalPages(),
-                pageList.getTotalElements(),
-                pageList.isFirst(),
-                pageList.isLast()
-        );
+        return HandoverAuthorListResponse.of(pageList, list);
     }
 
     // 단건조회
     @Transactional(readOnly = true)
     public HandoverDetailResponse getHandover(Long handoverId) {
-        HandoverNote handoverNote = handoverNoteRepository.findByIdWithAuthor(handoverId)
-                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 인수인계 입니다."));
+        HandoverNote handoverNote = getHandoverNoteEntity(handoverId);
+        List<String> recipients = recipientRepository.findRecipientNamesByHandoverNoteId(handoverNote.getId());
 
-        List<String> recipients = handoverRecipientRepository.findRecipientNamesByHandoverNoteId(handoverNote.getId());
-
-        return HandoverDetailResponse.from(
-                handoverNote.getId(),
-                handoverNote.getAuthor().getUsername(),
-                recipients,
-                handoverNote.getTitle(),
-                handoverNote.getContent(),
-                handoverNote.getCreatedAt()
-        );
+        return HandoverDetailResponse.of(handoverNote, recipients);
     }
 
-    // 인수인계 수정
-    @Transactional
-    public void updateHandover(Long handoverId, HandoverUpdateRequest dto) {
-        HandoverNote handoverNote = handoverNoteRepository.findByIdWithAuthor(handoverId)
-                .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 인수인계 입니다."));
-
-        handoverNote.update(dto.getTitle(), dto.getContent());
-
-        List<HandoverRecipient> recipients = handoverRecipientRepository.findAllByHandoverNoteId(handoverNote.getId());
-
-        Set<Long> existingIds = recipients.stream()
-                .map(hr -> hr.getRecipient().getId())
-                .collect(Collectors.toSet());
-        Set<Long> desiredIds = new HashSet<>(dto.getRecipientIds());
-
-        Set<Long> toAdd = new HashSet<>(desiredIds);
-        toAdd.removeAll(existingIds);
-        Set<Long> toRemove = new HashSet<>(existingIds);
-        toRemove.removeAll(desiredIds);
-
-        List<HandoverRecipient> newRecipients = toAdd.stream()
-                .map(u -> HandoverRecipient.create(handoverNote, userRepository.findById(u)
-                        .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 사용자 입니다."))))
-                .toList();
-        handoverRecipientRepository.saveAll(newRecipients);
-
-        handoverRecipientRepository.deleteByNoteIdAndRecipientIds(handoverNote.getId(), toRemove);
-
-        auditLogService.createLog(
-                Action.HANDOVER_UPDATE,
-                handoverNote.getAuthor().getId(),
-                AuditObjectType.HANDOVER,
-                handoverNote.getId(),
-                "["+handoverNote.getAuthor().getUsername()+"]님이 인수인계를 수정하였습니다."
-        );
+    /**
+     * 인수인계 엔티티 조회
+     */
+    private HandoverNote getHandoverNoteEntity(Long handoverId) {
+        return noteRepository.findById(handoverId)
+                .orElseThrow(() -> new NotFoundException("Not Found HandoverNote : " + handoverId));
+    }
+    
+    /**
+     * 페이지 객체 생성
+     */
+    private PageRequest getPageable(Integer page, Integer size) {
+        return PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createdAt")));
     }
 
-    //삭제
-    @Transactional
-    public void deleteHandover(Long handoverId) {
-        HandoverNote handoverNote = handoverNoteRepository.findById(handoverId)
-                .orElseThrow(() -> new BusinessException("삭제 실패 - 존재하지 않는 인수인계 입니다."));
+    /**
+     * 페이지 리스트 -> 발신목록 응답 리스트 변환
+     */
+    private List<HandoverAuthorResponse> getHandoverAuthorResponses(List<RecipientUsernameRow> rows, Page<HandoverNote> pageList) {
+        Map<Long, List<String>> recipientsByNoteId = getLongListMap(rows);
 
-        handoverRecipientRepository.deleteByHandoverNoteId(handoverNote.getId());
-        handoverNoteRepository.delete(handoverNote);
+        return pageList.getContent().stream()
+                .map(note -> HandoverAuthorResponse.of(
+                        note, recipientsByNoteId.getOrDefault(note.getId(), List.of())
+                )).toList();
+    }
+
+    /**
+     * Map<Long, List<String>> 변환
+     */
+    private Map<Long, List<String>> getLongListMap(List<RecipientUsernameRow> rows) {
+        return rows.stream()
+                .collect(Collectors.groupingBy(
+                        RecipientUsernameRow::getNoteId,
+                        Collectors.mapping(RecipientUsernameRow::getUsername, Collectors.toList())
+                ));
     }
 }

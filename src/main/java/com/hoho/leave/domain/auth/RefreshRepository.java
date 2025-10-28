@@ -1,4 +1,4 @@
-package com.hoho.leave.config.jwt;
+package com.hoho.leave.domain.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;

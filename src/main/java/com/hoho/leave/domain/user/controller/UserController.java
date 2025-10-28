@@ -4,7 +4,7 @@ import com.hoho.leave.domain.user.dto.request.UserJoinRequest;
 import com.hoho.leave.domain.user.dto.request.UserUpdateRequest;
 import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
-import com.hoho.leave.domain.user.facade.UserApplicationService;
+import com.hoho.leave.domain.user.facade.UserFacade;
 import com.hoho.leave.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final UserApplicationService userApplicationService;
+    private final UserFacade userApplicationService;
 
     @PostMapping("/join")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserJoinRequest userJoinRequest) {

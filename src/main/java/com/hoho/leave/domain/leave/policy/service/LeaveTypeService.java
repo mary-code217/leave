@@ -6,7 +6,7 @@ import com.hoho.leave.domain.leave.policy.dto.response.LeaveTypeDetailResponse;
 import com.hoho.leave.domain.leave.policy.dto.response.LeaveTypeListResponse;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.policy.repository.LeaveTypeRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

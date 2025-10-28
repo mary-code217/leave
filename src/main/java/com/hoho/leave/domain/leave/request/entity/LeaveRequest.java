@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.request.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
 import com.hoho.leave.domain.user.entity.User;

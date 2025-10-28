@@ -12,8 +12,8 @@ import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.DuplicateException;
-import com.hoho.leave.util.exception.NotFoundException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,18 +37,14 @@ public class UserService {
 
     public User createUser(UserJoinRequest request) {
         checkDuplicateEmail(request.getEmail());
-
         User user = User.create(request, passwordEncoder);
-
         assignOrgIfPresent(request.getTeamName(), request.getPositionName(), request.getGradeName(), user);
-
         return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
     public UserDetailResponse getUser(Long userId) {
         User user = getUserEntity(userId);
-
         return UserDetailResponse.of(user);
     }
 
@@ -79,9 +75,7 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, UserUpdateRequest request) {
         User user = getUserEntity(userId);
-
         assignOrgIfPresent(request.getTeamName(), request.getPositionName(), request.getGradeName(), user);
-
         user.updatePassword(request.getPassword(), passwordEncoder);
         user.updateUsername(request.getUsername());
     }
@@ -89,21 +83,36 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         User user = getUserEntity(userId);
-
         userRepository.delete(user);
     }
 
-    private User getUserEntity(Long userId) {
+    /**
+     * 유저 엔티티 조회
+     */
+    public User getUserEntity(Long userId) {
         return userRepository.findByIdWithOrg(userId)
                 .orElseThrow(() -> new NotFoundException("Not Found User : " + userId));
     }
 
+    /**
+     * 유저 엔티티 조회(List)
+     */
+    public List<User> getUserEntityList(List<Long> userIds) {
+        return userRepository.findAllById(userIds);
+    }
+
+    /**
+     * 중복 이메일 체크
+     */
     private void checkDuplicateEmail(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new DuplicateException("Duplicate Email : " + email);
         }
     }
 
+    /**
+     * 조직 정보 할당
+     */
     private void assignOrgIfPresent(String teamName, String positionName, String gradeName, User user) {
         if (teamName != null) assignTeam(teamName, user);
 
@@ -112,18 +121,27 @@ public class UserService {
         if (gradeName != null) assignGrade(gradeName, user);
     }
 
+    /**
+     * 부서 할당
+     */
     private void assignTeam(String teamName, User user) {
         Team team = teamRepository.findByTeamName(teamName)
                 .orElseThrow(() -> new NotFoundException("Not Found Team : " + teamName));
         user.assignTeam(team);
     }
 
+    /**
+     * 직책 할당
+     */
     private void assignPosition(String positionName, User user) {
         Position position = positionRepository.findByPositionName(positionName)
                 .orElseThrow(() -> new NotFoundException("Not Found Position : " + positionName));
         user.assignPosition(position);
     }
 
+    /**
+     * 직급 할당
+     */
     private void assignGrade(String gradeName, User user) {
         Grade grade = gradeRepository.findByGradeName(gradeName)
                 .orElseThrow(() -> new NotFoundException("Not Found Grade : " + gradeName));

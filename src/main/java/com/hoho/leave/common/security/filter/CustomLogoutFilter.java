@@ -1,7 +1,7 @@
-package com.hoho.leave.config.security;
+package com.hoho.leave.common.security.filter;
 
-import com.hoho.leave.config.jwt.JWTUtil;
-import com.hoho.leave.config.jwt.RefreshRepository;
+import com.hoho.leave.common.security.jwt.JWTUtil;
+import com.hoho.leave.domain.auth.RefreshRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

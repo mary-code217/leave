@@ -1,4 +1,4 @@
-package com.hoho.leave.config.jwt;
+package com.hoho.leave.domain.auth;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

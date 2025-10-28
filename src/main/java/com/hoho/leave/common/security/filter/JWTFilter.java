@@ -1,6 +1,7 @@
-package com.hoho.leave.config.jwt;
+package com.hoho.leave.common.security.filter;
 
-import com.hoho.leave.config.security.CustomUserDetails;
+import com.hoho.leave.common.security.jwt.JWTUtil;
+import com.hoho.leave.common.security.principal.CustomUserDetails;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.entity.UserRole;
 import io.jsonwebtoken.ExpiredJwtException;

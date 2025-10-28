@@ -1,8 +1,11 @@
 package com.hoho.leave.domain.org.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.org.dto.request.PositionCreateRequest;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -12,6 +15,7 @@ import lombok.Getter;
                 @UniqueConstraint(name = "uq_position_name", columnNames = "position_name")
         }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Position extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,36 +23,23 @@ public class Position extends BaseEntity {
     @Column(name = "position_name", nullable = false)
     private String positionName;
 
-    // 선택값: 지정 안 하면 null (UI에선 이름순 보조 정렬)
     @Column(name = "order_no")
     private Integer orderNo;
 
-    protected Position() {}
+    public static Position create(PositionCreateRequest request) {
+        Position position = new Position();
 
-    public Position(String positionName, Integer orderNo) {
-        if (positionName == null || positionName.isBlank())
-            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
-        if (orderNo != null && orderNo < 0)
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-        this.positionName = positionName;
-        this.orderNo = orderNo;
-    }
+        position.positionName = request.getPositionName();
+        position.orderNo = request.getOrderNo();
 
-    public static Position create(String positionName, Integer orderNo) {
-        return new Position(positionName, orderNo);
+        return position;
     }
 
     public void changeOrderNo(Integer orderNo) {
-        if (orderNo != null && orderNo < 0)
-            throw new IllegalArgumentException("orderNo는 0 이상이어야 합니다.");
-
-        this.orderNo = orderNo;
+        if(orderNo != null) this.orderNo = orderNo;
     }
 
     public void rename(String newPositionName) {
-        if (positionName == null || positionName.isBlank())
-            throw new IllegalArgumentException("직급명은 비어 있을 수 없습니다.");
-
         this.positionName = newPositionName;
     }
 }

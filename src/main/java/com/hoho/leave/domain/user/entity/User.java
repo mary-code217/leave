@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.user.entity;
 
-import com.hoho.leave.config.jpa.BaseEntity;
+import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
@@ -8,7 +8,6 @@ import com.hoho.leave.domain.user.dto.request.UserJoinRequest;
 import com.hoho.leave.domain.user.service.PasswordEncoder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

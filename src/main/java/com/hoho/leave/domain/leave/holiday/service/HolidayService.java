@@ -6,7 +6,7 @@ import com.hoho.leave.domain.leave.holiday.dto.response.HolidayMonthResponse;
 import com.hoho.leave.domain.leave.holiday.dto.response.HolidayRangeResponse;
 import com.hoho.leave.domain.leave.holiday.entity.Holiday;
 import com.hoho.leave.domain.leave.holiday.repository.HolidayRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

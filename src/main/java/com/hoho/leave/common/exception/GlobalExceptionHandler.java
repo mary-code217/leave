@@ -1,34 +1,30 @@
-package com.hoho.leave.util.exception.config;
+package com.hoho.leave.common.exception;
 
-import com.hoho.leave.util.exception.BusinessException;
-import com.hoho.leave.util.exception.DuplicateException;
-import com.hoho.leave.util.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class ExceptionHandleConfig {
+public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public ProblemDetail handleException(Exception e) {
         return getProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 
-    @ExceptionHandler(BusinessException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(BusinessException.class)
     public ProblemDetail handleBusiness(BusinessException e) {
         return getProblemDetail(HttpStatus.BAD_REQUEST, e);
     }
 
-    @ExceptionHandler(DuplicateException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(DuplicateException.class)
     public ProblemDetail handleDuplicateEmail(DuplicateException e) {
         return getProblemDetail(HttpStatus.CONFLICT, e);
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleNotFound(NotFoundException e) {
         return getProblemDetail(HttpStatus.NOT_FOUND, e);
     }

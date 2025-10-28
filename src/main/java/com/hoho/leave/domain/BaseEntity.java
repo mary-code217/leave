@@ -1,4 +1,4 @@
-package com.hoho.leave.config.jpa;
+package com.hoho.leave.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

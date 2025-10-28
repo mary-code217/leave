@@ -1,4 +1,4 @@
-package com.hoho.leave.config.jwt;
+package com.hoho.leave.common.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

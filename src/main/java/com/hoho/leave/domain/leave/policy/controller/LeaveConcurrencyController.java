@@ -1,8 +1,7 @@
 package com.hoho.leave.domain.leave.policy.controller;
 
-import com.hoho.leave.domain.leave.facade.ConcurrencyPolicyApplicationService;
+import com.hoho.leave.domain.leave.facade.ConcurrencyPolicyFacade;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveConcurrencyPolicyRequest;
-import com.hoho.leave.domain.leave.policy.service.LeaveConcurrencyPolicyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/concurrency")
 public class LeaveConcurrencyController {
 
-    private final ConcurrencyPolicyApplicationService service;
+    private final ConcurrencyPolicyFacade service;
 
     @PostMapping("")
     public ResponseEntity<?> createLeaveConcurrency(

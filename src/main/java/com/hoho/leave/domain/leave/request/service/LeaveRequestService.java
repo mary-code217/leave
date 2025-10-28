@@ -10,14 +10,13 @@ import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
 import com.hoho.leave.domain.leave.request.repository.LeaveRequestRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

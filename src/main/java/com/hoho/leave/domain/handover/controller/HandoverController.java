@@ -5,6 +5,8 @@ import com.hoho.leave.domain.handover.dto.request.HandoverUpdateRequest;
 import com.hoho.leave.domain.handover.dto.response.HandoverAuthorListResponse;
 import com.hoho.leave.domain.handover.dto.response.HandoverDetailResponse;
 import com.hoho.leave.domain.handover.dto.response.HandoverRecipientListResponse;
+import com.hoho.leave.domain.handover.facade.HandoverModify;
+import com.hoho.leave.domain.handover.service.HandoverRecipientService;
 import com.hoho.leave.domain.handover.service.HandoverService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/handover")
 public class HandoverController {
 
+    private final HandoverRecipientService recipientService;
     private final HandoverService handoverService;
+    private final HandoverModify handoverModify;
 
     @PostMapping("")
     public ResponseEntity<?> createHandover(@RequestBody @Valid HandoverCreateRequest handoverCreateRequest) {
-        
-        handoverService.createHandover(handoverCreateRequest);
+
+        handoverModify.createHandover(handoverCreateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 등록 성공");
     }
@@ -40,7 +44,7 @@ public class HandoverController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     // 수신목록
     @GetMapping("/recipient/{recipientId}")
     public ResponseEntity<HandoverRecipientListResponse> getHandoverRecipientList(
@@ -48,7 +52,7 @@ public class HandoverController {
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) Integer size) {
 
-        HandoverRecipientListResponse response = handoverService.getRecipientList(recipientId, page, size);
+        HandoverRecipientListResponse response = recipientService.getRecipientList(recipientId, page, size);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -68,7 +72,7 @@ public class HandoverController {
             @PathVariable("handoverId") Long handoverId,
             @RequestBody @Valid HandoverUpdateRequest handoverUpdateRequest) {
 
-        handoverService.updateHandover(handoverId, handoverUpdateRequest);
+        handoverModify.updateHandover(handoverId, handoverUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 수정 완료");
     }
@@ -77,7 +81,7 @@ public class HandoverController {
     @DeleteMapping("/{handoverId}")
     public ResponseEntity<?> deleteHandover(@PathVariable("handoverId") Long handoverId) {
 
-        handoverService.deleteHandover(handoverId);
+        handoverModify.deleteHandover(handoverId);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 삭제 성공");
     }

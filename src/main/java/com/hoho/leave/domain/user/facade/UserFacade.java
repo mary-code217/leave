@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class UserApplicationService {
+public class UserFacade {
 
     private final UserService userService;
     private final LeaveAccountService leaveAccountService;

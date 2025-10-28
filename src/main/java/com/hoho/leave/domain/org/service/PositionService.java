@@ -7,7 +7,9 @@ import com.hoho.leave.domain.org.dto.response.PositionListResponse;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.repository.PositionRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.util.exception.BusinessException;
+import com.hoho.leave.common.exception.BusinessException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,57 +28,41 @@ public class PositionService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createPosition(PositionCreateRequest positionCreateRequest) {
-        if(positionRepository.existsByPositionName(positionCreateRequest.getPositionName())) {
-            throw new BusinessException("이미 존재하는 직책 입니다.");
-        }
-        positionRepository.save(Position.create(positionCreateRequest.getPositionName(), positionCreateRequest.getOrderNo()));
+    public void createPosition(PositionCreateRequest request) {
+        checkDuplicatePosition(request.getPositionName());
+        positionRepository.save(Position.create(request));
     }
 
     @Transactional
-    public void updatePosition(Long positionId, PositionUpdateRequest positionUpdateRequest) {
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new BusinessException("수정 실패 - 존재하지 않는 직책 입니다."));
-
-        if(positionRepository.existsByPositionNameAndIdNot(positionUpdateRequest.getPositionName(), positionId)) {
-            throw new BusinessException("수정 실패 - 이미 존재하는 직책 입니다.");
-        }
-
-        position.changeOrderNo(positionUpdateRequest.getOrderNo());
-        position.rename(positionUpdateRequest.getPositionName());
+    public void updatePosition(Long positionId, PositionUpdateRequest request) {
+        Position position = getPositionEntity(positionId);
+        checkDuplicatePosition(request.getPositionName(), positionId);
+        position.changeOrderNo(request.getOrderNo());
+        position.rename(request.getPositionName());
     }
 
     @Transactional
     public void deletePosition(Long positionId) {
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new BusinessException("삭제 실패 - 존재하지 않는 직책 입니다."));
-
-        if(userRepository.existsByPositionId(positionId)) {
-            throw new BusinessException("삭제 실패 - 해당 직책을 사용하는 유저가 존재합니다.");
-        }
-
+        Position position = getPositionEntity(positionId);
+        existUser(positionId);
         positionRepository.delete(position);
     }
 
     @Transactional(readOnly = true)
     public PositionDetailResponse getPosition(Long positionId) {
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 직책 입니다."));
-
-        return PositionDetailResponse.from(position);
+        return PositionDetailResponse.of(getPositionEntity(positionId));
     }
 
     @Transactional(readOnly = true)
     public PositionListResponse getAllPositions(Integer size, Integer page) {
-
         Sort sort = Sort.by(Sort.Order.asc("orderNo"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         Page<Position> positions = positionRepository.findAll(pageable);
 
-        List<PositionDetailResponse> list = positions.getContent().stream().map(PositionDetailResponse::from).toList();
+        List<PositionDetailResponse> list = positions.getContent().stream().map(PositionDetailResponse::of).toList();
 
-        return PositionListResponse.from(
+        return PositionListResponse.of(
                 page,
                 size,
                 list,
@@ -85,5 +71,43 @@ public class PositionService {
                 positions.isFirst(),
                 positions.isLast()
         );
+    }
+
+    /**
+     * 직책 엔티티 조회
+     */
+    private Position getPositionEntity(Long positionId) {
+        return positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException("Not found Position : " + positionId));
+    }
+
+    /**
+     * 중복 직책 체크
+     * @param positionName 직책명
+     */
+    private void checkDuplicatePosition(String positionName) {
+        if (positionRepository.existsByPositionName(positionName)) {
+            throw new DuplicateException("Duplicate Position : " + positionName);
+        }
+    }
+
+    /**
+     * 중복 직책 체크
+     * @param positionName 직책명
+     * @param positionId 직책ID
+     */
+    private void checkDuplicatePosition(String positionName, Long positionId) {
+        if (positionRepository.existsByPositionNameAndIdNot(positionName, positionId)) {
+            throw new DuplicateException("Duplicate Position : " + positionName);
+        }
+    }
+
+    /**
+     * 소속 사용자 존재 여부 체크
+     */
+    private void existUser(Long positionId) {
+        if (userRepository.existsByPositionId(positionId)) {
+            throw new BusinessException("Delete failed : 사용자가 존재합니다.");
+        }
     }
 }

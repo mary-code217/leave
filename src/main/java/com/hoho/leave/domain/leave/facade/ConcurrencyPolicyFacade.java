@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ConcurrencyPolicyApplicationService {
+public class ConcurrencyPolicyFacade {
 
     private final TeamService teamService;
     private final LeaveTypeService leaveTypeService;
