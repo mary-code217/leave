@@ -25,7 +25,7 @@ public class HandoverController {
 
     @PostMapping("")
     public ResponseEntity<?> createHandover(@RequestBody @Valid HandoverCreateRequest handoverCreateRequest) {
-        
+
         handoverFacade.createHandover(handoverCreateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 등록 성공");
@@ -42,7 +42,7 @@ public class HandoverController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     // 수신목록
     @GetMapping("/recipient/{recipientId}")
     public ResponseEntity<HandoverRecipientListResponse> getHandoverRecipientList(
@@ -70,7 +70,7 @@ public class HandoverController {
             @PathVariable("handoverId") Long handoverId,
             @RequestBody @Valid HandoverUpdateRequest handoverUpdateRequest) {
 
-        handoverService.updateHandover(handoverId, handoverUpdateRequest);
+        handoverFacade.updateHandover(handoverId, handoverUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 수정 완료");
     }
@@ -79,7 +79,7 @@ public class HandoverController {
     @DeleteMapping("/{handoverId}")
     public ResponseEntity<?> deleteHandover(@PathVariable("handoverId") Long handoverId) {
 
-        handoverService.deleteHandover(handoverId);
+        handoverFacade.deleteHandover(handoverId);
 
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 삭제 성공");
     }

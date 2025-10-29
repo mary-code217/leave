@@ -26,7 +26,6 @@ public class AuditLogService {
     private final UserRepository userRepository;
     private final AuditLogRepository auditLogRepository;
 
-    @Transactional
     public void createLog(Action action, Long actorId,
                         String objectType, Long objectId,
                         String summary) {

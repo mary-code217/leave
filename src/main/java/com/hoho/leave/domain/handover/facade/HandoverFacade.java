@@ -3,8 +3,11 @@ package com.hoho.leave.domain.handover.facade;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
+import com.hoho.leave.domain.handover.dto.Diff;
 import com.hoho.leave.domain.handover.dto.request.HandoverCreateRequest;
+import com.hoho.leave.domain.handover.dto.request.HandoverUpdateRequest;
 import com.hoho.leave.domain.handover.entity.HandoverNote;
+import com.hoho.leave.domain.handover.entity.HandoverRecipient;
 import com.hoho.leave.domain.handover.service.HandoverRecipientService;
 import com.hoho.leave.domain.handover.service.HandoverService;
 import com.hoho.leave.domain.notification.entity.NotificationType;
@@ -50,6 +53,33 @@ public class HandoverFacade {
                 AuditObjectType.HANDOVER,
                 handover.getId(),
                 "["+author.getUsername()+"]님이 ["+getNames(recipients)+"]에게 인수인계를 남겼습니다."
+        );
+    }
+
+    @Transactional
+    public void deleteHandover(Long handoverId) {
+        handoverService.deleteHandover(handoverId);
+        handoverRecipientService.deleteByHandoverNoteId(handoverId);
+    }
+
+    @Transactional
+    public void updateHandover(Long handoverId, HandoverUpdateRequest request) {
+        HandoverNote handoverNote =
+                handoverService.updateHandover(handoverId, request.getTitle(), request.getContent());
+
+        List<HandoverRecipient> recipients =
+                handoverRecipientService.findAllByHandoverNoteId(handoverNote.getId());
+
+        Diff diff = handoverRecipientService.addAndDeleteRecipients(recipients, request.getRecipientIds());
+
+
+
+        auditLogService.createLog(
+                Action.HANDOVER_UPDATE,
+                handoverNote.getAuthor().getId(),
+                AuditObjectType.HANDOVER,
+                handoverNote.getId(),
+                "[" + handoverNote.getAuthor().getUsername() + "]님이 인수인계를 수정하였습니다."
         );
     }
 

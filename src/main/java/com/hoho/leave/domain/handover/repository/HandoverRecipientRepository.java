@@ -14,6 +14,11 @@ import java.util.List;
 
 public interface HandoverRecipientRepository extends JpaRepository<HandoverRecipient, Long> {
 
+    interface RecipientUsernameRow {
+        Long getNoteId();
+        String getUsername();
+    }
+
     @Query("""
             select hr.handoverNote.id as noteId,
                    hr.recipient.username as username
@@ -22,18 +27,13 @@ public interface HandoverRecipientRepository extends JpaRepository<HandoverRecip
             """)
     List<RecipientUsernameRow> findRecipientUsernamesByNoteIds(@Param("noteIds") Collection<Long> noteIds);
 
-    interface RecipientUsernameRow {
-        Long getNoteId();
-
-        String getUsername();
-    }
-
     @EntityGraph(attributePaths = {"handoverNote", "handoverNote.author", "recipient"})
     Page<HandoverRecipient> findByRecipientId(Long recipientId, Pageable pageable);
 
+    @EntityGraph(attributePaths = "recipient", type = EntityGraph.EntityGraphType.FETCH)
     List<HandoverRecipient> findAllByHandoverNoteId(Long handoverNoteId);
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Modifying
     @Query("""
             delete from HandoverRecipient hr
             where hr.handoverNote.id = :noteId

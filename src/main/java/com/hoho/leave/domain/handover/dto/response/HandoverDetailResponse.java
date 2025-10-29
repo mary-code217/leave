@@ -9,21 +9,34 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class HandoverDetailResponse {
 
     Long handoverId;
+
     String authorName;
+
     List<String> recipientNames;
+
     String title;
+
     String content;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime occurredAt;
 
-    public static HandoverDetailResponse from(Long handoverNoteId, String authorName,
-                                              List<String> recipientNames, String title,
-                                              String content, LocalDateTime occurredAt) {
-        return new HandoverDetailResponse(handoverNoteId, authorName, recipientNames, title, content, occurredAt);
+    public static HandoverDetailResponse of(Long handoverNoteId, String authorName,
+                                            List<String> recipientNames, String title,
+                                            String content, LocalDateTime occurredAt) {
+
+        HandoverDetailResponse response = new HandoverDetailResponse();
+
+        response.handoverId = handoverNoteId;
+        response.authorName = authorName;
+        response.recipientNames = recipientNames;
+        response.title = title;
+        response.content = content;
+        response.occurredAt = occurredAt;
+
+        return response;
     }
 }

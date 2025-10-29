@@ -1,28 +1,41 @@
 package com.hoho.leave.domain.handover.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class HandoverRecipientListResponse {
+
     Integer page;
+
     Integer size;
+
     List<HandoverRecipientResponse> recipients;
+
     Integer totalPage;
+
     Long totalElement;
+
     Boolean firstPage;
+
     Boolean lastPage;
 
-    public static HandoverRecipientListResponse from(Integer page, Integer size,
-                                                     List<HandoverRecipientResponse> recipients,
-                                                     Integer totalPage, Long totalElement,
-                                                     Boolean firstPage, Boolean lastPage) {
+    public static HandoverRecipientListResponse of(Integer page, Integer size,
+                                                   List<HandoverRecipientResponse> recipients,
+                                                   Integer totalPage, Long totalElement,
+                                                   Boolean firstPage, Boolean lastPage) {
 
-        return new HandoverRecipientListResponse(page, size, recipients, totalPage, totalElement, firstPage, lastPage);
+        HandoverRecipientListResponse response = new HandoverRecipientListResponse();
+
+        response.page = page;
+        response.size = size;
+        response.recipients = recipients;
+        response.totalPage = totalPage;
+        response.totalElement = totalElement;
+        response.firstPage = firstPage;
+        response.lastPage = lastPage;
+
+        return response;
     }
 }
