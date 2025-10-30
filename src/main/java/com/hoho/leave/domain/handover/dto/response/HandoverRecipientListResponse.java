@@ -1,6 +1,7 @@
 package com.hoho.leave.domain.handover.dto.response;
 
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -21,20 +22,16 @@ public class HandoverRecipientListResponse {
 
     Boolean lastPage;
 
-    public static HandoverRecipientListResponse of(Integer page, Integer size,
-                                                   List<HandoverRecipientResponse> recipients,
-                                                   Integer totalPage, Long totalElement,
-                                                   Boolean firstPage, Boolean lastPage) {
-
+    public static HandoverRecipientListResponse of(Page<?> page, List<HandoverRecipientResponse> recipients) {
         HandoverRecipientListResponse response = new HandoverRecipientListResponse();
 
-        response.page = page;
-        response.size = size;
+        response.page = page.getNumber();
+        response.size = page.getSize();
         response.recipients = recipients;
-        response.totalPage = totalPage;
-        response.totalElement = totalElement;
-        response.firstPage = firstPage;
-        response.lastPage = lastPage;
+        response.totalPage = page.getTotalPages();
+        response.totalElement = page.getTotalElements();
+        response.firstPage = page.isFirst();
+        response.lastPage = page.isLast();
 
         return response;
     }

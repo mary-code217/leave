@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
-    @Around("execution(* com.hoho.leave.domain.*.*(..))")
+    @Around("execution(* com.hoho.leave.domain..*.*(..))")
     public Object logMethodExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
         long startTime = System.currentTimeMillis();
