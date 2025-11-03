@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class HandoverAuthorListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class HandoverAuthorListResponse {
     public static HandoverAuthorListResponse of(Page<?> page, List<HandoverAuthorResponse> handoverNotes) {
         HandoverAuthorListResponse response = new HandoverAuthorListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.handoverNotes = handoverNotes;
         response.totalPage = page.getTotalPages();

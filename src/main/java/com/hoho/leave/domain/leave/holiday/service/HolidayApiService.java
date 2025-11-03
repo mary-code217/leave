@@ -2,7 +2,7 @@ package com.hoho.leave.domain.leave.holiday.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoho.leave.domain.leave.holiday.dto.HolidayImportDto;
+import com.hoho.leave.domain.leave.holiday.service.shared.HolidayImport;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +37,7 @@ public class HolidayApiService {
                 .build();
     }
 
-    public List<HolidayImportDto> fetchRestHolidaysByMonth(int year, int month) {
+    public List<HolidayImport> fetchRestHolidaysByMonth(int year, int month) {
         String monthStr = String.format("%02d", month);
 
         URI uri = UriComponentsBuilder.fromUriString(apiUrl)
@@ -65,7 +65,7 @@ public class HolidayApiService {
             if (items.isMissingNode() || items.isNull()) return Collections.emptyList();
 
 
-            List<HolidayImportDto> result = new ArrayList<>();
+            List<HolidayImport> result = new ArrayList<>();
             if (items.isArray()) {
                 for (JsonNode n : items) {
                     mapIfHoliday(n, result);
@@ -79,7 +79,7 @@ public class HolidayApiService {
         }
     }
 
-    private void mapIfHoliday(JsonNode n, List<HolidayImportDto> acc) {
+    private void mapIfHoliday(JsonNode n, List<HolidayImport> acc) {
         String isHoliday = n.path("isHoliday").asText("");
         String dateKind = n.path("dateKind").asText("");
         if (!"Y".equalsIgnoreCase(isHoliday) || !"01".equals(dateKind)) return;
@@ -89,6 +89,6 @@ public class HolidayApiService {
         if (loc <= 0 || name.isBlank()) return;
 
         LocalDate date = LocalDate.parse(String.valueOf(loc), LOCDATE_FMT);
-        acc.add(new HolidayImportDto(date, name));
+        acc.add(new HolidayImport(date, name));
     }
 }

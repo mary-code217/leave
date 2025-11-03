@@ -1,4 +1,4 @@
-package com.hoho.leave.domain;
+package com.hoho.leave.domain.shared;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

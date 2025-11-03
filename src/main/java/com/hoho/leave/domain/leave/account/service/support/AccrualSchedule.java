@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.account.dto;
+package com.hoho.leave.domain.leave.account.service.support;
 
 import com.hoho.leave.domain.leave.account.entity.LeaveStage;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountEvent {
+public class AccrualSchedule {
     LeaveStage leaveStage;
     LocalDate nextAccrualAt;
 }

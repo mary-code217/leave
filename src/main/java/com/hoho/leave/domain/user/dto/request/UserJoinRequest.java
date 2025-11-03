@@ -2,18 +2,13 @@ package com.hoho.leave.domain.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserJoinRequest {
-
     @NotBlank(message = "이름은 필수 입력 입니다.")
     @Size(min = 2, max = 10, message = "이름은 2~10자 입니다.")
     String username;

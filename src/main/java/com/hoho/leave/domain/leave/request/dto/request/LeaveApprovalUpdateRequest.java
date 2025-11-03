@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 public class LeaveApprovalUpdateRequest {
     ApprovalStatus status;
+
     String comment;
 }

@@ -1,37 +1,37 @@
 package com.hoho.leave.domain.notification.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class NotificationListResponse {
     Integer page;
+
     Integer size;
+
     List<NotificationDetailResponse> notifications;
+
     Integer totalPage;
+
     Long totalElement;
+
     Boolean firstPage;
+
     Boolean lastPage;
 
-    public static NotificationListResponse from(Integer page, Integer size,
-                                                List<NotificationDetailResponse> notifications,
-                                                Integer totalPage, Long totalElement,
-                                                Boolean firstPage, Boolean lastPage) {
-        return NotificationListResponse.builder()
-                .page(page)
-                .size(size)
-                .notifications(notifications)
-                .totalPage(totalPage)
-                .totalElement(totalElement)
-                .firstPage(firstPage)
-                .lastPage(lastPage)
-                .build();
+    public static NotificationListResponse of(Page<?> page, List<NotificationDetailResponse> notifications) {
+        NotificationListResponse response = new NotificationListResponse();
+
+        response.page = page.getNumber()+1;
+        response.size = page.getSize();
+        response.notifications = notifications;
+        response.totalPage = page.getTotalPages();
+        response.totalElement = page.getTotalElements();
+        response.firstPage = page.isFirst();
+        response.lastPage = page.isLast();
+
+        return response;
     }
 }

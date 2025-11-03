@@ -1,6 +1,5 @@
-package com.hoho.leave.domain.leave.account.service;
+package com.hoho.leave.domain.leave.account.service.support;
 
-import com.hoho.leave.domain.leave.account.dto.AccountEvent;
 import com.hoho.leave.domain.leave.account.entity.LeaveStage;
 import com.hoho.leave.domain.user.entity.User;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,7 @@ import java.time.LocalDate;
 
 @Service
 public class AccrualPolicyEngine {
-
-    public AccountEvent getAccountEvent(User user) {
+    public AccrualSchedule getAccountEvent(User user) {
         LeaveStage leaveStage;
         LocalDate nextAccrualAt;
         boolean isOneYear = LocalDate.now().isBefore(user.getHireDate().plusYears(1));
@@ -23,7 +21,7 @@ public class AccrualPolicyEngine {
             nextAccrualAt = nextAnnualAccrual(user.getHireDate(), LocalDate.now());
         }
 
-        return new AccountEvent(leaveStage, nextAccrualAt);
+        return new AccrualSchedule(leaveStage, nextAccrualAt);
     }
 
     // today는 Asia/Seoul 기준의 오늘 날짜

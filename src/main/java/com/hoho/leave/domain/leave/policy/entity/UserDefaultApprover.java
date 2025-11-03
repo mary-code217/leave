@@ -1,9 +1,9 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
                 @UniqueConstraint(name = "uq_uda_user_step", columnNames = {"user_id", "step_no"})
         }
 )
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDefaultApprover extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,17 +32,13 @@ public class UserDefaultApprover extends BaseEntity {
     @Column(name = "step_no", nullable = false)
     private Integer stepNo;
 
-    @Builder
-    public UserDefaultApprover(User user, User approver, Integer stepNo) {
-        this.user = user;
-        this.approver = approver;
-        this.stepNo = stepNo;
-    }
-
     public static UserDefaultApprover of(User user, User approver, Integer stepNo) {
-        return UserDefaultApprover.builder()
-                .user(user)
-                .approver(approver)
-                .stepNo(stepNo).build();
+        UserDefaultApprover defaultApprover = new UserDefaultApprover();
+
+        defaultApprover.user = user;
+        defaultApprover.approver = approver;
+        defaultApprover.stepNo = stepNo;
+
+        return defaultApprover;
     }
 }

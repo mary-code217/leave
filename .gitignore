@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 ### Secrets ###
-src/main/resources/application-secrets.properties
+application-secrets.properties
 .env
 .env.local
 *.key

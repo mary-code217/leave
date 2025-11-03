@@ -1,5 +1,7 @@
 package com.hoho.leave.domain.leave.request.service;
 
+import com.hoho.leave.common.exception.FileErrorException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.leave.request.dto.request.AttachmentUploadRequest;
 import com.hoho.leave.domain.leave.request.dto.response.AttachmentResponse;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
@@ -8,7 +10,6 @@ import com.hoho.leave.domain.leave.request.repository.AttachmentRepository;
 import com.hoho.leave.domain.leave.request.repository.LeaveRequestRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,24 +39,21 @@ public class AttachmentService {
         try {
             Files.createDirectories(Path.of(uploadDir));
         } catch (IOException e) {
-            throw new BusinessException("업로드 폴더를 생성할 수 없습니다. "+ uploadDir);
+            throw new FileErrorException("업로드 폴더를 생성할 수 없습니다. "+ uploadDir);
         }
     }
 
     /** 파일 업로드(pdf, png, jpeg, jpg) 메서드 */
     @Transactional
     public void uploadFile(List<MultipartFile> files, AttachmentUploadRequest request) {
-        List<LeaveRequestAttachment> attachments = new ArrayList<>();
-        LeaveRequest leaveRequest = leaveRequestRepository.findById(request.getLeaveRequestId())
-                .orElseThrow(() -> new BusinessException("존재 하지 않는 신청서 입니다."));
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BusinessException("존재 하지 않는 유저 입니다."));
+        LeaveRequest leaveRequest = getLeaveRequest(request.getLeaveRequestId());
+        User user = getUser(request.getUserId());
 
         files.forEach(f -> {
             // 빈 파일 체크
-            if(fileIsEmpty(f)) throw new BusinessException("파일이 존재하지 않습니다.");
+            if(fileIsEmpty(f)) throw new FileErrorException("Empty Upload File");
             // MIME 타입 체크
-            if(!isAllowedMime(f.getContentType())) throw new BusinessException("허용하지 않는 확장자 입니다.");
+            if(!isAllowedMime(f.getContentType())) throw new FileErrorException("Not Allowed MIME Type : " + f.getContentType());
             // 용량체크
             assertFileSizeAllowed(f.getSize(), f.getContentType());
 
@@ -67,51 +65,81 @@ public class AttachmentService {
             try {
                 f.transferTo(dest);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new FileErrorException(e.getMessage());
             }
 
-            attachments.add(LeaveRequestAttachment.create(
-                    leaveRequest,
-                    originalName,
-                    storedName,
-                    fullPath,
-                    f.getContentType(),
-                    f.getSize(),
-                    user
-            ));
+            LeaveRequestAttachment attachment = LeaveRequestAttachment.create(
+                    originalName, storedName,
+                    fullPath, f.getContentType(),
+                    f.getSize(), user
+            );
+
+            leaveRequest.addAttachment(attachment);
         });
-
-        attachmentRepository.saveAll(attachments);
     }
 
-    /** 파일 정보 가져오는 메서드 */
-    @Transactional(readOnly = true)
-    public List<AttachmentResponse> getAttachments(Long leaveRequestId) {
-
-        List<LeaveRequestAttachment> attachments = attachmentRepository.findByLeaveRequestId(leaveRequestId);
-
-        return attachments.stream().map(
-                a -> AttachmentResponse.of(
-                        a.getId(), a.getOriginalName(), a.getSizeBytes(),
-                        a.getUploadedBy().getUsername(), a.getUpdatedAt())
-        ).toList();
-    }
-
-    /** 파일 정보 삭제 */
+    /** 파일 삭제(단일) */
     @Transactional
     public void deleteAttachment(Long attachmentId) {
-        LeaveRequestAttachment attachment = attachmentRepository.findById(attachmentId)
-                .orElseThrow(() -> new BusinessException("존재 하지 않는 파일 입니다."));
+        LeaveRequestAttachment attachment = getAttachmentEntity(attachmentId);
 
-        try {
-            Files.deleteIfExists(Path.of(attachment.getFilePath()));
-        } catch (IOException e) {
-            throw new BusinessException("파일 삭제 실패!");
-        }
+        deleteAttachmentByDir(Path.of(attachment.getFilePath()));
 
-        attachmentRepository.delete(attachment);
+        LeaveRequest parent = Objects.requireNonNull(attachment.getLeaveRequest());
+        parent.removeAttachment(attachment);
     }
 
+    @Transactional
+    public void deleteAttachments(Long leaveRequestId) {
+        List<LeaveRequestAttachment> attachments = getByLeaveRequestId(leaveRequestId);
+
+        attachments.forEach(atc -> {
+                    deleteAttachmentByDir(Path.of(atc.getFilePath()));
+                    LeaveRequest parent = Objects.requireNonNull(atc.getLeaveRequest());
+                    parent.removeAttachment(atc);
+                }
+        );
+    }
+
+    /** 디렉토리에서 첨부파일 삭제 */
+    private void deleteAttachmentByDir(Path of) {
+        try {
+            Files.deleteIfExists(of);
+        } catch (IOException e) {
+            throw new FileErrorException("File Delete Error : " + e.getMessage());
+        }
+    }
+
+    /** 해당 휴가 신청서의 파일들을 응답해주는 DTO 반환 */
+    @Transactional(readOnly = true)
+    public List<AttachmentResponse> getAttachments(Long leaveRequestId) {
+        List<LeaveRequestAttachment> attachments = getByLeaveRequestId(leaveRequestId);
+
+        return attachments.stream().map(AttachmentResponse::of).toList();
+    }
+
+    /** 해당 휴가 신청서의 파일들 조회 */
+    private List<LeaveRequestAttachment> getByLeaveRequestId(Long leaveRequestId) {
+        return attachmentRepository.findByLeaveRequestId(leaveRequestId);
+    }
+
+    /** 유저 엔티티 조회 */
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Not Found User : " + userId));
+    }
+
+    /** 휴가 신청서 엔티티 조회 */
+    private LeaveRequest getLeaveRequest(Long leaveRequestId) {
+        return leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new NotFoundException("Not Found Leave Request : " + leaveRequestId));
+    }
+
+    /** 파일 엔티티 조회 */
+    private LeaveRequestAttachment getAttachmentEntity(Long attachmentId) {
+        return attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new NotFoundException("Not Found File : " + attachmentId));
+    }
 
     /** 로컬 저장소 Path */
     public String getFullPath(String fileName) {
@@ -153,7 +181,7 @@ public class AttachmentService {
         Long limit = MAX_SIZE_BY_MIME.get(mime);
 
         if (size <= 0 || size > limit) {
-            throw new BusinessException(
+            throw new FileErrorException(
                     String.format("파일 크기가 허용 범위를 초과했습니다. (형식: %s, 최대: %dMB)", mime, limit / MB)
             );
         }

@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.holiday.service;
 
-import com.hoho.leave.domain.leave.holiday.dto.HolidayImportDto;
+import com.hoho.leave.domain.leave.holiday.service.shared.HolidayImport;
 import com.hoho.leave.domain.leave.holiday.entity.Holiday;
 import com.hoho.leave.domain.leave.holiday.repository.HolidayRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class HolidaySyncService {
 
     @Transactional
     public void syncHoliday(Integer year, Integer month) {
-        List<HolidayImportDto> apiList = holidayApiService.fetchRestHolidaysByMonth(year, month);
+        List<HolidayImport> apiList = holidayApiService.fetchRestHolidaysByMonth(year, month);
 
         apiList.forEach(h -> {
             holidayRepository.findByHolidayDate(h.getHolidayDate()).ifPresentOrElse(

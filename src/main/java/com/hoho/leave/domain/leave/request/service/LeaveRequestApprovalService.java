@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.request.service;
 
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveApprovalUpdateRequest;
 import com.hoho.leave.domain.leave.request.dto.response.LeaveApprovalListResponse;
 import com.hoho.leave.domain.leave.request.dto.response.LeaveApprovalResponse;
@@ -7,7 +8,6 @@ import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequestApproval;
 import com.hoho.leave.domain.leave.request.repository.LeaveRequestApprovalRepository;
 import com.hoho.leave.domain.user.entity.User;
-import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +24,7 @@ public class LeaveRequestApprovalService {
 
     private final LeaveRequestApprovalRepository approvalRepository;
 
+    @Transactional
     public LeaveRequestApproval createLeaveApproval(
             LeaveRequest leaveRequest, User Approver, Integer stepNo) {
 
@@ -32,60 +33,43 @@ public class LeaveRequestApprovalService {
 
     @Transactional
     public void updateLeaveApproval(Long approvalId, LeaveApprovalUpdateRequest updateRequest) {
-        LeaveRequestApproval leaveRequestApproval = approvalRepository.findById(approvalId)
-                .orElseThrow(() -> new BusinessException("변경 실패 - 존재하지 않는 결재내역 입니다."));
+        LeaveRequestApproval leaveRequestApproval = getLeaveRequestApprovalEntity(approvalId);
 
         leaveRequestApproval.update(updateRequest.getStatus(), updateRequest.getComment());
     }
 
     @Transactional(readOnly = true)
     public LeaveApprovalResponse getLeaveApproval(Long leaveApprovalId) {
-        LeaveRequestApproval leaveRequestApproval = approvalRepository.findById(leaveApprovalId)
-                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 결재내역 입니다."));
+        LeaveRequestApproval leaveRequestApproval = getLeaveRequestApprovalEntity(leaveApprovalId);
 
-        return LeaveApprovalResponse.of(
-                leaveApprovalId,
-                leaveRequestApproval.getStatus(),
-                leaveRequestApproval.getLeaveRequest().getUser().getId(),
-                leaveRequestApproval.getLeaveRequest().getUser().getUsername(),
-                leaveRequestApproval.getLeaveRequest().getQuantityDays(),
-                leaveRequestApproval.getLeaveRequest().getStartDay(),
-                leaveRequestApproval.getLeaveRequest().getEndDay(),
-                leaveRequestApproval.getLeaveRequest().getStartTime(),
-                leaveRequestApproval.getLeaveRequest().getEndTime()
-        );
+        return LeaveApprovalResponse.of(leaveRequestApproval);
     }
 
     @Transactional(readOnly = true)
     public LeaveApprovalListResponse getAllLeaveApproval(Long approverId, Integer page, Integer size) {
-
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.asc("createdAt")));
+        Pageable pageable = getPageable(page, size);
 
         Page<LeaveRequestApproval> pageList = approvalRepository.findByApproverId(approverId, pageable);
 
         List<LeaveApprovalResponse> list = pageList.getContent().stream()
-                .map(a ->  LeaveApprovalResponse.of(
-                        a.getId(),
-                        a.getStatus(),
-                        a.getLeaveRequest().getUser().getId(),
-                        a.getLeaveRequest().getUser().getUsername(),
-                        a.getLeaveRequest().getQuantityDays(),
-                        a.getLeaveRequest().getStartDay(),
-                        a.getLeaveRequest().getEndDay(),
-                        a.getLeaveRequest().getStartTime(),
-                        a.getLeaveRequest().getEndTime()
-                ))
+                .map(LeaveApprovalResponse::of)
                 .toList();
 
+        return LeaveApprovalListResponse.of(pageList, list);
+    }
 
-        return LeaveApprovalListResponse.of(
-                page,
-                size,
-                list,
-                pageList.getTotalPages(),
-                pageList.getTotalElements(),
-                pageList.isFirst(),
-                pageList.isLast()
-        );
+    /**
+     * 페이지 요청 정보 생성
+     */
+    private static PageRequest getPageable(Integer page, Integer size) {
+        return PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("createdAt")));
+    }
+
+    /**
+     * 휴가 신청 결재 내역 조회
+     */
+    private LeaveRequestApproval getLeaveRequestApprovalEntity(Long approvalId) {
+        return approvalRepository.findById(approvalId)
+                .orElseThrow(() -> new NotFoundException("Not Found LeaveRequestApproval : " + approvalId));
     }
 }

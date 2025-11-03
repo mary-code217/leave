@@ -1,22 +1,23 @@
 package com.hoho.leave.domain.leave.request.entity;
 
-import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "leave_request")
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class LeaveRequest extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,28 +56,20 @@ public class LeaveRequest extends BaseEntity {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    /** 첨부파일이 있으면 사용 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_request_attachment_id")
-    private LeaveRequestAttachment attachment = null;
+    /** 첨부파일(복수) */
+    @OneToMany(mappedBy = "leaveRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LeaveRequestAttachment> attachments = new ArrayList<>();
 
-    @Builder
-    public LeaveRequest(BigDecimal quantityDays, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime) {
-        this.quantityDays = quantityDays;
-        this.startDay = startDay;
-        this.endDay = endDay;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
+    public static LeaveRequest create(LeaveRequestCreateRequest request) {
+        LeaveRequest leaveRequest = new LeaveRequest();
 
-    public static LeaveRequest create(LeaveRequestCreateRequest req) {
-        return LeaveRequest.builder()
-                .quantityDays(req.getQuantityDays())
-                .startDay(req.getStartDay())
-                .endDay(req.getEndDay())
-                .startTime(req.getStartTime())
-                .endTime(req.getEndTime())
-                .build();
+        leaveRequest.quantityDays = request.getQuantityDays();
+        leaveRequest.startDay = request.getStartDay();
+        leaveRequest.endDay = request.getEndDay();
+        leaveRequest.startTime = request.getStartTime();
+        leaveRequest.endTime = request.getEndTime();
+
+        return leaveRequest;
     }
 
     public void addUser(User user) {
@@ -87,8 +80,15 @@ public class LeaveRequest extends BaseEntity {
         this.leaveType = leaveType;
     }
 
+    // 양방향 연관관계 동기화 메서드
     public void addAttachment(LeaveRequestAttachment attachment) {
-        this.attachment = attachment;
+        attachments.add(attachment);
+        attachment.addLeaveRequest(this);
+    }
+
+    public void removeAttachment(LeaveRequestAttachment attachment) {
+        attachments.remove(attachment);
+        attachment.addLeaveRequest(null);
     }
 
     public void updateStatus(LeaveRequestStatus status) {

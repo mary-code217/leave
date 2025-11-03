@@ -1,8 +1,9 @@
 package com.hoho.leave.domain.leave.account.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.leave.account.service.support.LedgerRecord;
+import com.hoho.leave.domain.shared.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "user_leave_ledger")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLeaveLedger extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,23 +35,15 @@ public class UserLeaveLedger extends BaseEntity {
     @Column(name = "note")
     private String note;
 
-    @Builder
-    public UserLeaveLedger(UserLeaves userLeaves, LocalDateTime effectiveAt, String amount, ReasonCode reasonCode, String note) {
-        this.userLeaves = userLeaves;
-        this.effectiveAt = effectiveAt;
-        this.amount = amount;
-        this.reasonCode = reasonCode;
-        this.note = note;
-    }
+    public static UserLeaveLedger create(LedgerRecord ledgerRecord) {
+        UserLeaveLedger userLeaveLedger = new UserLeaveLedger();
 
-    public static UserLeaveLedger create(UserLeaves userLeaves, LocalDateTime effectiveAt,
-                                         String amount, ReasonCode reasonCode, String note) {
+        userLeaveLedger.userLeaves = ledgerRecord.getUserLeaves();
+        userLeaveLedger.effectiveAt = ledgerRecord.getEffectiveAt();
+        userLeaveLedger.amount = ledgerRecord.getAmount();
+        userLeaveLedger.reasonCode = ledgerRecord.getReasonCode();
+        userLeaveLedger.note = ledgerRecord.getNote();
 
-        return UserLeaveLedger.builder()
-                .userLeaves(userLeaves)
-                .effectiveAt(effectiveAt)
-                .amount(amount)
-                .reasonCode(reasonCode)
-                .note(note).build();
+        return userLeaveLedger;
     }
 }

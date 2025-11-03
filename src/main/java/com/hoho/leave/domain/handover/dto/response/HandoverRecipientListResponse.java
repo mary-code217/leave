@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class HandoverRecipientListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class HandoverRecipientListResponse {
     public static HandoverRecipientListResponse of(Page<?> page, List<HandoverRecipientResponse> recipients) {
         HandoverRecipientListResponse response = new HandoverRecipientListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.recipients = recipients;
         response.totalPage = page.getTotalPages();

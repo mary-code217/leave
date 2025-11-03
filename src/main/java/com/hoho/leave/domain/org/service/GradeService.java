@@ -1,5 +1,8 @@
 package com.hoho.leave.domain.org.service;
 
+import com.hoho.leave.common.exception.BusinessException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.org.dto.request.GradeCreateRequest;
 import com.hoho.leave.domain.org.dto.request.GradeUpdateRequest;
 import com.hoho.leave.domain.org.dto.response.GradeDetailResponse;
@@ -7,9 +10,6 @@ import com.hoho.leave.domain.org.dto.response.GradeListResponse;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.repository.GradeRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
-import com.hoho.leave.common.exception.DuplicateException;
-import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,22 +55,21 @@ public class GradeService {
 
     @Transactional(readOnly = true)
     public GradeListResponse getAllGrades(Integer size, Integer page) {
+        Pageable pageable = getPageable(size, page);
+
+        Page<Grade> pageList = gradeRepository.findAll(pageable);
+
+        List<GradeDetailResponse> list = pageList.getContent().stream().map(GradeDetailResponse::of).toList();
+
+        return GradeListResponse.of(pageList, list);
+    }
+
+    /**
+     * 페이지 정보 생성
+     */
+    private Pageable getPageable(Integer size, Integer page) {
         Sort sort = Sort.by(Sort.Order.asc("orderNo"));
-        Pageable pageable = PageRequest.of(page - 1, size, sort);
-
-        Page<Grade> grades = gradeRepository.findAll(pageable);
-
-        List<GradeDetailResponse> list = grades.getContent().stream().map(GradeDetailResponse::of).toList();
-
-        return GradeListResponse.of(
-                page,
-                size,
-                list,
-                grades.getTotalPages(),
-                grades.getTotalElements(),
-                grades.isFirst(),
-                grades.isLast()
-        );
+        return PageRequest.of(page - 1, size, sort);
     }
 
     /**

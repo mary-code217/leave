@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.org.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.org.dto.request.GradeCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

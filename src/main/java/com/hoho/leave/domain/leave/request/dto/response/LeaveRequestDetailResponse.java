@@ -1,64 +1,63 @@
 package com.hoho.leave.domain.leave.request.dto.response;
 
-import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequestStatus;
-import com.hoho.leave.domain.user.entity.User;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class LeaveRequestDetailResponse {
-
     Long leaveRequestId;
-    Long userId;
-    String username;
-    Long leaveTypeId;
-    String leaveTypeName;
+
     LocalDate startDay;
+
     LocalDate endDay;
+
     LocalTime startTime;
+
     LocalTime endTime;
+
     LeaveRequestStatus status;
 
-    public LeaveRequestDetailResponse(Long leaveRequestId,
-                                      LocalDate startDay, LocalDate endDay,
-                                      LocalTime startTime, LocalTime endTime,
-                                      LeaveRequestStatus status) {
-        this.leaveRequestId = leaveRequestId;
-        this.startDay = startDay;
-        this.endDay = endDay;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.status = status;
+    Long userId;
+
+    String username;
+
+    Long leaveTypeId;
+
+    String leaveTypeName;
+
+    boolean hasAttachment;
+
+    List<AttachmentResponse> attachments;
+
+    public static LeaveRequestDetailResponse of(LeaveRequest leaveRequest) {
+        LeaveRequestDetailResponse response = new LeaveRequestDetailResponse();
+
+        response.leaveRequestId = leaveRequest.getId();
+        response.startDay = leaveRequest.getStartDay();
+        response.endDay = leaveRequest.getEndDay();
+        response.startTime = leaveRequest.getStartTime();
+        response.endTime = leaveRequest.getEndTime();
+        response.status = leaveRequest.getStatus();
+
+        response.userId = leaveRequest.getUser().getId();
+        response.username = leaveRequest.getUser().getUsername();
+
+        response.leaveTypeId = leaveRequest.getLeaveType().getId();
+        response.leaveTypeName = leaveRequest.getLeaveType().getLeaveName();
+
+        return response;
     }
 
-    public static LeaveRequestDetailResponse from(LeaveRequest leaveRequest) {
-        return new LeaveRequestDetailResponse(
-            leaveRequest.getId(),
-            leaveRequest.getStartDay(),
-            leaveRequest.getEndDay(),
-            leaveRequest.getStartTime(),
-            leaveRequest.getEndTime(),
-            leaveRequest.getStatus()
-        );
+    public void addAttachments(List<AttachmentResponse> attachments) {
+        this.attachments = attachments;
     }
 
-    public void addUser(User user) {
-        this.userId = user.getId();
-        this.username = user.getUsername();
-    }
-
-    public void addLeaveType(LeaveType leaveType) {
-        this.leaveTypeId = leaveType.getId();
-        this.leaveTypeName = leaveType.getLeaveName();
+    public void hasAttachment(boolean hasAttachment) {
+        this.hasAttachment = hasAttachment;
     }
 }

@@ -5,6 +5,7 @@ import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
 import com.hoho.leave.domain.leave.policy.dto.response.LeaveTypeDetailResponse;
 import com.hoho.leave.domain.leave.policy.dto.response.LeaveTypeListResponse;
 import com.hoho.leave.domain.leave.policy.service.LeaveTypeService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class LeaveTypeController {
     private final LeaveTypeService leaveTypeService;
 
     @PostMapping("")
-    public ResponseEntity<?> createLeaveType(@RequestBody LeaveTypeCreateRequest leaveTypeCreateRequest) {
+    public ResponseEntity<?> createLeaveType(@RequestBody @Valid LeaveTypeCreateRequest leaveTypeCreateRequest) {
 
         leaveTypeService.LeaveTypeCreate(leaveTypeCreateRequest);
 
@@ -29,7 +30,7 @@ public class LeaveTypeController {
     
     @PutMapping("/{leaveTypeId}")
     public ResponseEntity<?> updateLeaveType(@PathVariable("leaveTypeId") Long leaveTypeId,
-                                             @RequestBody LeaveTypeUpdateRequest leaveTypeUpdate) {
+                                             @RequestBody @Valid LeaveTypeUpdateRequest leaveTypeUpdate) {
 
         leaveTypeService.LeaveTypeUpdate(leaveTypeId, leaveTypeUpdate);
 

@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.request.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +16,8 @@ import lombok.*;
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LeaveRequestAttachment extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,26 +43,22 @@ public class LeaveRequestAttachment extends BaseEntity {
     @JoinColumn(name = "uploaded_by_id", nullable = false)
     private User uploadedBy;
 
-    @Builder(access = AccessLevel.PROTECTED)
-    public LeaveRequestAttachment(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
-        this.leaveRequest = leaveRequest;
-        this.originalName = originalName;
-        this.storeName = storeName;
-        this.filePath = filePath;
-        this.contentType = contentType;
-        this.sizeBytes = sizeBytes;
-        this.uploadedBy = uploadedBy;
+    public static LeaveRequestAttachment create(String originalName, String storeName, String filePath,
+                                                String contentType, Long sizeBytes, User uploadedBy) {
+        LeaveRequestAttachment attachment = new LeaveRequestAttachment();
+
+        attachment.originalName = originalName;
+        attachment.storeName = storeName;
+        attachment.filePath = filePath;
+        attachment.contentType = contentType;
+        attachment.sizeBytes = sizeBytes;
+        attachment.uploadedBy = uploadedBy;
+
+        return attachment;
     }
 
-    public static LeaveRequestAttachment create(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
-        return LeaveRequestAttachment.builder()
-                .leaveRequest(leaveRequest)
-                .originalName(originalName)
-                .storeName(storeName)
-                .filePath(filePath)
-                .contentType(contentType)
-                .sizeBytes(sizeBytes)
-                .uploadedBy(uploadedBy).build();
+    protected void addLeaveRequest(LeaveRequest leaveRequest) {
+        this.leaveRequest = leaveRequest;
     }
 }
 

@@ -6,6 +6,8 @@ import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
 import com.hoho.leave.domain.user.facade.UserFacade;
 import com.hoho.leave.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User API", description = "유저 도메인 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -22,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final UserFacade userApplicationService;
 
+    @Operation(summary = "회원가입 API")
     @PostMapping("/join")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserJoinRequest userJoinRequest) {
 
@@ -30,6 +34,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
     }
 
+    @Operation(summary = "유저 상세 조회 API")
     @GetMapping("/{userId}")
     public ResponseEntity<UserDetailResponse> getUser(@PathVariable Long userId) {
 
@@ -38,6 +43,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "유저 정보 변경 API")
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
 
@@ -46,6 +52,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("유저 변경 성공");
     }
 
+    @Operation(summary = "유저 목록 조회 API")
     @GetMapping("")
     public ResponseEntity<UserListResponse> getAllUsers(
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) Integer size,
@@ -55,7 +62,8 @@ public class UserController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
+    @Operation(summary = "유저 삭제 API")
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
 

@@ -2,15 +2,10 @@ package com.hoho.leave.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserUpdateRequest {
-
     @NotBlank(message = "이름은 필수 입력 입니다.")
     @Size(min = 2, max = 10, message = "이름은 2~10자 입니다.")
     String username;

@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class TeamDetailResponse {
-
     Long teamId;
 
     String teamName;
@@ -20,9 +19,7 @@ public class TeamDetailResponse {
 
     Long childrenCount;
 
-    public static TeamDetailResponse of(Team team, Long userCount,
-                                        Long childrenCount) {
-
+    public static TeamDetailResponse of(Team team, Long userCount, Long childrenCount) {
         TeamDetailResponse response = new TeamDetailResponse();
 
         response.teamId = team.getId();

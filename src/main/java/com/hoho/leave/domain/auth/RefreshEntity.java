@@ -1,12 +1,13 @@
 package com.hoho.leave.domain.auth;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshEntity {
 
     @Id
@@ -14,7 +15,9 @@ public class RefreshEntity {
     private Long id;
 
     private String userEmail;
+
     private String refresh;
+
     private String expiration;
 
     public RefreshEntity(String userEmail, String refresh, String expiration) {

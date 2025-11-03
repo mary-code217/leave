@@ -1,5 +1,8 @@
 package com.hoho.leave.domain.org.service;
 
+import com.hoho.leave.common.exception.BusinessException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.org.dto.request.PositionCreateRequest;
 import com.hoho.leave.domain.org.dto.request.PositionUpdateRequest;
 import com.hoho.leave.domain.org.dto.response.PositionDetailResponse;
@@ -7,9 +10,6 @@ import com.hoho.leave.domain.org.dto.response.PositionListResponse;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.repository.PositionRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
-import com.hoho.leave.common.exception.DuplicateException;
-import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,22 +55,21 @@ public class PositionService {
 
     @Transactional(readOnly = true)
     public PositionListResponse getAllPositions(Integer size, Integer page) {
+        Pageable pageable = getPageable(size, page);
+
+        Page<Position> pageList = positionRepository.findAll(pageable);
+
+        List<PositionDetailResponse> list = pageList.getContent().stream().map(PositionDetailResponse::of).toList();
+
+        return PositionListResponse.of(pageList, list);
+    }
+
+    /**
+     * 페이지 정보 생성
+     */
+    private static Pageable getPageable(Integer size, Integer page) {
         Sort sort = Sort.by(Sort.Order.asc("orderNo"));
-        Pageable pageable = PageRequest.of(page - 1, size, sort);
-
-        Page<Position> positions = positionRepository.findAll(pageable);
-
-        List<PositionDetailResponse> list = positions.getContent().stream().map(PositionDetailResponse::of).toList();
-
-        return PositionListResponse.of(
-                page,
-                size,
-                list,
-                positions.getTotalPages(),
-                positions.getTotalElements(),
-                positions.isFirst(),
-                positions.isLast()
-        );
+        return PageRequest.of(page - 1, size, sort);
     }
 
     /**

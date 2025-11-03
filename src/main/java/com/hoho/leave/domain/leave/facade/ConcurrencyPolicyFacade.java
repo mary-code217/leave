@@ -3,7 +3,7 @@ package com.hoho.leave.domain.leave.facade;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.leave.policy.dto.request.CreateConcurrencyPolicy;
+import com.hoho.leave.domain.leave.policy.service.support.ConcurrencyPolicyParams;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveConcurrencyPolicyRequest;
 import com.hoho.leave.domain.leave.policy.entity.LeaveConcurrencyPolicy;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
@@ -24,22 +24,16 @@ public class ConcurrencyPolicyFacade {
     private final LeaveConcurrencyPolicyService leaveConcurrencyPolicyService;
     private final AuditLogService auditLogService;
 
-    /** 휴가 동시 제한 */
+    /** 부서별 휴가 동시 제한 */
     @Transactional
-    public void createLeaveConcurrencyPolicy(LeaveConcurrencyPolicyRequest req) {
-        Team team = teamService.getTeamEntity(req.getTeamId());
+    public void createLeaveConcurrencyPolicy(LeaveConcurrencyPolicyRequest request) {
+        Team team = teamService.getTeamEntity(request.getTeamId());
 
-        LeaveType leaveType = leaveTypeService.getLeaveTypeEntity(req.getLeaveTypeId());
+        LeaveType leaveType = leaveTypeService.getLeaveTypeEntity(request.getLeaveTypeId());
 
         LeaveConcurrencyPolicy savePolicy =
-                leaveConcurrencyPolicyService.createLeaveConcurrencyPolicy(
-                        new CreateConcurrencyPolicy(
-                                team,
-                                leaveType,
-                                req.getMaxConcurrent(),
-                                req.getEffectiveFrom(),
-                                req.getEffectiveTo()
-                        )
+                leaveConcurrencyPolicyService.createConcurrencyPolicy(
+                        ConcurrencyPolicyParams.of(team, leaveType, request)
                 );
 
         auditLogService.createLog(

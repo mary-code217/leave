@@ -14,7 +14,7 @@ public class UserDefaultApproverService {
     private final UserDefaultApproverRepository defaultApproverRepository;
 
     @Transactional
-    public UserDefaultApprover createUserDefaultApprover(UserDefaultApproverCreate dto) {
+    public UserDefaultApprover createUserDefaultApprover(UserDefaultApproverCreate request) {
 
 
 

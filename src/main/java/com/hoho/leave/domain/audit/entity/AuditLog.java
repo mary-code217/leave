@@ -1,14 +1,15 @@
 package com.hoho.leave.domain.audit.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "audit_log")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuditLog extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,18 +33,18 @@ public class AuditLog extends BaseEntity {
     @Column(name = "summary")
     private String summary;
 
-    public AuditLog(Action action, Long actorId, String objectType, Long objectId, String summary) {
-        this.action = action;
-        this.actorId = actorId;
-        this.objectType = objectType;
-        this.objectId = objectId;
-        this.summary = summary;
-    }
-
     public static AuditLog createLog(Action action, Long actorId,
                                      String objectType, Long objectId,
                                      String summary) {
-        return new AuditLog(action, actorId, objectType, objectId, summary);
+        AuditLog auditLog = new AuditLog();
+
+        auditLog.action = action;
+        auditLog.actorId = actorId;
+        auditLog.objectType = objectType;
+        auditLog.objectId = objectId;
+        auditLog.summary = summary;
+
+        return auditLog;
     }
 }
 

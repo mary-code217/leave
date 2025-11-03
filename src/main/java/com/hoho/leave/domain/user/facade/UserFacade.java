@@ -3,7 +3,7 @@ package com.hoho.leave.domain.user.facade;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.leave.account.dto.LedgerEvent;
+import com.hoho.leave.domain.leave.account.service.support.LedgerRecord;
 import com.hoho.leave.domain.leave.account.entity.ReasonCode;
 import com.hoho.leave.domain.leave.account.entity.UserLeaves;
 import com.hoho.leave.domain.leave.account.service.LeaveAccountService;
@@ -27,16 +27,16 @@ public class UserFacade {
     private final AuditLogService auditLogService;
 
     @Transactional
-    public void createUser(UserJoinRequest userJoinRequest) {
+    public void createUser(UserJoinRequest request) {
 
-        User saveUser = userService.createUser(userJoinRequest);
+        User saveUser = userService.createUser(request);
 
-        UserLeaves leaves = leaveAccountService.firstCreateUserLeaves(saveUser, userJoinRequest.getBalanceDays());
+        UserLeaves leaves = leaveAccountService.firstCreateUserLeaves(saveUser, request.getBalanceDays());
 
-        leaveLedgerService.createUserLeaveLedger(LedgerEvent.of(
+        leaveLedgerService.createUserLeaveLedger(LedgerRecord.of(
                 leaves,
                 LocalDateTime.now(),
-                "+" + userJoinRequest.getBalanceDays(),
+                "+" + request.getBalanceDays(),
                 ReasonCode.MIGRATION_OPENING_BALANCE,
                 "유저생성에 의한 초기 휴가설정"
         ));

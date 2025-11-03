@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class HandoverRecipientResponse {
-
     Long handoverId;
 
     String authorName;
@@ -21,7 +20,6 @@ public class HandoverRecipientResponse {
     LocalDateTime occurredAt;
 
     public static HandoverRecipientResponse of(HandoverNote note) {
-
         HandoverRecipientResponse response = new HandoverRecipientResponse();
 
         response.handoverId = note.getId();

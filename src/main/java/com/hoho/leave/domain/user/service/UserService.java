@@ -1,5 +1,7 @@
 package com.hoho.leave.domain.user.service;
 
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.org.entity.Grade;
 import com.hoho.leave.domain.org.entity.Position;
 import com.hoho.leave.domain.org.entity.Team;
@@ -12,8 +14,6 @@ import com.hoho.leave.domain.user.dto.response.UserDetailResponse;
 import com.hoho.leave.domain.user.dto.response.UserListResponse;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.DuplicateException;
-import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,26 +50,17 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserListResponse getAllUsers(Integer size, Integer page) {
-        Pageable pageable =
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("hireDate")));
+        Pageable pageable = getPageable(size, page);
 
-        Page<User> users = userRepository.findPageWithOrg(pageable);
+        Page<User> pageList = userRepository.findPageWithOrg(pageable);
 
         List<UserDetailResponse> list =
-                users.getContent()
+                pageList.getContent()
                         .stream()
                         .map(UserDetailResponse::of)
                         .toList();
 
-        return UserListResponse.of(
-                page,
-                size,
-                list,
-                users.getTotalPages(),
-                users.getTotalElements(),
-                users.isFirst(),
-                users.isLast()
-        );
+        return UserListResponse.of(pageList, list);
     }
 
     @Transactional
@@ -99,6 +90,13 @@ public class UserService {
      */
     public List<User> getUserEntityList(List<Long> userIds) {
         return userRepository.findAllById(userIds);
+    }
+
+    /**
+     * 페이지 정보 생성
+     */
+    private PageRequest getPageable(Integer size, Integer page) {
+        return PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("hireDate")));
     }
 
     /**

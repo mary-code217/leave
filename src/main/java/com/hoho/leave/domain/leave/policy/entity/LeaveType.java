@@ -1,10 +1,10 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
-import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeCreateRequest;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
+import com.hoho.leave.domain.shared.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
                 @UniqueConstraint(name = "uq_leave_type_name", columnNames = "leave_name")
         }
 )
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LeaveType extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,25 +43,17 @@ public class LeaveType extends BaseEntity {
     @Column(name = "leave_description")
     private String leaveDescription;
 
-    @Builder
-    public LeaveType(String leaveName, BigDecimal unitDays, boolean leaveDecrement, boolean requiresAttachment, LeaveCode leaveCode, String leaveDescription) {
-        this.leaveName = leaveName;
-        this.unitDays = unitDays;
-        this.leaveDecrement = leaveDecrement;
-        this.requiresAttachment = requiresAttachment;
-        this.leaveCode = leaveCode;
-        this.leaveDescription = leaveDescription;
-    }
-
     public static LeaveType Create(LeaveTypeCreateRequest req) {
-        return LeaveType.builder()
-                .leaveName(req.getLeaveTypeName())
-                .unitDays(req.getUnitDays())
-                .leaveDecrement(req.isLeaveDecrement())
-                .requiresAttachment(req.isRequiresAttachment())
-                .leaveCode(LeaveCode.valueOf(req.getLeaveCode()))
-                .leaveDescription(req.getLeaveDescription())
-                .build();
+        LeaveType leaveType = new LeaveType();
+
+        leaveType.leaveName = req.getLeaveTypeName();
+        leaveType.unitDays = req.getUnitDays();
+        leaveType.leaveDecrement = req.isLeaveDecrement();
+        leaveType.requiresAttachment = req.isRequiresAttachment();
+        leaveType.leaveCode = LeaveCode.valueOf(req.getLeaveCode());
+        leaveType.leaveDescription = req.getLeaveDescription();
+
+        return leaveType;
     }
 
     public void Update(LeaveTypeUpdateRequest req) {
