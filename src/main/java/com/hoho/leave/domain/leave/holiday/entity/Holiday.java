@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.holiday.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,5 +1,8 @@
 package com.hoho.leave.domain.org.service;
 
+import com.hoho.leave.common.exception.BusinessException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.org.dto.request.TeamCreateRequest;
 import com.hoho.leave.domain.org.dto.request.TeamUpdateRequest;
 import com.hoho.leave.domain.org.dto.response.TeamDetailResponse;
@@ -7,9 +10,6 @@ import com.hoho.leave.domain.org.dto.response.TeamListResponse;
 import com.hoho.leave.domain.org.entity.Team;
 import com.hoho.leave.domain.org.repository.TeamRepository;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
-import com.hoho.leave.common.exception.DuplicateException;
-import com.hoho.leave.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,49 +28,33 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 부서 생성
-     */
     @Transactional
     public void createTeam(TeamCreateRequest request) {
         checkDuplicateTeam(request.getTeamName());
 
-        Team team;
-        if (request.getParentId() == null) {
-            team = Team.createTeam(request);
-        } else {
-            Team parent = getTeamEntity(request.getParentId());
-            team = parent.createChild(request);
-        }
-
-        teamRepository.save(team);
+        teamRepository.save(teamRegister(request));
     }
 
-    /**
-     * 부서 수정
-     */
     @Transactional
     public void updateTeam(Long teamId, TeamUpdateRequest request) {
         Team team = getTeamEntity(teamId);
+
         checkDuplicateTeam(request.getTeamName(), teamId);
+
         updateParent(team, request.getParentId());
+
         team.changeOrder(request.getOrderNo());
+
         team.rename(request.getTeamName());
     }
 
-    /**
-     * 부서 삭제
-     */
     @Transactional
     public void deleteTeam(Long teamId) {
         Team team = getTeamEntity(teamId);
         checkExistChildOrUser(teamId);
         teamRepository.delete(team);
     }
-    
-    /**
-     * 부서 단일 조회(화면)
-     */
+
     @Transactional(readOnly = true)
     public TeamDetailResponse getTeam(Long teamId) {
         Team team = getTeamEntity(teamId);
@@ -79,24 +63,38 @@ public class TeamService {
         return TeamDetailResponse.of(team, userCount, childrenCount);
     }
 
-    /**
-     * 부서 전체 조회(화면)
-     */
     @Transactional(readOnly = true)
     public TeamListResponse getAllTeams(Integer size, Integer page) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("orderNo")));
+        Pageable pageable = getPageable(size, page);
 
-        Page<Team> pages = teamRepository.findAll(pageable);
-        List<TeamDetailResponse> list = new ArrayList<>();
+        Page<Team> pageList = teamRepository.findAll(pageable);
 
-        for (Team team : pages.toList()) {
-            Long userCount = userRepository.countByTeamId(team.getId());
-            Long childrenCount = teamRepository.countByParentId(team.getId());
+        List<TeamDetailResponse> list = getTeamDetailResponses(pageList);
 
-            list.add(TeamDetailResponse.of(team, userCount, childrenCount));
+        return TeamListResponse.of(pageList, list);
+    }
+
+    /**
+     * 부서 등록
+     */
+    private Team teamRegister(TeamCreateRequest request) {
+        Team team;
+
+        if (request.getParentId() == null) {
+            team = Team.createTeam(request);
+        } else {
+            Team parent = getTeamEntity(request.getParentId());
+            team = parent.createChild(request);
         }
 
-        return TeamListResponse.of(page, size, list, pages);
+        return team;
+    }
+
+    /**
+     * 페이지 정보 생성
+     */
+    private static PageRequest getPageable(Integer size, Integer page) {
+        return PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("orderNo")));
     }
 
     /**
@@ -151,5 +149,20 @@ public class TeamService {
         } else if (userRepository.existsByTeamId(teamId)) {
             throw new BusinessException("Delete Failed : 소속 사용자가 존재합니다.");
         }
+    }
+
+    /**
+     * 부서 상세 응답 리스트 생성
+     */
+    private List<TeamDetailResponse> getTeamDetailResponses(Page<Team> pageList) {
+        List<TeamDetailResponse> list = new ArrayList<>();
+
+        for (Team team : pageList.toList()) {
+            Long userCount = userRepository.countByTeamId(team.getId());
+            Long childrenCount = teamRepository.countByParentId(team.getId());
+
+            list.add(TeamDetailResponse.of(team, userCount, childrenCount));
+        }
+        return list;
     }
 }

@@ -1,13 +1,13 @@
 package com.hoho.leave.domain.audit.service;
 
-import com.hoho.leave.domain.audit.dto.response.AuditLogListResponse;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.audit.dto.response.AuditLogDetailResponse;
+import com.hoho.leave.domain.audit.dto.response.AuditLogListResponse;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.entity.AuditLog;
 import com.hoho.leave.domain.audit.repository.AuditLogRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +27,8 @@ public class AuditLogService {
     private final AuditLogRepository auditLogRepository;
 
     public void createLog(Action action, Long actorId,
-                        String objectType, Long objectId,
-                        String summary) {
+                          String objectType, Long objectId,
+                          String summary) {
 
         AuditLog auditLog = AuditLog.createLog(action, actorId, objectType, objectId, summary);
 
@@ -38,32 +38,24 @@ public class AuditLogService {
     @Transactional(readOnly = true)
     public AuditLogListResponse getAllLogs(Integer page, Integer size, String objectType) {
         Sort sort = Sort.by(Sort.Order.asc("createdAt"));
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-        Page<AuditLog> findList =
+        Page<AuditLog> pageList =
                 objectType.equals("all") ?
-                auditLogRepository.findAll(pageable) :
-                auditLogRepository.findAllByObjectType(objectType, pageable);
+                        auditLogRepository.findAll(pageable) :
+                        auditLogRepository.findAllByObjectType(objectType, pageable);
 
-        List<AuditLogDetailResponse> responses = new ArrayList<>();
-        for(AuditLog auditLog : findList.getContent()) {
-            if(auditLog.getActorId() != null) {
+        List<AuditLogDetailResponse> list = new ArrayList<>();
+        for (AuditLog auditLog : pageList.getContent()) {
+            if (auditLog.getActorId() != null) {
                 User user = userRepository.findById(auditLog.getActorId())
-                        .orElseThrow(() -> new BusinessException("로그 조회 실패 - 존재하지 않는 유저 입니다."));
-                responses.add(AuditLogDetailResponse.from(auditLog, user));
-            }else {
-                responses.add(AuditLogDetailResponse.from(auditLog, null));
+                        .orElseThrow(() -> new NotFoundException("Not Found User : " + auditLog.getActorId()));
+                list.add(AuditLogDetailResponse.of(auditLog, user));
+            } else {
+                list.add(AuditLogDetailResponse.of(auditLog, null));
             }
         }
 
-        return AuditLogListResponse.from(
-                page,
-                size,
-                responses,
-                findList.getTotalPages(),
-                findList.getTotalElements(),
-                findList.isFirst(),
-                findList.isLast()
-        );
+        return AuditLogListResponse.of(pageList, list);
     }
 }

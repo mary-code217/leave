@@ -1,6 +1,6 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeCreateRequest;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
 import jakarta.persistence.*;

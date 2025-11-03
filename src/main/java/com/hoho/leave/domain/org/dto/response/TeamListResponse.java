@@ -1,9 +1,6 @@
 package com.hoho.leave.domain.org.dto.response;
 
-import com.hoho.leave.domain.org.entity.Team;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -25,18 +22,16 @@ public class TeamListResponse {
 
     Boolean lastPage;
 
-    public static TeamListResponse of(Integer page, Integer size,
-                                      List<TeamDetailResponse> teams, Page<Team> pages) {
-
+    public static TeamListResponse of(Page<?> page, List<TeamDetailResponse> teams) {
         TeamListResponse response = new TeamListResponse();
 
-        response.page = page;
-        response.size = size;
+        response.page = page.getNumber();
+        response.size = page.getSize();
         response.teams = teams;
-        response.totalPage = pages.getTotalPages();
-        response.totalElement = pages.getTotalElements();
-        response.firstPage = pages.isFirst();
-        response.lastPage = pages.isLast();
+        response.totalPage = page.getTotalPages();
+        response.totalElement = page.getTotalElements();
+        response.firstPage = page.isFirst();
+        response.lastPage = page.isLast();
 
         return response;
     }

@@ -1,9 +1,9 @@
 package com.hoho.leave.domain.notification.entity;
 
-import com.hoho.leave.domain.BaseEntity;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "notification")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notification extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,20 +31,14 @@ public class Notification extends BaseEntity {
     @Column(name = "read_at")
     private LocalDateTime readAt;
 
-    @Builder
-    public Notification(User recipient, NotificationType type, String content, LocalDateTime readAt) {
-        this.recipient = recipient;
-        this.type = type;
-        this.content = content;
-        this.readAt = readAt;
-    }
-
     public static Notification create(User recipient, NotificationType type, String content) {
-        return Notification.builder()
-                .recipient(recipient)
-                .type(type)
-                .content(content)
-                .build();
+        Notification notification = new Notification();
+
+        notification.recipient = recipient;
+        notification.type = type;
+        notification.content = content;
+
+        return notification;
     }
 
     public void updateReadAt() {

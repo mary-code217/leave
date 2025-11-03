@@ -1,28 +1,32 @@
 package com.hoho.leave.domain.leave.request.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.hoho.leave.domain.leave.request.entity.LeaveRequestAttachment;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-@AllArgsConstructor
 public class AttachmentResponse {
+
     Long attachmentId;
+
     String originalName;
+
     Long size;
+
     String uploadBy;
+
     LocalDateTime uploadAt;
 
-    public static AttachmentResponse of(Long attachmentId, String originalName,
-                                        Long size, String uploadBy, LocalDateTime uploadAt) {
-        return AttachmentResponse.builder()
-                .attachmentId(attachmentId)
-                .originalName(originalName)
-                .size(size)
-                .uploadBy(uploadBy)
-                .uploadAt(uploadAt).build();
+    public static AttachmentResponse of(LeaveRequestAttachment attachment) {
+        AttachmentResponse response = new AttachmentResponse();
+
+        response.attachmentId = attachment.getId();
+        response.originalName = attachment.getOriginalName();
+        response.size = attachment.getSizeBytes();
+        response.uploadBy = attachment.getUploadedBy().getUsername();
+        response.uploadAt = attachment.getUpdatedAt();
+
+        return response;
     }
 }

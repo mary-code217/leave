@@ -1,11 +1,10 @@
 package com.hoho.leave.domain.leave.request.entity;
 
-import com.hoho.leave.domain.BaseEntity;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
+import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,8 +14,8 @@ import java.time.LocalTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "leave_request")
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class LeaveRequest extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,23 +59,16 @@ public class LeaveRequest extends BaseEntity {
     @JoinColumn(name = "leave_request_attachment_id")
     private LeaveRequestAttachment attachment = null;
 
-    @Builder
-    public LeaveRequest(BigDecimal quantityDays, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime) {
-        this.quantityDays = quantityDays;
-        this.startDay = startDay;
-        this.endDay = endDay;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
+    public static LeaveRequest create(LeaveRequestCreateRequest request) {
+        LeaveRequest leaveRequest = new LeaveRequest();
 
-    public static LeaveRequest create(LeaveRequestCreateRequest req) {
-        return LeaveRequest.builder()
-                .quantityDays(req.getQuantityDays())
-                .startDay(req.getStartDay())
-                .endDay(req.getEndDay())
-                .startTime(req.getStartTime())
-                .endTime(req.getEndTime())
-                .build();
+        leaveRequest.quantityDays = request.getQuantityDays();
+        leaveRequest.startDay = request.getStartDay();
+        leaveRequest.endDay = request.getEndDay();
+        leaveRequest.startTime = request.getStartTime();
+        leaveRequest.endTime = request.getEndTime();
+
+        return leaveRequest;
     }
 
     public void addUser(User user) {

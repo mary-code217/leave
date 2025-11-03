@@ -12,9 +12,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateConcurrencyPolicy {
+
     Team team;
+
     LeaveType leaveType;
+
     Integer maxConcurrent;
+
     LocalDate effectiveFrom;
+
     LocalDate effectiveTo;
+
 }

@@ -1,13 +1,12 @@
 package com.hoho.leave.domain.notification.service;
 
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.notification.dto.response.NotificationDetailResponse;
 import com.hoho.leave.domain.notification.dto.response.NotificationListResponse;
 import com.hoho.leave.domain.notification.entity.Notification;
 import com.hoho.leave.domain.notification.entity.NotificationType;
 import com.hoho.leave.domain.notification.repository.NotificationRepository;
 import com.hoho.leave.domain.user.entity.User;
-import com.hoho.leave.domain.user.repository.UserRepository;
-import com.hoho.leave.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,46 +22,47 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final UserRepository userRepository;
 
     public void createNotification(User user, NotificationType type, String content) {
         notificationRepository.save(Notification.create(user, type, content));
     }
 
     public void createManyNotification(List<User> recipients, NotificationType type, String content) {
-        for(User u : recipients){
-            createNotification(u, type, content);
-        }
+        recipients.forEach(u -> createNotification(u, type, content));
     }
 
-    // 읽음 처리
     @Transactional
     public void updateReadAt(Long NotificationId) {
-        Notification notification = notificationRepository.findById(NotificationId)
-                .orElseThrow(() -> new BusinessException("읽음 실패 - 존재하지 않는 알림 입니다."));
+        Notification notification = getNotificationEntity(NotificationId);
 
         notification.updateReadAt();
     }
 
-    // 알림 조회(전체)
     @Transactional(readOnly = true)
     public NotificationListResponse getAllUserNotifications(Long userId, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")));
+        Pageable pageable = getPageable(page, size);
 
         Page<Notification> pageList = notificationRepository.findByRecipientId(userId, pageable);
 
         List<NotificationDetailResponse> list = pageList.getContent().stream()
-                .map(NotificationDetailResponse::from)
+                .map(NotificationDetailResponse::of)
                 .toList();
 
-        return NotificationListResponse.from(
-                page,
-                size,
-                list,
-                pageList.getTotalPages(),
-                pageList.getTotalElements(),
-                pageList.isFirst(),
-                pageList.isLast()
-        );
+        return NotificationListResponse.of(pageList, list);
+    }
+
+    /**
+     * 페이지 정보 생성
+     */
+    private PageRequest getPageable(Integer page, Integer size) {
+        return PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createdAt")));
+    }
+
+    /**
+     * 알림 엔티티 조회
+     */
+    private Notification getNotificationEntity(Long NotificationId) {
+        return notificationRepository.findById(NotificationId)
+                .orElseThrow(() -> new NotFoundException("Not Found Notification : " + NotificationId));
     }
 }
