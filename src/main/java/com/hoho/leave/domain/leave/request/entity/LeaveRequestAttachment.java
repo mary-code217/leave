@@ -42,26 +42,22 @@ public class LeaveRequestAttachment extends BaseEntity {
     @JoinColumn(name = "uploaded_by_id", nullable = false)
     private User uploadedBy;
 
-    @Builder(access = AccessLevel.PROTECTED)
-    public LeaveRequestAttachment(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
-        this.leaveRequest = leaveRequest;
-        this.originalName = originalName;
-        this.storeName = storeName;
-        this.filePath = filePath;
-        this.contentType = contentType;
-        this.sizeBytes = sizeBytes;
-        this.uploadedBy = uploadedBy;
+    public static LeaveRequestAttachment create(String originalName, String storeName, String filePath,
+                                                String contentType, Long sizeBytes, User uploadedBy) {
+        LeaveRequestAttachment attachment = new LeaveRequestAttachment();
+
+        attachment.originalName = originalName;
+        attachment.storeName = storeName;
+        attachment.filePath = filePath;
+        attachment.contentType = contentType;
+        attachment.sizeBytes = sizeBytes;
+        attachment.uploadedBy = uploadedBy;
+
+        return attachment;
     }
 
-    public static LeaveRequestAttachment create(LeaveRequest leaveRequest, String originalName, String storeName, String filePath, String contentType, Long sizeBytes, User uploadedBy) {
-        return LeaveRequestAttachment.builder()
-                .leaveRequest(leaveRequest)
-                .originalName(originalName)
-                .storeName(storeName)
-                .filePath(filePath)
-                .contentType(contentType)
-                .sizeBytes(sizeBytes)
-                .uploadedBy(uploadedBy).build();
+    protected void addLeaveRequest(LeaveRequest leaveRequest) {
+        this.leaveRequest = leaveRequest;
     }
 }
 

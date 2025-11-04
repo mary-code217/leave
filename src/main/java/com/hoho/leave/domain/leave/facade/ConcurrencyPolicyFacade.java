@@ -3,7 +3,7 @@ package com.hoho.leave.domain.leave.facade;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.leave.policy.dto.request.CreateConcurrencyPolicy;
+import com.hoho.leave.domain.leave.policy.service.support.CreateConcurrencyPolicy;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveConcurrencyPolicyRequest;
 import com.hoho.leave.domain.leave.policy.entity.LeaveConcurrencyPolicy;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
@@ -33,7 +33,7 @@ public class ConcurrencyPolicyFacade {
 
         LeaveConcurrencyPolicy savePolicy =
                 leaveConcurrencyPolicyService.createLeaveConcurrencyPolicy(
-                        new CreateConcurrencyPolicy(
+                        CreateConcurrencyPolicy.of(
                                 team,
                                 leaveType,
                                 req.getMaxConcurrent(),

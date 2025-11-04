@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 
 public interface LeaveConcurrencyPolicyRepository extends JpaRepository<LeaveConcurrencyPolicy, Long> {
+
     @Query("""
         select (count(p) > 0)
         from LeaveConcurrencyPolicy p

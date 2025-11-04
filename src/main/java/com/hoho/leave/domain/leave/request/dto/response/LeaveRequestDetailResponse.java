@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class LeaveRequestDetailResponse {
@@ -30,7 +31,9 @@ public class LeaveRequestDetailResponse {
 
     String leaveTypeName;
 
-    public static LeaveRequestDetailResponse of(LeaveRequest leaveRequest) {
+    List<AttachmentResponse> attachments;
+
+    public static LeaveRequestDetailResponse of(LeaveRequest leaveRequest, List<AttachmentResponse> attachments) {
         LeaveRequestDetailResponse response = new LeaveRequestDetailResponse();
 
         response.leaveRequestId = leaveRequest.getId();
@@ -45,6 +48,8 @@ public class LeaveRequestDetailResponse {
 
         response.leaveTypeId = leaveRequest.getLeaveType().getId();
         response.leaveTypeName = leaveRequest.getLeaveType().getLeaveName();
+
+        response.attachments = attachments;
 
         return response;
     }

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class LeaveRequestFacade {
+public class LeaveRequestModifyFacade {
 
     private final UserService userService;
 

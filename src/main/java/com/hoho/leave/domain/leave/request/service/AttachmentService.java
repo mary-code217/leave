@@ -46,17 +46,14 @@ public class AttachmentService {
     /** 파일 업로드(pdf, png, jpeg, jpg) 메서드 */
     @Transactional
     public void uploadFile(List<MultipartFile> files, AttachmentUploadRequest request) {
-        List<LeaveRequestAttachment> attachments = new ArrayList<>();
-        LeaveRequest leaveRequest = leaveRequestRepository.findById(request.getLeaveRequestId())
-                .orElseThrow(() -> new NotFoundException("Not Found Leave Request : " + request.getLeaveRequestId()));
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new NotFoundException("Not Found User : " + request.getUserId()));
+        LeaveRequest leaveRequest = getLeaveRequest(request.getLeaveRequestId());
+        User user = getUser(request.getUserId());
 
         files.forEach(f -> {
             // 빈 파일 체크
-            if(fileIsEmpty(f)) throw new FileErrorException("파일이 존재하지 않습니다.");
+            if(fileIsEmpty(f)) throw new FileErrorException("Empty Upload File");
             // MIME 타입 체크
-            if(!isAllowedMime(f.getContentType())) throw new FileErrorException("허용하지 않는 확장자 입니다.");
+            if(!isAllowedMime(f.getContentType())) throw new FileErrorException("Not Allowed MIME Type : " + f.getContentType());
             // 용량체크
             assertFileSizeAllowed(f.getSize(), f.getContentType());
 
@@ -71,27 +68,14 @@ public class AttachmentService {
                 throw new FileErrorException(e.getMessage());
             }
 
-            attachments.add(LeaveRequestAttachment.create(
-                    leaveRequest,
-                    originalName,
-                    storedName,
-                    fullPath,
-                    f.getContentType(),
-                    f.getSize(),
-                    user
-            ));
+            LeaveRequestAttachment attachment = LeaveRequestAttachment.create(
+                    originalName, storedName,
+                    fullPath, f.getContentType(),
+                    f.getSize(), user
+            );
+
+            leaveRequest.addAttachment(attachment);
         });
-
-        attachmentRepository.saveAll(attachments);
-    }
-
-    /** 파일 정보 가져오는 메서드 */
-    @Transactional(readOnly = true)
-    public List<AttachmentResponse> getAttachments(Long leaveRequestId) {
-
-        List<LeaveRequestAttachment> attachments = attachmentRepository.findByLeaveRequestId(leaveRequestId);
-
-        return attachments.stream().map(AttachmentResponse::of).toList();
     }
 
     /** 파일 삭제 */
@@ -105,9 +89,31 @@ public class AttachmentService {
             throw new FileErrorException("File Delete Error : " + e.getMessage());
         }
 
-        attachmentRepository.delete(attachment);
+        LeaveRequest parent = Objects.requireNonNull(attachment.getLeaveRequest());
+        parent.removeAttachment(attachment);
     }
-    
+
+    /** 파일 정보 가져오는 메서드 */
+    @Transactional(readOnly = true)
+    public List<AttachmentResponse> getAttachments(Long leaveRequestId) {
+
+        List<LeaveRequestAttachment> attachments = attachmentRepository.findByLeaveRequestId(leaveRequestId);
+
+        return attachments.stream().map(AttachmentResponse::of).toList();
+    }
+
+    /** 유저 엔티티 조회 */
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Not Found User : " + userId));
+    }
+
+    /** 휴가 신청서 엔티티 조회 */
+    private LeaveRequest getLeaveRequest(Long leaveRequestId) {
+        return leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new NotFoundException("Not Found Leave Request : " + leaveRequestId));
+    }
+
     /** 파일 엔티티 조회 */
     private LeaveRequestAttachment getAttachmentEntity(Long attachmentId) {
         return attachmentRepository.findById(attachmentId)

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -54,10 +56,9 @@ public class LeaveRequest extends BaseEntity {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    /** 첨부파일이 있으면 사용 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leave_request_attachment_id")
-    private LeaveRequestAttachment attachment = null;
+    /** 첨부파일(복수) */
+    @OneToMany(mappedBy = "leaveRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LeaveRequestAttachment> attachments = new ArrayList<>();
 
     public static LeaveRequest create(LeaveRequestCreateRequest request) {
         LeaveRequest leaveRequest = new LeaveRequest();
@@ -79,8 +80,15 @@ public class LeaveRequest extends BaseEntity {
         this.leaveType = leaveType;
     }
 
+    // 양방향 연관관계 동기화 메서드
     public void addAttachment(LeaveRequestAttachment attachment) {
-        this.attachment = attachment;
+        attachments.add(attachment);
+        attachment.addLeaveRequest(this);
+    }
+
+    public void removeAttachment(LeaveRequestAttachment attachment) {
+        attachments.remove(attachment);
+        attachment.addLeaveRequest(null);
     }
 
     public void updateStatus(LeaveRequestStatus status) {

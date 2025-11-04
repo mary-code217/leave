@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.request.controller;
 
+import com.hoho.leave.domain.leave.facade.LeaveRequestQueryFacade;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestUpdateRequest;
 import com.hoho.leave.domain.leave.request.dto.response.LeaveRequestDetailResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class LeaveRequestController {
 
     private final LeaveRequestService leaveRequestService;
+    private final LeaveRequestQueryFacade leaveRequestQueryFacade;
 
     @PostMapping("")
     public ResponseEntity<?> createLeaveRequest(@RequestBody LeaveRequestCreateRequest req) {
@@ -48,7 +50,7 @@ public class LeaveRequestController {
     public ResponseEntity<LeaveRequestDetailResponse> getLeaveRequest(
             @PathVariable("leaveRequestId") Long leaveRequestId) {
 
-        LeaveRequestDetailResponse response = leaveRequestService.getLeaveRequest(leaveRequestId);
+        LeaveRequestDetailResponse response = leaveRequestQueryFacade.getLeaveRequest(leaveRequestId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.request.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequestAttachment;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class AttachmentResponse {
 
     String uploadBy;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime uploadAt;
 
     public static AttachmentResponse of(LeaveRequestAttachment attachment) {

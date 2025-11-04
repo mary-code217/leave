@@ -4,15 +4,11 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class LeaveTypeUpdateRequest {
 
     @NotBlank
@@ -28,6 +24,7 @@ public class LeaveTypeUpdateRequest {
     private BigDecimal unitDays;
 
     boolean leaveDecrement = true;
+
     boolean requiresAttachment = false;
 
     private String leaveDescription;

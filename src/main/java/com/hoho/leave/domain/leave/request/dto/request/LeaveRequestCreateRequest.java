@@ -20,9 +20,7 @@ public class LeaveRequestCreateRequest {
     @NotNull
     Long leaveTypeId;
 
-    @NotNull
     @Digits(integer = 3, fraction = 2)
-    @DecimalMin(value = "0.01")
     BigDecimal quantityDays;
 
     @NotBlank
