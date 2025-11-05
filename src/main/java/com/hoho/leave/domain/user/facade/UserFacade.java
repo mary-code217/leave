@@ -3,7 +3,7 @@ package com.hoho.leave.domain.user.facade;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.service.AuditLogService;
 import com.hoho.leave.domain.audit.service.AuditObjectType;
-import com.hoho.leave.domain.leave.account.dto.LedgerEvent;
+import com.hoho.leave.domain.leave.account.service.support.LedgerRecord;
 import com.hoho.leave.domain.leave.account.entity.ReasonCode;
 import com.hoho.leave.domain.leave.account.entity.UserLeaves;
 import com.hoho.leave.domain.leave.account.service.LeaveAccountService;
@@ -33,7 +33,7 @@ public class UserFacade {
 
         UserLeaves leaves = leaveAccountService.firstCreateUserLeaves(saveUser, request.getBalanceDays());
 
-        leaveLedgerService.createUserLeaveLedger(LedgerEvent.of(
+        leaveLedgerService.createUserLeaveLedger(LedgerRecord.of(
                 leaves,
                 LocalDateTime.now(),
                 "+" + request.getBalanceDays(),

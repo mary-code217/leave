@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.policy.service.support;
 
+import com.hoho.leave.domain.leave.policy.dto.request.LeaveConcurrencyPolicyRequest;
 import com.hoho.leave.domain.leave.policy.entity.LeaveType;
 import com.hoho.leave.domain.org.entity.Team;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class CreateConcurrencyPolicy {
+public class ConcurrencyPolicyParams {
 
     private final Team team;
 
@@ -21,15 +22,15 @@ public class CreateConcurrencyPolicy {
 
     private final LocalDate effectiveTo;
 
-    public static CreateConcurrencyPolicy of(Team team, LeaveType leaveType, Integer maxConcurrent,
-                                             LocalDate effectiveFrom, LocalDate effectiveTo) {
+    public static ConcurrencyPolicyParams of(Team team, LeaveType leaveType,
+                                             LeaveConcurrencyPolicyRequest request) {
 
-        return CreateConcurrencyPolicy.builder()
+        return ConcurrencyPolicyParams.builder()
                 .team(team)
                 .leaveType(leaveType)
-                .maxConcurrent(maxConcurrent)
-                .effectiveFrom(effectiveFrom)
-                .effectiveTo(effectiveTo)
+                .maxConcurrent(request.getMaxConcurrent())
+                .effectiveFrom(request.getEffectiveFrom())
+                .effectiveTo(request.getEffectiveTo())
                 .build();
     }
 }

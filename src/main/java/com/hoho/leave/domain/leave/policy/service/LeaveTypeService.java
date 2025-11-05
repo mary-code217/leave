@@ -1,6 +1,7 @@
 package com.hoho.leave.domain.leave.policy.service;
 
-import com.hoho.leave.common.exception.BusinessException;
+import com.hoho.leave.common.exception.DuplicateException;
+import com.hoho.leave.common.exception.NotFoundException;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeCreateRequest;
 import com.hoho.leave.domain.leave.policy.dto.request.LeaveTypeUpdateRequest;
 import com.hoho.leave.domain.leave.policy.dto.response.LeaveTypeDetailResponse;
@@ -72,7 +73,7 @@ public class LeaveTypeService {
      */
     public LeaveType getLeaveTypeEntity(Long leaveTypeId) {
         return leaveTypeRepository.findById(leaveTypeId)
-                .orElseThrow(() -> new BusinessException("조회 실패 - 존재하지 않는 유형 입니다."));
+                .orElseThrow(() -> new NotFoundException("Not Found Leave Type : " + leaveTypeId));
     }
 
     /**
@@ -80,7 +81,7 @@ public class LeaveTypeService {
      */
     private void checkDuplicateLeaveType(LeaveTypeCreateRequest request) {
         if (leaveTypeRepository.existsByLeaveName(request.getLeaveTypeName())) {
-            throw new BusinessException("생성 실패 - 이미 존재하는 유형 입니다.");
+            throw new DuplicateException("Duplicate Leave Type Name exists : " + request.getLeaveTypeName());
         }
     }
 }

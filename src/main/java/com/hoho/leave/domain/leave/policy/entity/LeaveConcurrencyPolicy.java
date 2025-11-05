@@ -1,11 +1,10 @@
 package com.hoho.leave.domain.leave.policy.entity;
 
-import com.hoho.leave.domain.leave.policy.service.support.CreateConcurrencyPolicy;
+import com.hoho.leave.domain.leave.policy.service.support.ConcurrencyPolicyParams;
 import com.hoho.leave.domain.shared.BaseEntity;
 import com.hoho.leave.domain.org.entity.Team;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,7 +43,7 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
     @Column(name = "effective_to")
     private LocalDate effectiveTo;
 
-    public static LeaveConcurrencyPolicy create(CreateConcurrencyPolicy request) {
+    public static LeaveConcurrencyPolicy create(ConcurrencyPolicyParams request) {
         LeaveConcurrencyPolicy concurrencyPolicy = new LeaveConcurrencyPolicy();
 
         concurrencyPolicy.team = request.getTeam();

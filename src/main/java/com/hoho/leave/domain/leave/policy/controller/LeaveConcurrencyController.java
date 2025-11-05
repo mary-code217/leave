@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/concurrency")
 public class LeaveConcurrencyController {
 
-    private final ConcurrencyPolicyFacade facade;
+    private final ConcurrencyPolicyFacade policyFacade;
 
     @PostMapping("")
     public ResponseEntity<?> createLeaveConcurrency(
             @RequestBody @Valid LeaveConcurrencyPolicyRequest request) {
 
-        facade.createLeaveConcurrencyPolicy(request);
+        policyFacade.createLeaveConcurrencyPolicy(request);
 
         return ResponseEntity.status(HttpStatus.OK).body("휴가 정책 생성");
     }
