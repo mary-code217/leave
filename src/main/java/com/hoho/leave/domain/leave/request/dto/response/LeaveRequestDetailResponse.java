@@ -31,9 +31,11 @@ public class LeaveRequestDetailResponse {
 
     String leaveTypeName;
 
+    boolean hasAttachment;
+
     List<AttachmentResponse> attachments;
 
-    public static LeaveRequestDetailResponse of(LeaveRequest leaveRequest, List<AttachmentResponse> attachments) {
+    public static LeaveRequestDetailResponse of(LeaveRequest leaveRequest) {
         LeaveRequestDetailResponse response = new LeaveRequestDetailResponse();
 
         response.leaveRequestId = leaveRequest.getId();
@@ -49,8 +51,14 @@ public class LeaveRequestDetailResponse {
         response.leaveTypeId = leaveRequest.getLeaveType().getId();
         response.leaveTypeName = leaveRequest.getLeaveType().getLeaveName();
 
-        response.attachments = attachments;
-
         return response;
+    }
+
+    public void addAttachments(List<AttachmentResponse> attachments) {
+        this.attachments = attachments;
+    }
+
+    public void hasAttachment(boolean hasAttachment) {
+        this.hasAttachment = hasAttachment;
     }
 }

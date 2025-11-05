@@ -63,7 +63,7 @@ public class AttachmentController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
     }
-    
+     
     @DeleteMapping("/{attachmentId}")
     public ResponseEntity<?> deleteAttachment(@PathVariable Long attachmentId) {
 

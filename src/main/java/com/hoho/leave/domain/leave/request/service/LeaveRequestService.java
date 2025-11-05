@@ -8,6 +8,8 @@ import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestUpdateRequest
 import com.hoho.leave.domain.leave.request.dto.response.LeaveRequestDetailResponse;
 import com.hoho.leave.domain.leave.request.dto.response.LeaveRequestListResponse;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
+import com.hoho.leave.domain.leave.request.repository.AttachmentRepository;
+import com.hoho.leave.domain.leave.request.repository.AttachmentRepository.ReqIdCount;
 import com.hoho.leave.domain.leave.request.repository.LeaveRequestRepository;
 import com.hoho.leave.domain.user.entity.User;
 import com.hoho.leave.domain.user.repository.UserRepository;
@@ -20,12 +22,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LeaveRequestService {
 
     private final LeaveRequestRepository leaveRequestRepository;
+    private final AttachmentRepository attachmentRepository;
     private final UserRepository userRepository;
     private final LeaveTypeRepository leaveTypeRepository;
 
@@ -48,10 +53,7 @@ public class LeaveRequestService {
         leaveRequest.updateStatus(request.getStatus());
     }
 
-    @Transactional
-    public void deleteLeaveRequest(Long leaveRequestId) {
-        LeaveRequest leaveRequest = getRequestEntity(leaveRequestId);
-
+    public void deleteLeaveRequest(LeaveRequest leaveRequest) {
         leaveRequestRepository.delete(leaveRequest);
     }
 
@@ -62,7 +64,7 @@ public class LeaveRequestService {
         Page<LeaveRequest> pageList = leaveRequestRepository.findByUserId(userId, pageable);
 
         List<LeaveRequestDetailResponse> list = pageList.stream()
-                .map(req -> LeaveRequestDetailResponse.of(req, null))
+                .map(LeaveRequestDetailResponse::of)
                 .toList();
 
         return LeaveRequestListResponse.of(pageList, list);
@@ -71,14 +73,23 @@ public class LeaveRequestService {
     @Transactional(readOnly = true)
     public LeaveRequestListResponse getAllLeaveRequests(Integer page, Integer size) {
         Pageable pageable = getPageable(page, size);
-
         Page<LeaveRequest> pageList = leaveRequestRepository.findAll(pageable);
 
-        List<LeaveRequestDetailResponse> list = pageList.stream()
-                .map(req -> LeaveRequestDetailResponse.of(req, null))
-                .toList();
+        List<Long> ids = pageList.stream().map(LeaveRequest::getId).toList();
+        Map<Long, Long> countMap = attachmentRepository.countByLeaveRequestIds(ids).stream()
+                .collect(Collectors.toMap(ReqIdCount::getReqId, ReqIdCount::getCnt));
+
+        List<LeaveRequestDetailResponse> list = pageList
+                .map(req -> getDetailResponse(req, countMap)).toList();
 
         return LeaveRequestListResponse.of(pageList, list);
+    }
+
+    /** 휴가 신청서 정보 응답 DTO 생성 */
+    private LeaveRequestDetailResponse getDetailResponse(LeaveRequest req, Map<Long, Long> countMap) {
+        LeaveRequestDetailResponse response = LeaveRequestDetailResponse.of(req);
+        response.hasAttachment(countMap.getOrDefault(req.getId(), 0L) > 0);
+        return response;
     }
 
     /** 휴가 신청서 엔티티 조회 */

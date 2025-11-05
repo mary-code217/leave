@@ -78,28 +78,49 @@ public class AttachmentService {
         });
     }
 
-    /** 파일 삭제 */
+    /** 파일 삭제(단일) */
     @Transactional
     public void deleteAttachment(Long attachmentId) {
         LeaveRequestAttachment attachment = getAttachmentEntity(attachmentId);
 
-        try {
-            Files.deleteIfExists(Path.of(attachment.getFilePath()));
-        } catch (IOException e) {
-            throw new FileErrorException("File Delete Error : " + e.getMessage());
-        }
+        deleteAttachmentByDir(Path.of(attachment.getFilePath()));
 
         LeaveRequest parent = Objects.requireNonNull(attachment.getLeaveRequest());
         parent.removeAttachment(attachment);
     }
 
-    /** 파일 정보 가져오는 메서드 */
+    @Transactional
+    public void deleteAttachments(Long leaveRequestId) {
+        List<LeaveRequestAttachment> attachments = getByLeaveRequestId(leaveRequestId);
+
+        attachments.forEach(atc -> {
+                    deleteAttachmentByDir(Path.of(atc.getFilePath()));
+                    LeaveRequest parent = Objects.requireNonNull(atc.getLeaveRequest());
+                    parent.removeAttachment(atc);
+                }
+        );
+    }
+
+    /** 디렉토리에서 첨부파일 삭제 */
+    private void deleteAttachmentByDir(Path of) {
+        try {
+            Files.deleteIfExists(of);
+        } catch (IOException e) {
+            throw new FileErrorException("File Delete Error : " + e.getMessage());
+        }
+    }
+
+    /** 해당 휴가 신청서의 파일들을 응답해주는 DTO 반환 */
     @Transactional(readOnly = true)
     public List<AttachmentResponse> getAttachments(Long leaveRequestId) {
-
-        List<LeaveRequestAttachment> attachments = attachmentRepository.findByLeaveRequestId(leaveRequestId);
+        List<LeaveRequestAttachment> attachments = getByLeaveRequestId(leaveRequestId);
 
         return attachments.stream().map(AttachmentResponse::of).toList();
+    }
+
+    /** 해당 휴가 신청서의 파일들 조회 */
+    private List<LeaveRequestAttachment> getByLeaveRequestId(Long leaveRequestId) {
+        return attachmentRepository.findByLeaveRequestId(leaveRequestId);
     }
 
     /** 유저 엔티티 조회 */

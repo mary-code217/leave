@@ -3,6 +3,7 @@ package com.hoho.leave.domain.leave.request.repository;
 import com.hoho.leave.domain.leave.request.entity.LeaveRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,4 +20,7 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long
         WHERE lr.id = :leaveRequestId
     """)
     Optional<LeaveRequest> findByIdWithUserAndLeaveType(Long leaveRequestId);
+
+    @EntityGraph(attributePaths = {"user", "leaveType"})
+    Page<LeaveRequest> findAll(Pageable pageable);
 }

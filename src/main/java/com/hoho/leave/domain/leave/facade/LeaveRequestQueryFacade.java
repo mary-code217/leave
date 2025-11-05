@@ -23,6 +23,9 @@ public class LeaveRequestQueryFacade {
         LeaveRequest leaveRequest = leaveRequestService.getRequestEntityWithUserAndType(leaveRequestId);
         List<AttachmentResponse> attachments = attachmentService.getAttachments(leaveRequestId);
 
-        return LeaveRequestDetailResponse.of(leaveRequest, attachments);
+        LeaveRequestDetailResponse response = LeaveRequestDetailResponse.of(leaveRequest);
+        response.addAttachments(attachments);
+
+        return response;
     }
 }

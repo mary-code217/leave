@@ -13,6 +13,8 @@ public class AttachmentResponse {
 
     String originalName;
 
+    String storeName;
+
     Long size;
 
     String uploadBy;
@@ -25,6 +27,7 @@ public class AttachmentResponse {
 
         response.attachmentId = attachment.getId();
         response.originalName = attachment.getOriginalName();
+        response.storeName = attachment.getStoreName();
         response.size = attachment.getSizeBytes();
         response.uploadBy = attachment.getUploadedBy().getUsername();
         response.uploadAt = attachment.getUpdatedAt();

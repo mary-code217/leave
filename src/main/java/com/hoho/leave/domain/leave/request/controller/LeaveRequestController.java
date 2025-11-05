@@ -1,5 +1,6 @@
 package com.hoho.leave.domain.leave.request.controller;
 
+import com.hoho.leave.domain.leave.facade.LeaveRequestModifyFacade;
 import com.hoho.leave.domain.leave.facade.LeaveRequestQueryFacade;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestCreateRequest;
 import com.hoho.leave.domain.leave.request.dto.request.LeaveRequestUpdateRequest;
@@ -20,6 +21,7 @@ public class LeaveRequestController {
 
     private final LeaveRequestService leaveRequestService;
     private final LeaveRequestQueryFacade leaveRequestQueryFacade;
+    private final LeaveRequestModifyFacade leaveRequestModifyFacade;
 
     @PostMapping("")
     public ResponseEntity<?> createLeaveRequest(@RequestBody LeaveRequestCreateRequest req) {
@@ -41,7 +43,7 @@ public class LeaveRequestController {
     @DeleteMapping("/{leaveRequestId}")
     public ResponseEntity<?> deleteLeaveRequest(@PathVariable("leaveRequestId") Long leaveRequestId) {
 
-        leaveRequestService.deleteLeaveRequest(leaveRequestId);
+        leaveRequestModifyFacade.deleteLeaveRequest(leaveRequestId);
 
         return ResponseEntity.status(HttpStatus.OK).body("신청 취소 완료");
     }
