@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 @Data
 public class LeaveTypeDetailResponse {
-
     Long leaveTypeId;
 
     String leaveTypeName;

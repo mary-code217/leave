@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 
 @Data
 public class LeaveTypeUpdateRequest {
-
     @NotBlank
     String leaveTypeName;
 

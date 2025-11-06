@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class AuditLogListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class AuditLogListResponse {
     public static AuditLogListResponse of(Page<?> page, List<AuditLogDetailResponse> auditLogs) {
         AuditLogListResponse response = new AuditLogListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.auditLogs = auditLogs;
         response.totalPage = page.getTotalPages();

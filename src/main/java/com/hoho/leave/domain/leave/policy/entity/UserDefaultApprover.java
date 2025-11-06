@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDefaultApprover extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

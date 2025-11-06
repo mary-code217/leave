@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class TeamDetailResponse {
-
     Long teamId;
 
     String teamName;

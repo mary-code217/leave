@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class GradeListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class GradeListResponse {
     public static GradeListResponse of(Page<?> page, List<GradeDetailResponse> grades) {
         GradeListResponse response = new GradeListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.grades = grades;
         response.totalPage = page.getTotalPages();

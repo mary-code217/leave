@@ -4,17 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hoho.leave.domain.audit.entity.Action;
 import com.hoho.leave.domain.audit.entity.AuditLog;
 import com.hoho.leave.domain.user.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AuditLogDetailResponse {
-
     Long id;
 
     Action action; // 행위코드

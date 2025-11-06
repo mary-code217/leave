@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.request.dto.response;
+package com.hoho.leave.domain.leave.account.dto.response;
 
 import lombok.Data;
 import org.springframework.data.domain.Page;
@@ -6,12 +6,12 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Data
-public class LeaveApprovalListResponse {
+public class LeaveLedgerListResponse {
     Integer page;
 
     Integer size;
 
-    List<LeaveApprovalResponse> leaveApprovals;
+    List<LeaveLedgerDetailResponse> leaveLedgers;
 
     Integer totalPage;
 
@@ -21,12 +21,12 @@ public class LeaveApprovalListResponse {
 
     Boolean lastPage;
 
-    public static LeaveApprovalListResponse of(Page<?> page, List<LeaveApprovalResponse> leaveApprovals) {
-        LeaveApprovalListResponse response = new LeaveApprovalListResponse();
+    public static LeaveLedgerListResponse of(Page<?> page, List<LeaveLedgerDetailResponse> leaveLedgers) {
+        LeaveLedgerListResponse response = new LeaveLedgerListResponse();
 
-        response.page = page.getNumber() + 1;
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
-        response.leaveApprovals = leaveApprovals;
+        response.leaveLedgers = leaveLedgers;
         response.totalPage = page.getTotalPages();
         response.totalElement = page.getTotalElements();
         response.firstPage = page.isFirst();

@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 public class LeaveRequestDetailResponse {
-
     Long leaveRequestId;
 
     LocalDate startDay;

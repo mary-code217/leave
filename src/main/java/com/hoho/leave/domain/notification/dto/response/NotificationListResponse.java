@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class NotificationListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class NotificationListResponse {
     public static NotificationListResponse of(Page<?> page, List<NotificationDetailResponse> notifications) {
         NotificationListResponse response = new NotificationListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.notifications = notifications;
         response.totalPage = page.getTotalPages();

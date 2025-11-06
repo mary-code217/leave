@@ -2,24 +2,31 @@ package com.hoho.leave.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hoho.leave.domain.user.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 public class UserDetailResponse {
     Long id;
+
     String username;
+
     String email;
+
     String employeeNo;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
+
     String role;
+
     String teamName;
+
     String gradeName;
+
     String positionName;
+
     String active;
     
     public static UserDetailResponse of(User user) {

@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class LeaveRequestUpdateRequest {
-
     @NotBlank
     LeaveRequestStatus status;
 }

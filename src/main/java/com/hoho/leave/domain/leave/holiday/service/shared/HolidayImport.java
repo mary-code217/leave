@@ -1,4 +1,4 @@
-package com.hoho.leave.domain.leave.holiday.dto;
+package com.hoho.leave.domain.leave.holiday.service.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HolidayImportDto {
+public class HolidayImport {
     LocalDate holidayDate;
     String holidayName;
 }

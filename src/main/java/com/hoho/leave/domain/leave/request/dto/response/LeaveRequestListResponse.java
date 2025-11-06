@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class LeaveRequestListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class LeaveRequestListResponse {
     public static LeaveRequestListResponse of(Page<?> page, List<LeaveRequestDetailResponse> leaveTypes) {
         LeaveRequestListResponse response = new LeaveRequestListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber() + 1;
         response.size = page.getSize();
         response.leaveTypes = leaveTypes;
         response.totalPage = page.getTotalPages();

@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class TeamListResponse {
-
     Integer page;
 
     Integer size;
@@ -25,7 +24,7 @@ public class TeamListResponse {
     public static TeamListResponse of(Page<?> page, List<TeamDetailResponse> teams) {
         TeamListResponse response = new TeamListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.teams = teams;
         response.totalPage = page.getTotalPages();

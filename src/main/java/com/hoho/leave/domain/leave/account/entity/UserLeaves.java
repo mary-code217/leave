@@ -13,16 +13,11 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Table(
-        name = "user_leaves",
-        uniqueConstraints = {
-                // 유저×휴가유형 1행만 존재
-                @UniqueConstraint(name = "uq_user_leaves_user_type", columnNames = {"user_id", "leave_type_id"})
-        }
-)
+@Table(name = "user_leaves")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLeaves extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,6 +43,10 @@ public class UserLeaves extends BaseEntity {
         userLeaves.balanceDays = balanceDays;
 
         return userLeaves;
+    }
+
+    public void updateBalanceDays(BigDecimal newBalanceDays) {
+        this.balanceDays = newBalanceDays;
     }
 }
 

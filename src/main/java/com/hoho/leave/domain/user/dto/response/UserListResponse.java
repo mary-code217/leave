@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class UserListResponse {
-
     Integer page;
 
     Integer size;
@@ -23,10 +22,9 @@ public class UserListResponse {
     Boolean lastPage;
 
     public static UserListResponse of(Page<?> page, List<UserDetailResponse> users) {
-
         UserListResponse response = new UserListResponse();
 
-        response.page = page.getNumber();
+        response.page = page.getNumber()+1;
         response.size = page.getSize();
         response.users = users;
         response.totalPage = page.getTotalPages();

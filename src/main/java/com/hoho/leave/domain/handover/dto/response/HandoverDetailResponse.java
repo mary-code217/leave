@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class HandoverDetailResponse {
-
     Long handoverId;
 
     String authorName;

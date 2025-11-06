@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserDefaultApproverCreate {
-    
     Long userId;
 
     Long approverId;

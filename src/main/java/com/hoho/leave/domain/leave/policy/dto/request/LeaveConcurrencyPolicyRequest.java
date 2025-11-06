@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @Data
 public class LeaveConcurrencyPolicyRequest {
-
     @NotNull
     Long teamId;
 

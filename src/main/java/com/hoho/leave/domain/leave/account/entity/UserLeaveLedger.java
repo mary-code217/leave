@@ -4,7 +4,6 @@ import com.hoho.leave.domain.leave.account.service.support.LedgerRecord;
 import com.hoho.leave.domain.shared.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

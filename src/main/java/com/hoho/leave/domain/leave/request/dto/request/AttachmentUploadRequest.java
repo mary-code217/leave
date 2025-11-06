@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class AttachmentUploadRequest {
-
     @NotNull
     Long userId;
 

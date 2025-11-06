@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class PositionListResponse {
-
     Integer page;
 
     Integer size;
@@ -23,10 +22,9 @@ public class PositionListResponse {
     Boolean lastPage;
 
     public static  PositionListResponse of(Page<?> page, List<PositionDetailResponse> positions) {
-
         PositionListResponse positionListResponse = new PositionListResponse();
 
-        positionListResponse.page = page.getNumber();
+        positionListResponse.page = page.getNumber()+1;
         positionListResponse.size = page.getSize();
         positionListResponse.positions = positions;
         positionListResponse.totalPage = page.getTotalPages();

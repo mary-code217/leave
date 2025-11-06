@@ -12,7 +12,6 @@ import java.time.LocalTime;
 
 @Data
 public class LeaveRequestCreateRequest {
-
     @NotNull
     Long userId;
 

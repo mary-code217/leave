@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class LedgerRecord {
-
     UserLeaves userLeaves;
 
     LocalDateTime effectiveAt;

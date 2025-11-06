@@ -1,20 +1,17 @@
 package com.hoho.leave.domain.leave.policy.dto.request;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
 public class LeaveTypeCreateRequest {
-
-    @NotBlank @NotNull
+    @NotBlank
     String leaveTypeName;
 
-    @NotBlank @NotNull
+    @NotBlank
     String leaveCode;
 
     @Digits(integer = 3, fraction = 2)

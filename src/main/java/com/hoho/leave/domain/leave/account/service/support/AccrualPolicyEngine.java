@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @Service
 public class AccrualPolicyEngine {
-
     public AccrualSchedule getAccountEvent(User user) {
         LeaveStage leaveStage;
         LocalDate nextAccrualAt;

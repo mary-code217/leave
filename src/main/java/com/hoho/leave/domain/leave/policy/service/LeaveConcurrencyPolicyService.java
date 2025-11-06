@@ -7,6 +7,8 @@ import com.hoho.leave.domain.leave.policy.service.support.ConcurrencyPolicyParam
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class LeaveConcurrencyPolicyService {
@@ -22,7 +24,13 @@ public class LeaveConcurrencyPolicyService {
     // 동시휴가정책 가져오기(전체 - 현재 유효한 정책 and 미래에 실행될 정책 - 메인화면 표시용도)
     
 
-    // 동시휴가정책 가져오기(부서 - 휴가기간사이의 정책 - 휴가신청시 확인용도)
+    public boolean checkTeamConcurrencyPolicyRange(Long teamId, LocalDate from, LocalDate to) {
+        return policyRepository.existsCoveringRange(teamId, from, to);
+    }
+
+    public Integer getMaxConcurrent(Long teamId, LocalDate from, LocalDate to) {
+        return policyRepository.findCoveringRange(teamId, from, to).getFirst().getMaxConcurrent();
+    }
 
     /** 중복 정책 체크 */
     private void checkDuplicatePolicy(ConcurrencyPolicyParams params) {
