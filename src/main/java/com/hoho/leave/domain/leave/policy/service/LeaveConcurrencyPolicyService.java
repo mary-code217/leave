@@ -15,7 +15,6 @@ public class LeaveConcurrencyPolicyService {
 
     private final LeaveConcurrencyPolicyRepository policyRepository;
 
-    // 동시휴가정책 생성
     public LeaveConcurrencyPolicy createConcurrencyPolicy(ConcurrencyPolicyParams params) {
         checkDuplicatePolicy(params);
         return policyRepository.save(LeaveConcurrencyPolicy.create(params));
