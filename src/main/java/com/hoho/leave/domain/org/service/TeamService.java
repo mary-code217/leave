@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -152,17 +154,39 @@ public class TeamService {
     }
 
     /**
-     * 부서 상세 응답 리스트 생성
+     * 부서 상세 응답 리스트 생성 (N+1 최적화)
+     * - 기존: 부서 N개 조회 시 userCount N번 + childrenCount N번 = 2N+1 쿼리
+     * - 개선: 부서 목록 1번 + userCount 1번 + childrenCount 1번 = 3 쿼리
      */
     private List<TeamDetailResponse> getTeamDetailResponses(Page<Team> pageList) {
+        // 조회된 부서들의 ID 목록 추출
+        List<Long> teamIds = pageList.getContent().stream()
+                .map(Team::getId)
+                .toList();
+
+        // 부서별 소속 유저 수 일괄 조회 (IN 쿼리 1회)
+        Map<Long, Long> userCountMap = toCountMap(userRepository.countByTeamIds(teamIds));
+        // 부서별 하위 부서 수 일괄 조회 (IN 쿼리 1회)
+        Map<Long, Long> childrenCountMap = toCountMap(teamRepository.countChildrenByTeamIds(teamIds));
+
+        // Map에서 조회하여 응답 DTO 생성
         List<TeamDetailResponse> list = new ArrayList<>();
-
-        for (Team team : pageList.toList()) {
-            Long userCount = userRepository.countByTeamId(team.getId());
-            Long childrenCount = teamRepository.countByParentId(team.getId());
-
+        for (Team team : pageList.getContent()) {
+            Long userCount = userCountMap.getOrDefault(team.getId(), 0L);
+            Long childrenCount = childrenCountMap.getOrDefault(team.getId(), 0L);
             list.add(TeamDetailResponse.of(team, userCount, childrenCount));
         }
         return list;
+    }
+
+    /**
+     * Object[] 결과를 Map<ID, Count>로 변환
+     */
+    private Map<Long, Long> toCountMap(List<Object[]> results) {
+        return results.stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
     }
 }
