@@ -23,7 +23,7 @@ public class LeaveTypeController {
     @PostMapping("")
     public ResponseEntity<?> createLeaveType(@RequestBody @Valid LeaveTypeCreateRequest leaveTypeCreateRequest) {
 
-        leaveTypeService.LeaveTypeCreate(leaveTypeCreateRequest);
+        leaveTypeService.createLeaveType(leaveTypeCreateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body("휴가 유형 생성");
     }
@@ -32,7 +32,7 @@ public class LeaveTypeController {
     public ResponseEntity<?> updateLeaveType(@PathVariable("leaveTypeId") Long leaveTypeId,
                                              @RequestBody @Valid LeaveTypeUpdateRequest leaveTypeUpdate) {
 
-        leaveTypeService.LeaveTypeUpdate(leaveTypeId, leaveTypeUpdate);
+        leaveTypeService.updateLeaveType(leaveTypeId, leaveTypeUpdate);
 
         return ResponseEntity.status(HttpStatus.OK).body("휴가 유형 변경");
     }
@@ -40,7 +40,7 @@ public class LeaveTypeController {
     @DeleteMapping("/{leaveTypeId}")
     public ResponseEntity<?> deleteLeaveType(@PathVariable("leaveTypeId") Long leaveTypeId) {
 
-        leaveTypeService.LeaveTypeDelete(leaveTypeId);
+        leaveTypeService.deleteLeaveType(leaveTypeId);
 
         return ResponseEntity.status(HttpStatus.OK).body("휴가 유형 삭제");
     }

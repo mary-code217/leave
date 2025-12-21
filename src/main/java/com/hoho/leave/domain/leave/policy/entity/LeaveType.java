@@ -43,7 +43,7 @@ public class LeaveType extends BaseEntity {
     @Column(name = "leave_description")
     private String leaveDescription;
 
-    public static LeaveType Create(LeaveTypeCreateRequest req) {
+    public static LeaveType create(LeaveTypeCreateRequest req) {
         LeaveType leaveType = new LeaveType();
 
         leaveType.leaveName = req.getLeaveTypeName();
@@ -56,7 +56,7 @@ public class LeaveType extends BaseEntity {
         return leaveType;
     }
 
-    public void Update(LeaveTypeUpdateRequest req) {
+    public void update(LeaveTypeUpdateRequest req) {
         this.leaveName = req.getLeaveTypeName();
         this.unitDays = req.getUnitDays();
         this.leaveDecrement = req.isLeaveDecrement();

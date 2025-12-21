@@ -25,21 +25,21 @@ public class LeaveTypeService {
     private final LeaveTypeRepository leaveTypeRepository;
 
     @Transactional
-    public void LeaveTypeCreate(LeaveTypeCreateRequest request) {
+    public void createLeaveType(LeaveTypeCreateRequest request) {
         checkDuplicateLeaveType(request);
-        leaveTypeRepository.save(LeaveType.Create(request));
+        leaveTypeRepository.save(LeaveType.create(request));
     }
 
     @Transactional
-    public void LeaveTypeDelete(Long leaveTypeId) {
+    public void deleteLeaveType(Long leaveTypeId) {
         LeaveType leaveType = getLeaveTypeEntity(leaveTypeId);
         leaveTypeRepository.delete(leaveType);
     }
 
     @Transactional
-    public void LeaveTypeUpdate(Long leaveTypeId, LeaveTypeUpdateRequest request) {
+    public void updateLeaveType(Long leaveTypeId, LeaveTypeUpdateRequest request) {
         LeaveType leaveType = getLeaveTypeEntity(leaveTypeId);
-        leaveType.Update(request);
+        leaveType.update(request);
     }
 
     @Transactional(readOnly = true)
