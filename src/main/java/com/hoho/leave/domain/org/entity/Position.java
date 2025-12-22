@@ -7,6 +7,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 직책 엔티티.
+ * <p>
+ * 조직 내 직책 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -26,6 +32,12 @@ public class Position extends BaseEntity {
     @Column(name = "order_no")
     private Integer orderNo;
 
+    /**
+     * 직책을 생성한다.
+     *
+     * @param request 직책 생성 요청 정보
+     * @return 생성된 직책 엔티티
+     */
     public static Position create(PositionCreateRequest request) {
         Position position = new Position();
 
@@ -35,10 +47,20 @@ public class Position extends BaseEntity {
         return position;
     }
 
+    /**
+     * 정렬 순서를 변경한다.
+     *
+     * @param orderNo 새로운 정렬 순서
+     */
     public void changeOrderNo(Integer orderNo) {
         if(orderNo != null) this.orderNo = orderNo;
     }
 
+    /**
+     * 직책명을 변경한다.
+     *
+     * @param newPositionName 새로운 직책명
+     */
     public void rename(String newPositionName) {
         this.positionName = newPositionName;
     }

@@ -20,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 직급 관리 서비스.
+ * <p>
+ * 직급의 생성, 조회, 수정, 삭제 기능을 제공한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class GradeService {
@@ -27,12 +33,23 @@ public class GradeService {
     private final GradeRepository gradeRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 직급을 생성한다.
+     *
+     * @param request 직급 생성 요청 정보
+     */
     @Transactional
     public void createGrade(GradeCreateRequest request) {
         checkDuplicateGrade(request.getGradeName());
         gradeRepository.save(Grade.create(request));
     }
 
+    /**
+     * 직급을 수정한다.
+     *
+     * @param gradeId 직급 ID
+     * @param request 직급 수정 요청 정보
+     */
     @Transactional
     public void updateGrade(Long gradeId, GradeUpdateRequest request) {
         Grade grade = getGradeEntity(gradeId);
@@ -41,6 +58,11 @@ public class GradeService {
         grade.rename(request.getGradeName());
     }
 
+    /**
+     * 직급을 삭제한다.
+     *
+     * @param gradeId 직급 ID
+     */
     @Transactional
     public void deleteGrade(Long gradeId) {
         Grade grade = getGradeEntity(gradeId);
@@ -48,11 +70,24 @@ public class GradeService {
         gradeRepository.delete(grade);
     }
 
+    /**
+     * 특정 직급을 조회한다.
+     *
+     * @param gradeId 직급 ID
+     * @return 직급 상세 응답 DTO
+     */
     @Transactional(readOnly = true)
     public GradeDetailResponse getGrade(Long gradeId) {
         return GradeDetailResponse.of(getGradeEntity(gradeId));
     }
 
+    /**
+     * 전체 직급 목록을 조회한다.
+     *
+     * @param size 페이지 크기
+     * @param page 페이지 번호
+     * @return 직급 목록 응답 DTO
+     */
     @Transactional(readOnly = true)
     public GradeListResponse getAllGrades(Integer size, Integer page) {
         Pageable pageable = getPageable(size, page);

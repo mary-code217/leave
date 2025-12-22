@@ -17,6 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * 사용자 파사드.
+ * <p>
+ * 사용자 생성 시 필요한 여러 도메인 서비스를 조율하여
+ * 사용자 계정, 휴가 계정, 감사 로그 등을 통합 관리한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
@@ -26,6 +33,14 @@ public class UserFacade {
     private final LeaveLedgerService leaveLedgerService;
     private final AuditLogService auditLogService;
 
+    /**
+     * 새로운 사용자를 생성하고 초기 휴가를 설정한다.
+     * <p>
+     * 사용자 계정 생성, 휴가 계정 생성, 휴가 원장 기록, 감사 로그 기록을 하나의 트랜잭션으로 처리한다.
+     * </p>
+     *
+     * @param request 회원가입 요청 정보
+     */
     @Transactional
     public void createUser(UserJoinRequest request) {
 

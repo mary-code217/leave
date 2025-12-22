@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * 휴가 동시 제한 정책 엔티티.
+ * <p>
+ * 팀별, 휴가 유형별 동시 사용 가능 인원수를 제한하는 정책을 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -43,6 +49,12 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
     @Column(name = "effective_to")
     private LocalDate effectiveTo;
 
+    /**
+     * 휴가 동시 제한 정책을 생성한다.
+     *
+     * @param request 정책 생성 파라미터
+     * @return 생성된 정책 엔티티
+     */
     public static LeaveConcurrencyPolicy create(ConcurrencyPolicyParams request) {
         LeaveConcurrencyPolicy concurrencyPolicy = new LeaveConcurrencyPolicy();
 
@@ -55,6 +67,12 @@ public class LeaveConcurrencyPolicy extends BaseEntity {
         return concurrencyPolicy;
     }
 
+    /**
+     * 특정 날짜에 정책이 유효한지 확인한다.
+     *
+     * @param date 확인할 날짜
+     * @return 유효 여부
+     */
     public boolean isEffectiveOn(LocalDate date) {
         if (date == null) return false;
         boolean fromOk = !date.isBefore(effectiveFrom);

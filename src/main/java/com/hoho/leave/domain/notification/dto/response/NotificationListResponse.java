@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * 알림 목록 응답 DTO.
+ * <p>
+ * 페이지네이션된 알림 목록과 페이징 정보를 클라이언트에 전달한다.
+ * </p>
+ */
 @Data
 public class NotificationListResponse {
     Integer page;
@@ -21,6 +27,13 @@ public class NotificationListResponse {
 
     Boolean lastPage;
 
+    /**
+     * Page 객체와 알림 목록으로부터 NotificationListResponse를 생성한다.
+     *
+     * @param page 페이지 객체
+     * @param notifications 알림 상세 응답 목록
+     * @return 생성된 알림 목록 응답 DTO
+     */
     public static NotificationListResponse of(Page<?> page, List<NotificationDetailResponse> notifications) {
         NotificationListResponse response = new NotificationListResponse();
 

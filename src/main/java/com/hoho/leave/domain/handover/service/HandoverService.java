@@ -22,7 +22,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 인수인계 서비스
+ * 인수인계 서비스.
+ * <p>
+ * 인수인계 노트의 생성, 수정, 삭제 및 조회 기능을 제공한다.
+ * </p>
  */
 @Service
 @RequiredArgsConstructor
@@ -31,10 +34,26 @@ public class HandoverService {
     private final HandoverNoteRepository noteRepository;
     private final HandoverRecipientRepository recipientRepository;
 
+    /**
+     * 인수인계 노트를 생성한다.
+     *
+     * @param author  작성자
+     * @param title   제목
+     * @param content 내용
+     * @return 생성된 인수인계 노트
+     */
     public HandoverNote createHandover(User author, String title, String content) {
         return noteRepository.save(HandoverNote.create(author, title, content));
     }
 
+    /**
+     * 인수인계 노트를 수정한다.
+     *
+     * @param handoverId 인수인계 ID
+     * @param title      새 제목
+     * @param content    새 내용
+     * @return 수정된 인수인계 노트
+     */
     public HandoverNote updateHandover(Long handoverId, String title, String content) {
         HandoverNote handoverNote = getHandoverNoteEntity(handoverId);
         handoverNote.update(title, content);
@@ -42,12 +61,24 @@ public class HandoverService {
         return handoverNote;
     }
 
+    /**
+     * 인수인계 노트를 삭제한다.
+     *
+     * @param handoverId 삭제할 인수인계 ID
+     */
     public void deleteHandover(Long handoverId) {
         HandoverNote handoverNote = getHandoverNoteEntity(handoverId);
         noteRepository.delete(handoverNote);
     }
 
-    // 발신목록
+    /**
+     * 작성자의 발신 인수인계 목록을 조회한다.
+     *
+     * @param authorId 작성자 ID
+     * @param page     페이지 번호
+     * @param size     페이지 크기
+     * @return 발신 인수인계 목록 응답
+     */
     @Transactional(readOnly = true)
     public HandoverAuthorListResponse getHandoverAuthorList(Long authorId, Integer page, Integer size) {
         Pageable pageable = getPageable(page, size);
@@ -62,7 +93,12 @@ public class HandoverService {
         return HandoverAuthorListResponse.of(pageList, list);
     }
 
-    // 단건조회
+    /**
+     * 인수인계를 단건 조회한다.
+     *
+     * @param handoverId 인수인계 ID
+     * @return 인수인계 상세 응답
+     */
     @Transactional(readOnly = true)
     public HandoverDetailResponse getHandover(Long handoverId) {
         HandoverNote handoverNote = getHandoverNoteEntity(handoverId);

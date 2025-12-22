@@ -7,6 +7,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * 공휴일 생성 요청 DTO.
+ * <p>
+ * 공휴일 날짜와 명칭 정보를 담는다.
+ * </p>
+ */
 @Data
 public class HolidayCreateRequest {
     @NotNull

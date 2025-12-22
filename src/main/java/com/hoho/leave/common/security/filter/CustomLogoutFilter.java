@@ -15,17 +15,45 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
+/**
+ * 사용자 로그아웃을 처리하는 커스텀 필터.
+ * <p>
+ * POST /logout 요청을 가로채어 refresh 토큰을 검증하고,
+ * 유효한 경우 데이터베이스에서 토큰을 삭제하고 쿠키를 무효화한다.
+ * </p>
+ */
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
 
+    /**
+     * 필터 체인에서 요청을 처리한다.
+     *
+     * @param servletRequest  서블릿 요청
+     * @param servletResponse 서블릿 응답
+     * @param filterChain     필터 체인
+     * @throws IOException      입출력 예외
+     * @throws ServletException 서블릿 예외
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         doFilter((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse, filterChain);
     }
 
+    /**
+     * 로그아웃 요청을 처리하는 내부 메서드.
+     * <p>
+     * refresh 토큰의 유효성을 검증하고, DB에서 삭제한 후 쿠키를 무효화한다.
+     * </p>
+     *
+     * @param request     HTTP 요청
+     * @param response    HTTP 응답
+     * @param filterChain 필터 체인
+     * @throws IOException      입출력 예외
+     * @throws ServletException 서블릿 예외
+     */
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         //path and method verify

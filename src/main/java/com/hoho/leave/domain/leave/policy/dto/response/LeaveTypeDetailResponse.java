@@ -5,6 +5,12 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * 휴가 유형 상세 응답 DTO.
+ * <p>
+ * 휴가 유형의 상세 정보를 반환하는 응답 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class LeaveTypeDetailResponse {
     Long leaveTypeId;
@@ -21,6 +27,12 @@ public class LeaveTypeDetailResponse {
 
     private String leaveDescription;
 
+    /**
+     * LeaveType 엔티티로부터 응답 DTO를 생성한다.
+     *
+     * @param leaveType 휴가 유형 엔티티
+     * @return 휴가 유형 상세 응답 DTO
+     */
     public static LeaveTypeDetailResponse of(LeaveType leaveType) {
         LeaveTypeDetailResponse response = new LeaveTypeDetailResponse();
 

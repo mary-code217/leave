@@ -11,6 +11,13 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 팀(부서) 엔티티.
+ * <p>
+ * 조직의 계층 구조를 표현하는 팀 정보를 관리한다.
+ * 상위 팀과 하위 팀 간의 관계를 지원한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(name = "team")
@@ -35,7 +42,12 @@ public class Team extends BaseEntity {
     @Column(name = "order_no")
     private Integer orderNo;
 
-    // 루트 부서 생성
+    /**
+     * 루트 팀을 생성한다.
+     *
+     * @param request 팀 생성 요청 정보
+     * @return 생성된 팀 엔티티
+     */
     public static Team createTeam(TeamCreateRequest request) {
         Team team = new Team();
 
@@ -45,7 +57,12 @@ public class Team extends BaseEntity {
         return team;
     }
 
-    // 자식 부서 생성
+    /**
+     * 하위 팀을 생성한다.
+     *
+     * @param request 팀 생성 요청 정보
+     * @return 생성된 하위 팀 엔티티
+     */
     public Team createChild(TeamCreateRequest request) {
         Team child = createTeam(request);
         child.parent = this;
@@ -53,19 +70,31 @@ public class Team extends BaseEntity {
         return child;
     }
 
-    // 부서명 변경
+    /**
+     * 팀명을 변경한다.
+     *
+     * @param newName 새로운 팀명
+     */
     public void rename(String newName) {
         if (newName == null || newName.isBlank()) throw new BusinessException("팀명은 비어 있을 수 없습니다.");
 
         this.teamName = newName;
     }
 
-    // 정렬기준 변경
+    /**
+     * 정렬 순서를 변경한다.
+     *
+     * @param newOrderNo 새로운 정렬 순서
+     */
     public void changeOrder(Integer newOrderNo) {
         if(newOrderNo != null) this.orderNo = newOrderNo;
     }
 
-    // 상위부서 이동
+    /**
+     * 상위 팀을 변경한다.
+     *
+     * @param newParent 새로운 상위 팀
+     */
     public void moveTo(Team newParent) {
         if (this == newParent) {
             throw new BusinessException("자기 자신을 상위 부서로 지정할 수 없습니다.");

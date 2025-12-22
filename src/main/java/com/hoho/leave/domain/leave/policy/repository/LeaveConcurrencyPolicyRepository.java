@@ -8,8 +8,23 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * 휴가 동시 제한 정책 리포지토리.
+ * <p>
+ * 휴가 동시 제한 정책 엔티티에 대한 데이터베이스 접근을 담당한다.
+ * </p>
+ */
 public interface LeaveConcurrencyPolicyRepository extends JpaRepository<LeaveConcurrencyPolicy, Long> {
 
+    /**
+     * 중복되는 정책이 존재하는지 확인한다.
+     *
+     * @param teamId 팀 ID
+     * @param leaveTypeId 휴가 유형 ID
+     * @param newFrom 새 정책 시작일
+     * @param newTo 새 정책 종료일 (null = 무기한)
+     * @return 중복 존재 여부
+     */
     @Query("""
             select (count(p) > 0)
             from LeaveConcurrencyPolicy p
@@ -25,6 +40,14 @@ public interface LeaveConcurrencyPolicyRepository extends JpaRepository<LeaveCon
             @Param("newTo") LocalDate newTo // null = 오픈엔드
     );
 
+    /**
+     * 특정 기간을 포함하는 정책 목록을 조회한다.
+     *
+     * @param teamId 팀 ID
+     * @param from 시작일
+     * @param to 종료일
+     * @return 해당 기간을 포함하는 정책 목록
+     */
     @Query("""
             select p
               from LeaveConcurrencyPolicy p
@@ -39,6 +62,14 @@ public interface LeaveConcurrencyPolicyRepository extends JpaRepository<LeaveCon
             @Param("to") LocalDate to
     );
 
+    /**
+     * 특정 기간을 포함하는 정책이 존재하는지 확인한다.
+     *
+     * @param teamId 팀 ID
+     * @param from 시작일
+     * @param to 종료일
+     * @return 존재 여부
+     */
     @Query("""
             select (count(p) > 0)
               from LeaveConcurrencyPolicy p

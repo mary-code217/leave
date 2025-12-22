@@ -7,6 +7,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 사용자 기본 결재자 엔티티.
+ * <p>
+ * 사용자별 기본 결재선 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -32,6 +38,14 @@ public class UserDefaultApprover extends BaseEntity {
     @Column(name = "step_no", nullable = false)
     private Integer stepNo;
 
+    /**
+     * 사용자 기본 결재자를 생성한다.
+     *
+     * @param user 사용자
+     * @param approver 결재자
+     * @param stepNo 결재 단계
+     * @return 생성된 기본 결재자 엔티티
+     */
     public static UserDefaultApprover of(User user, User approver, Integer stepNo) {
         UserDefaultApprover defaultApprover = new UserDefaultApprover();
 

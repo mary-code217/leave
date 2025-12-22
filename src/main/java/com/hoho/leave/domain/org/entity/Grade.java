@@ -7,6 +7,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 직급 엔티티.
+ * <p>
+ * 조직 내 직급 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -26,6 +32,12 @@ public class Grade extends BaseEntity {
     @Column(name = "order_no")
     private Integer orderNo;
 
+    /**
+     * 직급을 생성한다.
+     *
+     * @param request 직급 생성 요청 정보
+     * @return 생성된 직급 엔티티
+     */
     public static Grade create(GradeCreateRequest request) {
         Grade grade = new Grade();
 
@@ -34,9 +46,21 @@ public class Grade extends BaseEntity {
 
         return grade;
     }
+
+    /**
+     * 정렬 순서를 변경한다.
+     *
+     * @param orderNo 새로운 정렬 순서
+     */
     public void changeOrderNo(Integer orderNo) {
         if(orderNo != null) this.orderNo = orderNo;
     }
+
+    /**
+     * 직급명을 변경한다.
+     *
+     * @param gradeName 새로운 직급명
+     */
     public void rename(String gradeName) {
         this.gradeName = gradeName;
     }

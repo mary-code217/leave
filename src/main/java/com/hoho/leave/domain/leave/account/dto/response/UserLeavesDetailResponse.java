@@ -7,6 +7,12 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * 사용자 휴가 정보 상세 응답 DTO.
+ * <p>
+ * 사용자의 휴가 잔여 일수 및 휴가 단계 정보를 담는다.
+ * </p>
+ */
 @Data
 public class UserLeavesDetailResponse {
     Long id;
@@ -21,6 +27,12 @@ public class UserLeavesDetailResponse {
 
     BigDecimal balanceDays;
 
+    /**
+     * 사용자 휴가 엔티티로부터 응답 DTO를 생성한다.
+     *
+     * @param userLeaves 사용자 휴가 엔티티
+     * @return 사용자 휴가 정보 상세 응답
+     */
     public static UserLeavesDetailResponse of(UserLeaves userLeaves) {
         UserLeavesDetailResponse response = new UserLeavesDetailResponse();
 

@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * 직책 목록 응답 DTO.
+ * <p>
+ * 직책 목록과 페이징 정보를 반환하는 응답 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class PositionListResponse {
     Integer page;
@@ -21,6 +27,13 @@ public class PositionListResponse {
 
     Boolean lastPage;
 
+    /**
+     * Page 객체와 직책 목록으로부터 응답 DTO를 생성한다.
+     *
+     * @param page 페이지 정보
+     * @param positions 직책 상세 응답 목록
+     * @return 직책 목록 응답 DTO
+     */
     public static  PositionListResponse of(Page<?> page, List<PositionDetailResponse> positions) {
         PositionListResponse positionListResponse = new PositionListResponse();
 

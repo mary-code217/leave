@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 알림 상세 응답 DTO.
+ * <p>
+ * 개별 알림의 상세 정보를 클라이언트에 전달한다.
+ * </p>
+ */
 @Data
 public class NotificationDetailResponse {
     Long notificationId;
@@ -18,6 +24,12 @@ public class NotificationDetailResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime readAt;
 
+    /**
+     * Notification 엔티티로부터 NotificationDetailResponse를 생성한다.
+     *
+     * @param notification 알림 엔티티
+     * @return 생성된 알림 상세 응답 DTO
+     */
     public static NotificationDetailResponse of(Notification notification) {
         NotificationDetailResponse response = new NotificationDetailResponse();
 

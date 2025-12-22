@@ -4,6 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
+/**
+ * 직급 생성 요청 DTO.
+ * <p>
+ * 새로운 직급을 등록할 때 사용되는 요청 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class GradeCreateRequest {
     @NotBlank(message = "직급명은 필수입니다.")

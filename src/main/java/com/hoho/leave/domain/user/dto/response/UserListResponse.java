@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * 사용자 목록 응답 DTO.
+ * <p>
+ * 페이징된 사용자 목록과 페이지 정보를 클라이언트에게 전달한다.
+ * </p>
+ */
 @Data
 public class UserListResponse {
     Integer page;
@@ -21,6 +27,13 @@ public class UserListResponse {
     
     Boolean lastPage;
 
+    /**
+     * Page 객체와 사용자 목록으로부터 UserListResponse를 생성한다.
+     *
+     * @param page 페이지 정보
+     * @param users 사용자 상세 정보 목록
+     * @return 사용자 목록 응답 DTO
+     */
     public static UserListResponse of(Page<?> page, List<UserDetailResponse> users) {
         UserListResponse response = new UserListResponse();
 

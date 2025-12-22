@@ -22,6 +22,12 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 감사 로그 관리 서비스.
+ * <p>
+ * 시스템 내 모든 중요 행위를 기록하고 조회하는 기능을 제공한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class AuditLogService {
@@ -29,6 +35,15 @@ public class AuditLogService {
     private final UserRepository userRepository;
     private final AuditLogRepository auditLogRepository;
 
+    /**
+     * 새로운 감사 로그를 생성하고 저장한다.
+     *
+     * @param action     행위 유형
+     * @param actorId    행위자 ID
+     * @param objectType 대상 객체 유형
+     * @param objectId   대상 객체 ID
+     * @param summary    요약 설명
+     */
     public void createLog(Action action, Long actorId,
                           String objectType, Long objectId,
                           String summary) {
@@ -39,9 +54,15 @@ public class AuditLogService {
     }
 
     /**
-     * 감사 로그 목록 조회 (N+1 최적화)
-     * - 기존: 로그 N개 조회 시 User N번 = N+1 쿼리
-     * - 개선: 로그 목록 1번 + User IN 쿼리 1번 = 2 쿼리
+     * 감사 로그 목록을 페이징하여 조회한다.
+     * <p>
+     * N+1 쿼리 문제를 방지하기 위해 User를 IN 쿼리로 일괄 조회한다.
+     * </p>
+     *
+     * @param page       페이지 번호
+     * @param size       페이지 크기
+     * @param objectType 대상 객체 유형 필터
+     * @return 감사 로그 목록 응답
      */
     @Transactional(readOnly = true)
     public AuditLogListResponse getAllLogs(Integer page, Integer size, String objectType) {

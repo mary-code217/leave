@@ -6,9 +6,20 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-
+/**
+ * 휴가 부여 정책 엔진.
+ * <p>
+ * 사용자의 입사일을 기준으로 휴가 부여 스케줄을 계산한다.
+ * </p>
+ */
 @Service
 public class AccrualPolicyEngine {
+    /**
+     * 사용자의 휴가 부여 스케줄을 계산한다.
+     *
+     * @param user 사용자
+     * @return 휴가 부여 스케줄
+     */
     public AccrualSchedule getAccountEvent(User user) {
         LeaveStage leaveStage;
         LocalDate nextAccrualAt;
@@ -24,7 +35,13 @@ public class AccrualPolicyEngine {
         return new AccrualSchedule(leaveStage, nextAccrualAt);
     }
 
-    // today는 Asia/Seoul 기준의 오늘 날짜
+    /**
+     * 다음 월차 부여일을 계산한다.
+     *
+     * @param hireDate 입사일
+     * @param today 오늘 날짜
+     * @return 다음 월차 부여일
+     */
     public static LocalDate nextMonthlyAccrual(LocalDate hireDate, LocalDate today) {
         int hireDay = hireDate.getDayOfMonth();
 
@@ -40,6 +57,13 @@ public class AccrualPolicyEngine {
         return thisMonthAnchor;
     }
 
+    /**
+     * 다음 연차 부여일을 계산한다.
+     *
+     * @param hireDate 입사일
+     * @param today 오늘 날짜
+     * @return 다음 연차 부여일
+     */
     public static LocalDate nextAnnualAccrual(LocalDate hireDate, LocalDate today) {
         int month = hireDate.getMonthValue();
         int day = hireDate.getDayOfMonth();

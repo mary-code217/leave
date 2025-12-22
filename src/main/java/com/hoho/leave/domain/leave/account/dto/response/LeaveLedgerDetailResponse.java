@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 휴가 원장 상세 응답 DTO.
+ * <p>
+ * 개별 휴가 원장 항목의 상세 정보를 담는다.
+ * </p>
+ */
 @Data
 public class LeaveLedgerDetailResponse {
     Long id;
@@ -22,6 +28,12 @@ public class LeaveLedgerDetailResponse {
 
     String note;
 
+    /**
+     * 휴가 원장 엔티티로부터 응답 DTO를 생성한다.
+     *
+     * @param ledger 휴가 원장 엔티티
+     * @return 휴가 원장 상세 응답
+     */
     public static LeaveLedgerDetailResponse of(UserLeaveLedger ledger) {
         LeaveLedgerDetailResponse response = new LeaveLedgerDetailResponse();
 

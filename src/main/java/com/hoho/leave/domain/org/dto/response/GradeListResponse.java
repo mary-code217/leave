@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * 직급 목록 응답 DTO.
+ * <p>
+ * 직급 목록과 페이징 정보를 반환하는 응답 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class GradeListResponse {
     Integer page;
@@ -21,6 +27,13 @@ public class GradeListResponse {
 
     Boolean lastPage;
 
+    /**
+     * Page 객체와 직급 목록으로부터 응답 DTO를 생성한다.
+     *
+     * @param page 페이지 정보
+     * @param grades 직급 상세 응답 목록
+     * @return 직급 목록 응답 DTO
+     */
     public static GradeListResponse of(Page<?> page, List<GradeDetailResponse> grades) {
         GradeListResponse response = new GradeListResponse();
 

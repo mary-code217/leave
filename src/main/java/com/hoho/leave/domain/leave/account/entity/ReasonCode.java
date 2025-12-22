@@ -1,5 +1,12 @@
 package com.hoho.leave.domain.leave.account.entity;
 
+/**
+ * 휴가 원장 사유 코드 열거형.
+ * <p>
+ * 휴가 원장의 증감 사유를 나타낸다.
+ * 부여, 소멸, 신청/결재, 조정 등의 사유로 분류된다.
+ * </p>
+ */
 public enum ReasonCode {
     /** 부여(+) **/
     GRANT_REGULAR,            // 연간 정기부여

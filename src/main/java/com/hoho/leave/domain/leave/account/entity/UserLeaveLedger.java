@@ -9,6 +9,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 사용자 휴가 원장 엔티티.
+ * <p>
+ * 사용자의 휴가 증감 내역을 기록한다.
+ * 부여, 소멸, 사용, 환급 등 모든 휴가 변동 사항을 추적한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(name = "user_leave_ledger")
@@ -35,6 +42,12 @@ public class UserLeaveLedger extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    /**
+     * 원장 레코드로부터 휴가 원장 엔티티를 생성한다.
+     *
+     * @param ledgerRecord 원장 레코드
+     * @return 생성된 휴가 원장 엔티티
+     */
     public static UserLeaveLedger create(LedgerRecord ledgerRecord) {
         UserLeaveLedger userLeaveLedger = new UserLeaveLedger();
 

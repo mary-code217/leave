@@ -12,13 +12,45 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * 사용자 레포지토리.
+ * <p>
+ * 사용자 엔티티의 데이터베이스 접근을 담당한다.
+ * </p>
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // org 도메인 관련 조회
+    /**
+     * 특정 부서에 소속된 사용자가 존재하는지 확인한다.
+     *
+     * @param teamId 부서 ID
+     * @return 존재 여부
+     */
     boolean existsByTeamId(Long teamId);
+
+    /**
+     * 특정 직급의 사용자가 존재하는지 확인한다.
+     *
+     * @param gradeId 직급 ID
+     * @return 존재 여부
+     */
     boolean existsByGradeId(Long gradeId);
+
+    /**
+     * 특정 직책의 사용자가 존재하는지 확인한다.
+     *
+     * @param positionId 직책 ID
+     * @return 존재 여부
+     */
     boolean existsByPositionId(Long positionId);
+
+    /**
+     * 특정 부서에 소속된 사용자 수를 조회한다.
+     *
+     * @param teamId 부서 ID
+     * @return 소속 사용자 수
+     */
     Long countByTeamId(Long teamId);
 
     /**
@@ -29,14 +61,38 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.team.id, COUNT(u) FROM User u WHERE u.team.id IN :teamIds GROUP BY u.team.id")
     List<Object[]> countByTeamIds(@Param("teamIds") List<Long> teamIds);
 
-    // 유저 도메인 관련
+    /**
+     * 이메일이 이미 존재하는지 확인한다.
+     *
+     * @param email 이메일
+     * @return 존재 여부
+     */
     boolean existsByEmail(String email);
+
+    /**
+     * 이메일로 사용자를 조회한다.
+     *
+     * @param email 이메일
+     * @return 사용자 엔티티
+     */
     Optional<User> findByEmail(String email);
 
+    /**
+     * 조직 정보를 포함하여 사용자 목록을 페이지 단위로 조회한다.
+     *
+     * @param pageable 페이지 정보
+     * @return 사용자 페이지
+     */
     @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select u from User u")
     Page<User> findPageWithOrg(Pageable pageable);
 
+    /**
+     * 조직 정보를 포함하여 사용자를 ID로 조회한다.
+     *
+     * @param userId 사용자 ID
+     * @return 사용자 엔티티
+     */
     @EntityGraph(value = "User.withOrg", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select u from User u where u.id = :userId")
     Optional<User> findByIdWithOrg(Long userId);

@@ -8,27 +8,47 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 감사 로그 상세 정보 응답 DTO.
+ */
 @Data
 public class AuditLogDetailResponse {
+
+    /** 로그 ID */
     Long id;
 
-    Action action; // 행위코드
+    /** 행위 코드 */
+    Action action;
 
+    /** 행위자 ID */
     Long userId;
 
-    String username; // 행위자
+    /** 행위자 이름 */
+    String username;
 
-    String employeeNo; // 행위자 사번
+    /** 행위자 사번 */
+    String employeeNo;
 
+    /** 대상 객체 ID */
     Long objectId;
 
+    /** 대상 객체 유형 */
     String objectType;
 
+    /** 요약 설명 */
     String summary;
 
+    /** 발생 일시 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime occurredAt;
 
+    /**
+     * AuditLog 엔티티와 User 엔티티로부터 응답 DTO를 생성한다.
+     *
+     * @param auditLog 감사 로그 엔티티
+     * @param user     행위자 정보 (null 가능)
+     * @return 감사 로그 상세 응답
+     */
     public static AuditLogDetailResponse of(AuditLog auditLog, User user) {
         AuditLogDetailResponse response = new AuditLogDetailResponse();
 

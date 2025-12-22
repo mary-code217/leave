@@ -20,6 +20,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
+/**
+ * Spring Security 설정 클래스.
+ * <p>
+ * JWT 기반의 Stateless 인증을 구성하고, 로그인/로그아웃 필터 및 권한 설정을 정의한다.
+ * </p>
+ */
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -29,17 +35,38 @@ public class SecurityConfig {
     private final RefreshRepository refreshRepository;
     private final JWTUtil jwtUtil;
 
+    /**
+     * BCrypt 비밀번호 인코더를 빈으로 등록한다.
+     *
+     * @return BCryptPasswordEncoder 인스턴스
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //AuthenticationManager Bean 등록
+    /**
+     * AuthenticationManager를 빈으로 등록한다.
+     *
+     * @param cfg 인증 설정
+     * @return AuthenticationManager 인스턴스
+     * @throws Exception 설정 실패 시
+     */
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
         return cfg.getAuthenticationManager();
     }
 
+    /**
+     * Security Filter Chain을 구성한다.
+     * <p>
+     * CSRF 비활성화, JWT 필터 등록, 세션 정책을 STATELESS로 설정한다.
+     * </p>
+     *
+     * @param http HttpSecurity 객체
+     * @return 구성된 SecurityFilterChain
+     * @throws Exception 설정 실패 시
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);

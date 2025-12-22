@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 팀(부서) 관리 서비스.
+ * <p>
+ * 조직 내 팀의 생성, 조회, 수정, 삭제 기능을 제공한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -30,6 +36,11 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 팀을 생성한다.
+     *
+     * @param request 팀 생성 요청 정보
+     */
     @Transactional
     public void createTeam(TeamCreateRequest request) {
         checkDuplicateTeam(request.getTeamName());
@@ -37,6 +48,12 @@ public class TeamService {
         teamRepository.save(teamRegister(request));
     }
 
+    /**
+     * 팀을 수정한다.
+     *
+     * @param teamId 팀 ID
+     * @param request 팀 수정 요청 정보
+     */
     @Transactional
     public void updateTeam(Long teamId, TeamUpdateRequest request) {
         Team team = getTeamEntity(teamId);
@@ -50,6 +67,11 @@ public class TeamService {
         team.rename(request.getTeamName());
     }
 
+    /**
+     * 팀을 삭제한다.
+     *
+     * @param teamId 팀 ID
+     */
     @Transactional
     public void deleteTeam(Long teamId) {
         Team team = getTeamEntity(teamId);
@@ -57,6 +79,12 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
+    /**
+     * 특정 팀을 조회한다.
+     *
+     * @param teamId 팀 ID
+     * @return 팀 상세 응답 DTO
+     */
     @Transactional(readOnly = true)
     public TeamDetailResponse getTeam(Long teamId) {
         Team team = getTeamEntity(teamId);
@@ -65,6 +93,13 @@ public class TeamService {
         return TeamDetailResponse.of(team, userCount, childrenCount);
     }
 
+    /**
+     * 전체 팀 목록을 조회한다.
+     *
+     * @param size 페이지 크기
+     * @param page 페이지 번호
+     * @return 팀 목록 응답 DTO
+     */
     @Transactional(readOnly = true)
     public TeamListResponse getAllTeams(Integer size, Integer page) {
         Pageable pageable = getPageable(size, page);

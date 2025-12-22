@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 공휴일 API 서비스.
+ * <p>
+ * 공공데이터 포털의 공휴일 API를 호출하여 공휴일 정보를 가져온다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class HolidayApiService {
@@ -30,6 +36,9 @@ public class HolidayApiService {
     private String apiUrl;
     private RestClient client;
 
+    /**
+     * RestClient를 초기화한다.
+     */
     @PostConstruct
     public void init() {
         this.client = RestClient.builder()
@@ -37,6 +46,13 @@ public class HolidayApiService {
                 .build();
     }
 
+    /**
+     * 특정 년월의 공휴일 정보를 API로부터 가져온다.
+     *
+     * @param year 조회 년도
+     * @param month 조회 월
+     * @return 공휴일 목록
+     */
     public List<HolidayImport> fetchRestHolidaysByMonth(int year, int month) {
         String monthStr = String.format("%02d", month);
 

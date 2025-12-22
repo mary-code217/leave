@@ -13,6 +13,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * 사용자 엔티티.
+ * <p>
+ * 시스템 사용자의 계정 정보와 조직 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -70,11 +76,24 @@ public class User extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
+    /**
+     * 사용자를 생성한다.
+     *
+     * @param email 사용자 이메일
+     * @param role 사용자 권한
+     */
     public User(String email, UserRole role) {
         this.email = email;
         this.role = role;
     }
 
+    /**
+     * 회원가입 요청으로부터 사용자 엔티티를 생성한다.
+     *
+     * @param userJoinRequest 회원가입 요청 정보
+     * @param encoder 비밀번호 인코더
+     * @return 생성된 사용자 엔티티
+     */
     public static User create(UserJoinRequest userJoinRequest, PasswordEncoder encoder) {
         User user = new User();
 
@@ -88,22 +107,48 @@ public class User extends BaseEntity {
         return user;
     }
 
+    /**
+     * 사용자에게 직급을 할당한다.
+     *
+     * @param grade 할당할 직급
+     */
     public void assignGrade(Grade grade) {
         this.grade = grade;
     }
 
+    /**
+     * 사용자에게 직책을 할당한다.
+     *
+     * @param position 할당할 직책
+     */
     public void assignPosition(Position position) {
         this.position = position;
     }
 
+    /**
+     * 사용자에게 부서를 할당한다.
+     *
+     * @param team 할당할 부서
+     */
     public void assignTeam(Team team) {
         this.team = team;
     }
 
+    /**
+     * 사용자의 비밀번호를 변경한다.
+     *
+     * @param newPassword 새로운 비밀번호
+     * @param encoder 비밀번호 인코더
+     */
     public void updatePassword(String newPassword, PasswordEncoder encoder) {
         this.password = encoder.encode(newPassword);
     }
 
+    /**
+     * 사용자의 이름을 변경한다.
+     *
+     * @param username 새로운 이름
+     */
     public void updateUsername(String username) {
         this.username = username;
     }

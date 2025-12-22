@@ -22,7 +22,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 인수인계 생성, 수정, 삭제 퍼사드
+ * 인수인계 생성, 수정, 삭제를 조율하는 퍼사드.
+ * <p>
+ * 인수인계 관련 비즈니스 로직을 조합하고, 알림 발송 및 감사 로그 기록을 처리한다.
+ * </p>
  */
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,14 @@ public class HandoverModify {
     private final AuditLogService auditLogService;
     private final NotificationService notificationService;
 
+    /**
+     * 인수인계를 생성한다.
+     * <p>
+     * 인수인계 노트 생성, 수신자 등록, 알림 발송, 감사 로그 기록을 수행한다.
+     * </p>
+     *
+     * @param request 인수인계 생성 요청
+     */
     @Transactional
     public void createHandover(HandoverCreateRequest request) {
         User author = userService.getUserEntity(request.getAuthorId());
@@ -49,7 +60,11 @@ public class HandoverModify {
         createLog(author.getId(), note.getId(), author.getUsername(), getNames(recipients));
     }
 
-
+    /**
+     * 인수인계를 삭제한다.
+     *
+     * @param handoverId 삭제할 인수인계 ID
+     */
     @Transactional
     public void deleteHandover(Long handoverId) {
         handoverService.deleteHandover(handoverId);
@@ -57,6 +72,15 @@ public class HandoverModify {
         handoverRecipientService.deleteByHandoverNoteId(handoverId);
     }
 
+    /**
+     * 인수인계를 수정한다.
+     * <p>
+     * 제목, 내용 수정과 함께 수신자 목록의 추가/삭제를 처리한다.
+     * </p>
+     *
+     * @param handoverId 수정할 인수인계 ID
+     * @param request    수정 요청
+     */
     @Transactional
     public void updateHandover(Long handoverId, HandoverUpdateRequest request) {
         HandoverNote note = handoverService.updateHandover(handoverId, request.getTitle(), request.getContent());

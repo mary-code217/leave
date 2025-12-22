@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * 공휴일 엔티티.
+ * <p>
+ * 공휴일 날짜와 명칭을 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -28,6 +34,13 @@ public class Holiday extends BaseEntity {
     @Column(name = "holiday_name", nullable = false)
     private String holidayName;
 
+    /**
+     * 공휴일을 생성한다.
+     *
+     * @param holidayDate 공휴일 날짜
+     * @param holidayName 공휴일 명칭
+     * @return 생성된 공휴일 엔티티
+     */
     public static Holiday create(LocalDate holidayDate, String holidayName) {
         Holiday holiday = new Holiday();
 
@@ -37,6 +50,11 @@ public class Holiday extends BaseEntity {
         return holiday;
     }
 
+    /**
+     * 공휴일 명칭을 변경한다.
+     *
+     * @param holidayName 새로운 공휴일 명칭
+     */
     public void rename(String holidayName) {
         this.holidayName = holidayName;
     }

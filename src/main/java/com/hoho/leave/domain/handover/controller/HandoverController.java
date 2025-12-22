@@ -16,6 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 인수인계 관리 API 컨트롤러.
+ * <p>
+ * 휴가 시 업무 인수인계 노트의 생성, 조회, 수정, 삭제 기능을 제공한다.
+ * </p>
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/handover")
@@ -25,6 +31,12 @@ public class HandoverController {
     private final HandoverService handoverService;
     private final HandoverModify handoverModify;
 
+    /**
+     * 인수인계를 생성한다.
+     *
+     * @param handoverCreateRequest 인수인계 생성 요청
+     * @return 성공 메시지
+     */
     @PostMapping("")
     public ResponseEntity<?> createHandover(@RequestBody @Valid HandoverCreateRequest handoverCreateRequest) {
 
@@ -33,7 +45,14 @@ public class HandoverController {
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 등록 성공");
     }
 
-    // 발신목록
+    /**
+     * 사용자가 발신한 인수인계 목록을 조회한다.
+     *
+     * @param userId 발신자 ID
+     * @param page   페이지 번호
+     * @param size   페이지 크기
+     * @return 발신 인수인계 목록
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<HandoverAuthorListResponse> getHandoverAuthorList(
             @PathVariable("userId") Long userId,
@@ -45,7 +64,14 @@ public class HandoverController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 수신목록
+    /**
+     * 사용자가 수신한 인수인계 목록을 조회한다.
+     *
+     * @param recipientId 수신자 ID
+     * @param page        페이지 번호
+     * @param size        페이지 크기
+     * @return 수신 인수인계 목록
+     */
     @GetMapping("/recipient/{recipientId}")
     public ResponseEntity<HandoverRecipientListResponse> getHandoverRecipientList(
             @PathVariable("recipientId") Long recipientId,
@@ -57,7 +83,12 @@ public class HandoverController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 단건조회
+    /**
+     * 인수인계를 단건 조회한다.
+     *
+     * @param handoverId 인수인계 ID
+     * @return 인수인계 상세 정보
+     */
     @GetMapping("/{handoverId}")
     public ResponseEntity<HandoverDetailResponse> getHandover(@PathVariable("handoverId") Long handoverId) {
 
@@ -66,7 +97,13 @@ public class HandoverController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 수정
+    /**
+     * 인수인계를 수정한다.
+     *
+     * @param handoverId            인수인계 ID
+     * @param handoverUpdateRequest 수정 요청
+     * @return 성공 메시지
+     */
     @PutMapping("/{handoverId}")
     public ResponseEntity<?> updateHandover(
             @PathVariable("handoverId") Long handoverId,
@@ -77,7 +114,12 @@ public class HandoverController {
         return ResponseEntity.status(HttpStatus.OK).body("인수인계 수정 완료");
     }
 
-    // 삭제
+    /**
+     * 인수인계를 삭제한다.
+     *
+     * @param handoverId 인수인계 ID
+     * @return 성공 메시지
+     */
     @DeleteMapping("/{handoverId}")
     public ResponseEntity<?> deleteHandover(@PathVariable("handoverId") Long handoverId) {
 

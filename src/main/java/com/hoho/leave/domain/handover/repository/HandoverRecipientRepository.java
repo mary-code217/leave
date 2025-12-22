@@ -12,13 +12,25 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 인수인계 수신자 데이터 접근 레포지토리.
+ */
 public interface HandoverRecipientRepository extends JpaRepository<HandoverRecipient, Long> {
 
+    /**
+     * 수신자 사용자명 조회를 위한 프로젝션 인터페이스.
+     */
     interface RecipientUsernameRow {
         Long getNoteId();
         String getUsername();
     }
 
+    /**
+     * 인수인계 노트 ID 목록으로 수신자 사용자명을 조회한다.
+     *
+     * @param noteIds 인수인계 노트 ID 목록
+     * @return 수신자 사용자명 행 목록
+     */
     @Query("""
             select hr.handoverNote.id as noteId,
                    hr.recipient.username as username
@@ -27,12 +39,31 @@ public interface HandoverRecipientRepository extends JpaRepository<HandoverRecip
             """)
     List<RecipientUsernameRow> findRecipientUsernamesByNoteIds(@Param("noteIds") Collection<Long> noteIds);
 
+    /**
+     * 수신자 ID로 수신한 인수인계 목록을 조회한다.
+     *
+     * @param recipientId 수신자 ID
+     * @param pageable    페이징 정보
+     * @return 인수인계 수신자 페이지
+     */
     @EntityGraph(attributePaths = {"handoverNote", "handoverNote.author", "recipient"})
     Page<HandoverRecipient> findByRecipientId(Long recipientId, Pageable pageable);
 
+    /**
+     * 인수인계 노트 ID로 모든 수신자를 조회한다.
+     *
+     * @param handoverNoteId 인수인계 노트 ID
+     * @return 수신자 목록
+     */
     @EntityGraph(attributePaths = "recipient", type = EntityGraph.EntityGraphType.FETCH)
     List<HandoverRecipient> findAllByHandoverNoteId(Long handoverNoteId);
 
+    /**
+     * 인수인계 노트와 수신자 ID로 수신자를 삭제한다.
+     *
+     * @param noteId       인수인계 노트 ID
+     * @param recipientIds 삭제할 수신자 ID 목록
+     */
     @Modifying
     @Query("""
             delete from HandoverRecipient hr
@@ -42,8 +73,19 @@ public interface HandoverRecipientRepository extends JpaRepository<HandoverRecip
     void deleteByNoteIdAndRecipientIds(@Param("noteId") Long noteId,
                                        @Param("recipientIds") Collection<Long> recipientIds);
 
+    /**
+     * 인수인계 노트의 모든 수신자를 삭제한다.
+     *
+     * @param handoverNoteId 인수인계 노트 ID
+     */
     void deleteByHandoverNoteId(Long handoverNoteId);
 
+    /**
+     * 인수인계 노트의 수신자 이름 목록을 조회한다.
+     *
+     * @param handoverNoteId 인수인계 노트 ID
+     * @return 수신자 이름 목록
+     */
     @Query("""
             select u.username
             from HandoverRecipient r

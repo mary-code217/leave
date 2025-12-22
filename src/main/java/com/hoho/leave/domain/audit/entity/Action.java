@@ -1,5 +1,11 @@
 package com.hoho.leave.domain.audit.entity;
 
+/**
+ * 감사 로그에 기록되는 행위 유형을 정의하는 열거형.
+ * <p>
+ * 사용자, 조직, 휴가, 알림 등 시스템 내 모든 주요 행위를 분류한다.
+ * </p>
+ */
 public enum Action {
     // USER (회원)
     USER_JOIN,                          // 회원가입 성공

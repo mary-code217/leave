@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 유저 휴가 원장 서비스
+ * 사용자 휴가 원장 서비스.
+ * <p>
+ * 휴가 원장의 생성, 조회 기능을 제공한다.
+ * </p>
  */
 @Service
 @RequiredArgsConstructor
@@ -24,10 +27,22 @@ public class LeaveLedgerService {
 
     private final UserLeaveLedgerRepository ledgerRepository;
 
+    /**
+     * 사용자 휴가 원장을 생성한다.
+     *
+     * @param ledgerRecord 원장 레코드
+     */
     public void createUserLeaveLedger(LedgerRecord ledgerRecord) {
         ledgerRepository.save(UserLeaveLedger.create(ledgerRecord));
     }
 
+    /**
+     * 휴가 원장 목록을 페이징하여 조회한다.
+     *
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 휴가 원장 목록 응답
+     */
     @Transactional(readOnly = true)
     public LeaveLedgerListResponse getLeaveLedgers(Integer page, Integer size) {
         Pageable pageable = getPageable(size, page);
@@ -38,7 +53,11 @@ public class LeaveLedgerService {
     }
 
     /**
-     * 페이지 정보 생성
+     * 페이지 정보를 생성한다.
+     *
+     * @param size 페이지 크기
+     * @param page 페이지 번호
+     * @return 페이지 요청 정보
      */
     private PageRequest getPageable(Integer size, Integer page) {
         return PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("id")));

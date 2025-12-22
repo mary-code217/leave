@@ -8,12 +8,53 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 팀 리포지토리.
+ * <p>
+ * 팀 엔티티에 대한 데이터베이스 접근을 담당한다.
+ * </p>
+ */
 public interface TeamRepository extends JpaRepository<Team, Long> {
+
+    /**
+     * 팀명으로 팀 존재 여부를 확인한다.
+     *
+     * @param teamName 팀명
+     * @return 존재 여부
+     */
     boolean existsByTeamName(String teamName);
+
+    /**
+     * 특정 팀을 제외하고 팀명으로 존재 여부를 확인한다.
+     *
+     * @param teamName 팀명
+     * @param id 제외할 팀 ID
+     * @return 존재 여부
+     */
     boolean existsByTeamNameAndIdNot(String teamName, Long id);
+
+    /**
+     * 상위 팀 ID로 하위 팀 존재 여부를 확인한다.
+     *
+     * @param parentId 상위 팀 ID
+     * @return 존재 여부
+     */
     boolean existsByParentId(Long parentId);
+
+    /**
+     * 상위 팀 ID로 하위 팀 개수를 조회한다.
+     *
+     * @param parentId 상위 팀 ID
+     * @return 하위 팀 개수
+     */
     Long countByParentId(Long parentId);
 
+    /**
+     * 팀명으로 팀을 조회한다.
+     *
+     * @param teamName 팀명
+     * @return 팀 엔티티
+     */
     Optional<Team> findByTeamName(String teamName);
 
     /**

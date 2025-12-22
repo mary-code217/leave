@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * 팀 목록 응답 DTO.
+ * <p>
+ * 팀 목록과 페이징 정보를 반환하는 응답 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class TeamListResponse {
     Integer page;
@@ -21,6 +27,13 @@ public class TeamListResponse {
 
     Boolean lastPage;
 
+    /**
+     * Page 객체와 팀 목록으로부터 응답 DTO를 생성한다.
+     *
+     * @param page 페이지 정보
+     * @param teams 팀 상세 응답 목록
+     * @return 팀 목록 응답 DTO
+     */
     public static TeamListResponse of(Page<?> page, List<TeamDetailResponse> teams) {
         TeamListResponse response = new TeamListResponse();
 

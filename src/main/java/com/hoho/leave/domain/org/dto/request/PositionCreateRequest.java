@@ -4,6 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
+/**
+ * 직책 생성 요청 DTO.
+ * <p>
+ * 새로운 직책을 등록할 때 사용되는 요청 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class PositionCreateRequest {
     @NotBlank(message = "직책은 필수입니다.")

@@ -9,6 +9,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 휴가 결재 엔티티.
+ * <p>
+ * 휴가 신청에 대한 결재 단계별 승인 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -50,6 +56,14 @@ public class LeaveRequestApproval extends BaseEntity {
     @Column(name = "acted_at")
     private LocalDateTime actedAt;        // 실제 처리 시각
 
+    /**
+     * 휴가 결재를 생성한다.
+     *
+     * @param leaveRequest 휴가 신청
+     * @param approver 결재자
+     * @param stepNo 결재 단계
+     * @return 생성된 휴가 결재 엔티티
+     */
     public static LeaveRequestApproval create(LeaveRequest leaveRequest, User approver, Integer stepNo) {
         LeaveRequestApproval approval = new LeaveRequestApproval();
 
@@ -60,6 +74,12 @@ public class LeaveRequestApproval extends BaseEntity {
         return approval;
     }
 
+    /**
+     * 결재 정보를 수정한다.
+     *
+     * @param status 결재 상태
+     * @param comment 결재 의견
+     */
     public void update(ApprovalStatus status, String comment) {
         this.status = status;
         this.comment = comment;

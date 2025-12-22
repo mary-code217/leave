@@ -14,6 +14,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 휴가 신청 엔티티.
+ * <p>
+ * 사용자가 신청한 휴가 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(name = "leave_request")
@@ -60,6 +66,12 @@ public class LeaveRequest extends BaseEntity {
     @OneToMany(mappedBy = "leaveRequest", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LeaveRequestAttachment> attachments = new ArrayList<>();
 
+    /**
+     * 휴가 신청 요청으로부터 엔티티를 생성한다.
+     *
+     * @param request 휴가 신청 생성 요청
+     * @return 생성된 휴가 신청 엔티티
+     */
     public static LeaveRequest create(LeaveRequestCreateRequest request) {
         LeaveRequest leaveRequest = new LeaveRequest();
 
@@ -72,25 +84,49 @@ public class LeaveRequest extends BaseEntity {
         return leaveRequest;
     }
 
+    /**
+     * 사용자를 설정한다.
+     *
+     * @param user 사용자
+     */
     public void addUser(User user) {
         this.user = user;
     }
 
+    /**
+     * 휴가 유형을 설정한다.
+     *
+     * @param leaveType 휴가 유형
+     */
     public void addLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
     }
 
-    // 양방향 연관관계 동기화 메서드
+    /**
+     * 첨부파일을 추가한다.
+     *
+     * @param attachment 첨부파일
+     */
     public void addAttachment(LeaveRequestAttachment attachment) {
         attachments.add(attachment);
         attachment.addLeaveRequest(this);
     }
 
+    /**
+     * 첨부파일을 제거한다.
+     *
+     * @param attachment 첨부파일
+     */
     public void removeAttachment(LeaveRequestAttachment attachment) {
         attachments.remove(attachment);
         attachment.addLeaveRequest(null);
     }
 
+    /**
+     * 휴가 신청 상태를 변경한다.
+     *
+     * @param status 변경할 상태
+     */
     public void updateStatus(LeaveRequestStatus status) {
         this.status = status;
     }

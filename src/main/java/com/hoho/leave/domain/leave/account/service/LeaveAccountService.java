@@ -15,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 /**
- * 유저 휴가계정 서비스
+ * 사용자 휴가 계정 서비스.
+ * <p>
+ * 사용자의 휴가 계정 생성, 조회 기능을 제공한다.
+ * </p>
  */
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,13 @@ public class LeaveAccountService {
     private final UserLeavesRepository userLeavesRepository;
     private final AccrualPolicyEngine engine;
 
+    /**
+     * 사용자의 첫 휴가 계정을 생성한다.
+     *
+     * @param user 사용자
+     * @param balanceDays 초기 잔여 일수
+     * @return 생성된 휴가 계정
+     */
     public UserLeaves firstCreateUserLeaves(User user, BigDecimal balanceDays) {
         checkDuplicateUserLeaves(user);
         AccrualSchedule accrualSchedule = engine.getAccountEvent(user);
@@ -31,6 +41,12 @@ public class LeaveAccountService {
         return userLeavesRepository.save(userLeaves);
     }
 
+    /**
+     * 사용자의 휴가 정보를 조회한다.
+     *
+     * @param userId 사용자 ID
+     * @return 사용자 휴가 정보 응답
+     */
     @Transactional(readOnly = true)
     public UserLeavesDetailResponse getUserLeaves(Long userId) {
         UserLeaves userLeaves = getUserLeavesByUserId(userId);
@@ -38,7 +54,10 @@ public class LeaveAccountService {
     }
 
     /**
-     * 유저 휴가계정 엔티티 조회
+     * 사용자 ID로 휴가 계정 엔티티를 조회한다.
+     *
+     * @param userId 사용자 ID
+     * @return 사용자 휴가 계정 엔티티
      */
     public UserLeaves getUserLeavesByUserId(Long userId) {
         return userLeavesRepository.findByUserId(userId)
@@ -46,7 +65,9 @@ public class LeaveAccountService {
     }
 
     /**
-     * 중복된 UserLeaves 가 있는지 확인
+     * 중복된 휴가 계정이 있는지 확인한다.
+     *
+     * @param user 사용자
      */
     private void checkDuplicateUserLeaves(User user) {
         if (userLeavesRepository.existsByUserId(user.getId())) {

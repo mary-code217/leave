@@ -20,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 직책 관리 서비스.
+ * <p>
+ * 직책의 생성, 조회, 수정, 삭제 기능을 제공한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class PositionService {
@@ -27,12 +33,23 @@ public class PositionService {
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 직책을 생성한다.
+     *
+     * @param request 직책 생성 요청 정보
+     */
     @Transactional
     public void createPosition(PositionCreateRequest request) {
         checkDuplicatePosition(request.getPositionName());
         positionRepository.save(Position.create(request));
     }
 
+    /**
+     * 직책을 수정한다.
+     *
+     * @param positionId 직책 ID
+     * @param request 직책 수정 요청 정보
+     */
     @Transactional
     public void updatePosition(Long positionId, PositionUpdateRequest request) {
         Position position = getPositionEntity(positionId);
@@ -41,6 +58,11 @@ public class PositionService {
         position.rename(request.getPositionName());
     }
 
+    /**
+     * 직책을 삭제한다.
+     *
+     * @param positionId 직책 ID
+     */
     @Transactional
     public void deletePosition(Long positionId) {
         Position position = getPositionEntity(positionId);
@@ -48,11 +70,24 @@ public class PositionService {
         positionRepository.delete(position);
     }
 
+    /**
+     * 특정 직책을 조회한다.
+     *
+     * @param positionId 직책 ID
+     * @return 직책 상세 응답 DTO
+     */
     @Transactional(readOnly = true)
     public PositionDetailResponse getPosition(Long positionId) {
         return PositionDetailResponse.of(getPositionEntity(positionId));
     }
 
+    /**
+     * 전체 직책 목록을 조회한다.
+     *
+     * @param size 페이지 크기
+     * @param page 페이지 번호
+     * @return 직책 목록 응답 DTO
+     */
     @Transactional(readOnly = true)
     public PositionListResponse getAllPositions(Integer size, Integer page) {
         Pageable pageable = getPageable(size, page);

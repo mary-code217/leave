@@ -5,6 +5,12 @@ import com.hoho.leave.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * 휴가 신청 첨부파일 엔티티.
+ * <p>
+ * 휴가 신청서에 첨부되는 파일 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -43,6 +49,17 @@ public class LeaveRequestAttachment extends BaseEntity {
     @JoinColumn(name = "uploaded_by_id", nullable = false)
     private User uploadedBy;
 
+    /**
+     * 첨부파일 엔티티를 생성한다.
+     *
+     * @param originalName 원본 파일명
+     * @param storeName 저장된 파일명
+     * @param filePath 파일 경로
+     * @param contentType 컨텐츠 타입
+     * @param sizeBytes 파일 크기 (bytes)
+     * @param uploadedBy 업로드한 사용자
+     * @return 생성된 첨부파일 엔티티
+     */
     public static LeaveRequestAttachment create(String originalName, String storeName, String filePath,
                                                 String contentType, Long sizeBytes, User uploadedBy) {
         LeaveRequestAttachment attachment = new LeaveRequestAttachment();
@@ -57,6 +74,11 @@ public class LeaveRequestAttachment extends BaseEntity {
         return attachment;
     }
 
+    /**
+     * 휴가 신청을 설정한다.
+     *
+     * @param leaveRequest 휴가 신청
+     */
     protected void addLeaveRequest(LeaveRequest leaveRequest) {
         this.leaveRequest = leaveRequest;
     }

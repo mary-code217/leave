@@ -15,12 +15,23 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
+/**
+ * 공휴일 서비스.
+ * <p>
+ * 공휴일의 생성, 조회 기능을 제공한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class HolidayService {
 
     private final HolidayRepository holidayRepository;
 
+    /**
+     * 공휴일을 생성한다.
+     *
+     * @param request 공휴일 생성 요청
+     */
     @Transactional
     public void createHoliday(HolidayCreateRequest request) {
         String name = normalizeName(request.getName());
@@ -31,8 +42,13 @@ public class HolidayService {
         );
     }
 
+    /**
+     * 특정 월의 공휴일 목록을 조회한다.
+     *
+     * @param month 조회할 년월
+     * @return 월별 공휴일 응답
+     */
     @Transactional(readOnly = true)
-    // 공휴일 가져오는 메서드 (특정 달)
     public HolidayMonthResponse getAllHolidayMonth(YearMonth month) {
         LocalDate start = month.atDay(1);
         LocalDate end = month.atEndOfMonth();
@@ -43,7 +59,13 @@ public class HolidayService {
         return HolidayMonthResponse.of(month, list);
     }
 
-    // 공휴일 가져오는 메서드 (범위)
+    /**
+     * 특정 기간의 공휴일 목록을 조회한다.
+     *
+     * @param startDate 시작일
+     * @param endDate 종료일
+     * @return 기간별 공휴일 응답
+     */
     public HolidayRangeResponse getRangeHoliday(LocalDate startDate, LocalDate endDate) {
 
         List<Holiday> findList = holidayRepository.findAllByHolidayDateBetween(startDate, endDate);
@@ -52,6 +74,12 @@ public class HolidayService {
         return HolidayRangeResponse.of(startDate, endDate, list);
     }
 
+    /**
+     * 공휴일 명칭을 정규화한다.
+     *
+     * @param name 원본 명칭
+     * @return 정규화된 명칭
+     */
     public String normalizeName(String name) {
         if (name == null) return "";
         return name.replaceAll("\\s+", " ").trim();

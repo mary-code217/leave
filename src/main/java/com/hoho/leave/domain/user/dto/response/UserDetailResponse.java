@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * 사용자 상세 정보 응답 DTO.
+ * <p>
+ * 사용자의 상세 정보를 클라이언트에게 전달한다.
+ * </p>
+ */
 @Data
 public class UserDetailResponse {
     Long id;
@@ -28,7 +34,13 @@ public class UserDetailResponse {
     String positionName;
 
     String active;
-    
+
+    /**
+     * User 엔티티로부터 UserDetailResponse를 생성한다.
+     *
+     * @param user 사용자 엔티티
+     * @return 사용자 상세 정보 응답 DTO
+     */
     public static UserDetailResponse of(User user) {
         UserDetailResponse response = new UserDetailResponse();
 

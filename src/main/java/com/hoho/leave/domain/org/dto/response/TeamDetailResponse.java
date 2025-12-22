@@ -3,6 +3,12 @@ package com.hoho.leave.domain.org.dto.response;
 import com.hoho.leave.domain.org.entity.Team;
 import lombok.Data;
 
+/**
+ * 팀 상세 응답 DTO.
+ * <p>
+ * 팀의 상세 정보를 반환하는 응답 데이터를 담는다.
+ * </p>
+ */
 @Data
 public class TeamDetailResponse {
     Long teamId;
@@ -19,6 +25,14 @@ public class TeamDetailResponse {
 
     Long childrenCount;
 
+    /**
+     * Team 엔티티와 통계 정보로부터 응답 DTO를 생성한다.
+     *
+     * @param team 팀 엔티티
+     * @param userCount 소속 사용자 수
+     * @param childrenCount 하위 팀 수
+     * @return 팀 상세 응답 DTO
+     */
     public static TeamDetailResponse of(Team team, Long userCount, Long childrenCount) {
         TeamDetailResponse response = new TeamDetailResponse();
 

@@ -13,6 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 휴가 신청 변경 파사드.
+ * <p>
+ * 휴가 신청의 생성, 삭제 시 여러 도메인 서비스를 조율한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class LeaveRequestModifyFacade {
@@ -28,6 +34,10 @@ public class LeaveRequestModifyFacade {
     private final AuditLogService auditLogService;
     private final NotificationService notificationService;
 
+    /**
+     * 휴가 신청을 생성한다.
+     * (미구현)
+     */
     @Transactional
     public void createLeaveRequest() {
         // 신청유저 찾아오기 -> 유저 엔티티를 반환하는 메서드 필요(O)
@@ -54,6 +64,11 @@ public class LeaveRequestModifyFacade {
         // 로그 등록(O)
     }
 
+    /**
+     * 휴가 신청을 삭제한다.
+     *
+     * @param leaveRequestId 휴가 신청 ID
+     */
     @Transactional
     public void deleteLeaveRequest(Long leaveRequestId) {
         LeaveRequest leaveRequest = leaveRequestService.getRequestEntity(leaveRequestId);

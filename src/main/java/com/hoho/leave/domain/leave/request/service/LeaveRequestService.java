@@ -25,6 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 휴가 신청 서비스.
+ * <p>
+ * 휴가 신청의 생성, 조회, 수정, 삭제 등의 비즈니스 로직을 처리한다.
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class LeaveRequestService {
@@ -34,6 +40,11 @@ public class LeaveRequestService {
     private final UserRepository userRepository;
     private final LeaveTypeRepository leaveTypeRepository;
 
+    /**
+     * 휴가 신청을 생성한다.
+     *
+     * @param request 휴가 신청 생성 요청
+     */
     @Transactional
     public void createLeaveRequest(LeaveRequestCreateRequest request) {
         User user = getUser(request);
@@ -46,6 +57,12 @@ public class LeaveRequestService {
         leaveRequestRepository.save(leaveRequest);
     }
 
+    /**
+     * 휴가 신청 상태를 수정한다.
+     *
+     * @param leaveRequestId 휴가 신청 ID
+     * @param request 휴가 신청 수정 요청
+     */
     @Transactional
     public void updateLeaveRequest(Long leaveRequestId, LeaveRequestUpdateRequest request) {
         LeaveRequest leaveRequest = getRequestEntity(leaveRequestId);
@@ -53,10 +70,23 @@ public class LeaveRequestService {
         leaveRequest.updateStatus(request.getStatus());
     }
 
+    /**
+     * 휴가 신청을 삭제한다.
+     *
+     * @param leaveRequest 휴가 신청
+     */
     public void deleteLeaveRequest(LeaveRequest leaveRequest) {
         leaveRequestRepository.delete(leaveRequest);
     }
 
+    /**
+     * 특정 사용자의 휴가 신청 목록을 조회한다.
+     *
+     * @param userId 사용자 ID
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 휴가 신청 목록 응답
+     */
     @Transactional(readOnly = true)
     public LeaveRequestListResponse getUserLeaveRequests(Long userId, Integer page, Integer size) {
         Pageable pageable = getPageable(page, size);
@@ -70,6 +100,13 @@ public class LeaveRequestService {
         return LeaveRequestListResponse.of(pageList, list);
     }
 
+    /**
+     * 모든 휴가 신청 목록을 조회한다.
+     *
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 휴가 신청 목록 응답
+     */
     @Transactional(readOnly = true)
     public LeaveRequestListResponse getAllLeaveRequests(Integer page, Integer size) {
         Pageable pageable = getPageable(page, size);
@@ -85,37 +122,69 @@ public class LeaveRequestService {
         return LeaveRequestListResponse.of(pageList, list);
     }
 
-    /** 휴가 신청서 정보 응답 DTO 생성 */
+    /**
+     * 휴가 신청 상세 응답 DTO를 생성한다.
+     *
+     * @param req 휴가 신청
+     * @param countMap 첨부파일 개수 맵
+     * @return 휴가 신청 상세 응답
+     */
     private LeaveRequestDetailResponse getDetailResponse(LeaveRequest req, Map<Long, Long> countMap) {
         LeaveRequestDetailResponse response = LeaveRequestDetailResponse.of(req);
         response.hasAttachment(countMap.getOrDefault(req.getId(), 0L) > 0);
         return response;
     }
 
-    /** 휴가 신청서 엔티티 조회 */
+    /**
+     * 휴가 신청 엔티티를 조회한다.
+     *
+     * @param leaveRequestId 휴가 신청 ID
+     * @return 휴가 신청 엔티티
+     */
     public LeaveRequest getRequestEntity(Long leaveRequestId) {
         return leaveRequestRepository.findById(leaveRequestId)
                 .orElseThrow(() -> new NotFoundException("Not Found LeaveRequest : " + leaveRequestId));
     }
 
-    /** 휴가 신청서 엔티티 조회(유저, 타입 포함) */
+    /**
+     * 사용자와 휴가 유형을 포함하여 휴가 신청 엔티티를 조회한다.
+     *
+     * @param leaveRequestId 휴가 신청 ID
+     * @return 휴가 신청 엔티티
+     */
     public LeaveRequest getRequestEntityWithUserAndType(Long leaveRequestId) {
         return leaveRequestRepository.findByIdWithUserAndLeaveType(leaveRequestId)
                 .orElseThrow(() -> new NotFoundException("Not Found LeaveRequest : " + leaveRequestId));
     }
 
-    /** 페이지 요청 정보 */
+    /**
+     * 페이지 요청 정보를 생성한다.
+     *
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이지 요청 정보
+     */
     private static PageRequest getPageable(Integer page, Integer size) {
         return PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("startDay")));
     }
 
-    /** 유저 엔티티 조회 */
+    /**
+     * 사용자 엔티티를 조회한다.
+     *
+     * @param request 휴가 신청 생성 요청
+     * @return 사용자 엔티티
+     */
     private User getUser(LeaveRequestCreateRequest request) {
         return userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException("Not Found User : " + request.getUserId()));
     }
 
-    /** 휴가 유형 엔티티 조회 */
+    /**
+     * 휴가 유형 엔티티를 조회한다.
+     *
+     * @param request 휴가 신청 생성 요청
+     * @return 휴가 유형 엔티티
+     */
     private LeaveType getLeaveType(LeaveRequestCreateRequest request) {
         return leaveTypeRepository.findById(request.getLeaveTypeId())
                 .orElseThrow(() -> new NotFoundException("Not Found Leave Type : " + request.getLeaveTypeId()));

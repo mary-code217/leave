@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * 휴가 유형 엔티티.
+ * <p>
+ * 휴가의 종류와 정책 정보를 관리한다.
+ * </p>
+ */
 @Entity
 @Getter
 @Table(
@@ -43,6 +49,12 @@ public class LeaveType extends BaseEntity {
     @Column(name = "leave_description")
     private String leaveDescription;
 
+    /**
+     * 휴가 유형을 생성한다.
+     *
+     * @param req 휴가 유형 생성 요청
+     * @return 생성된 휴가 유형 엔티티
+     */
     public static LeaveType create(LeaveTypeCreateRequest req) {
         LeaveType leaveType = new LeaveType();
 
@@ -56,6 +68,11 @@ public class LeaveType extends BaseEntity {
         return leaveType;
     }
 
+    /**
+     * 휴가 유형 정보를 수정한다.
+     *
+     * @param req 휴가 유형 수정 요청
+     */
     public void update(LeaveTypeUpdateRequest req) {
         this.leaveName = req.getLeaveTypeName();
         this.unitDays = req.getUnitDays();
