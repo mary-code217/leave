@@ -22,9 +22,9 @@ import java.util.List;
 
 /**
  * 직책 관리 서비스.
- * <p>
+ * 
  * 직책의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * 첨부파일 리포지토리.
- * <p>
+ * 
  * 휴가 신청 첨부파일의 데이터 접근을 담당한다.
- * </p>
+ * 
  */
 public interface AttachmentRepository extends JpaRepository<LeaveRequestAttachment, Long> {
     /**

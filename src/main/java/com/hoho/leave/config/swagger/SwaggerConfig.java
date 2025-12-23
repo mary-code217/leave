@@ -10,18 +10,18 @@ import java.util.List;
 
 /**
  * Swagger/OpenAPI 문서화 설정 클래스.
- * <p>
+ * 
  * API 문서의 기본 정보와 서버 설정을 정의한다.
- * </p>
+ * 
  */
 @Configuration
 public class SwaggerConfig {
 
     /**
      * OpenAPI 문서 설정을 빈으로 등록한다.
-     * <p>
+     * 
      * API 제목, 설명, 버전 및 서버 정보를 설정한다.
-     * </p>
+     * 
      *
      * @return OpenAPI 설정 객체
      */

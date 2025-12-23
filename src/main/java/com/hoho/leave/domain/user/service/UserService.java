@@ -26,9 +26,9 @@ import java.util.List;
 
 /**
  * 사용자 서비스.
- * <p>
+ * 
  * 사용자 계정의 생성, 조회, 수정, 삭제 등 비즈니스 로직을 처리한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

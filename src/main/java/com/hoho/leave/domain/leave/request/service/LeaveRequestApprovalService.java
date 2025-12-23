@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  * 휴가 결재 서비스.
- * <p>
+ * 
  * 휴가 신청의 결재 승인, 반려 등 결재 관련 비즈니스 로직을 처리한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

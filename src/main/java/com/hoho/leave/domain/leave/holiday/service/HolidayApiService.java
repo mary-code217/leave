@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  * 공휴일 API 서비스.
- * <p>
+ * 
  * 공공데이터 포털의 공휴일 API를 호출하여 공휴일 정보를 가져온다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

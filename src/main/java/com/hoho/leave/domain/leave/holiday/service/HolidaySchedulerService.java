@@ -9,9 +9,9 @@ import java.time.YearMonth;
 
 /**
  * 공휴일 스케줄러 서비스.
- * <p>
+ * 
  * 정기적으로 공휴일 정보를 동기화한다.
- * </p>
+ * 
  */
 @Slf4j
 @Service

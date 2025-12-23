@@ -10,9 +10,9 @@ import java.util.Optional;
 
 /**
  * 팀 리포지토리.
- * <p>
+ * 
  * 팀 엔티티에 대한 데이터베이스 접근을 담당한다.
- * </p>
+ * 
  */
 public interface TeamRepository extends JpaRepository<Team, Long> {
 

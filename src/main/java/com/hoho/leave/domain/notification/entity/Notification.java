@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 
 /**
  * 알림 엔티티.
- * <p>
+ * 
  * 사용자에게 발송되는 알림 정보를 저장하고 관리한다.
  * 휴가 승인 요청, 상태 변경, 인수인계 배정, 연차 잔여일수 조정 등의 알림 유형을 지원한다.
- * </p>
+ * 
  */
 @Entity
 @Getter
@@ -58,9 +58,9 @@ public class Notification extends BaseEntity {
 
     /**
      * 알림을 읽음 처리한다.
-     * <p>
+     * 
      * 현재 시각으로 읽은 시각을 설정한다.
-     * </p>
+     * 
      */
     public void updateReadAt() {
         this.readAt = LocalDateTime.now();

@@ -8,9 +8,9 @@ import java.util.Optional;
 
 /**
  * 사용자 휴가 계정 리포지토리.
- * <p>
+ * 
  * 휴가 계정 엔티티에 대한 데이터베이스 접근을 제공한다.
- * </p>
+ * 
  */
 public interface UserLeavesRepository extends JpaRepository<UserLeaves, Long> {
     /**

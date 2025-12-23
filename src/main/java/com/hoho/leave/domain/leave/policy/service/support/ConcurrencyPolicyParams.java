@@ -10,9 +10,9 @@ import java.time.LocalDate;
 
 /**
  * 휴가 동시 제한 정책 생성 파라미터.
- * <p>
+ * 
  * 휴가 동시 제한 정책 생성에 필요한 데이터를 담는다.
- * </p>
+ * 
  */
 @Getter
 @Builder

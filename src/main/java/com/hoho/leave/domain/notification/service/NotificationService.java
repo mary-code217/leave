@@ -19,9 +19,9 @@ import java.util.List;
 
 /**
  * 알림 서비스.
- * <p>
+ * 
  * 알림 생성, 조회, 읽음 처리 등의 비즈니스 로직을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

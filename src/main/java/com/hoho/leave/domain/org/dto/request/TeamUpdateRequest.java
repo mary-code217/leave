@@ -7,9 +7,9 @@ import lombok.Data;
 
 /**
  * 팀 수정 요청 DTO.
- * <p>
+ * 
  * 기존 팀 정보를 수정할 때 사용되는 요청 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class TeamUpdateRequest {

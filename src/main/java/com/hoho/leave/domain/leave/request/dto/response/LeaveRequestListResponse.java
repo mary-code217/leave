@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 휴가 신청 목록 응답 DTO.
- * <p>
+ * 
  * 페이지네이션된 휴가 신청 목록 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveRequestListResponse {

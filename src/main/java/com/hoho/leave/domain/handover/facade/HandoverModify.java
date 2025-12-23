@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 
 /**
  * 인수인계 생성, 수정, 삭제를 조율하는 퍼사드.
- * <p>
+ * 
  * 인수인계 관련 비즈니스 로직을 조합하고, 알림 발송 및 감사 로그 기록을 처리한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor
@@ -39,9 +39,9 @@ public class HandoverModify {
 
     /**
      * 인수인계를 생성한다.
-     * <p>
+     * 
      * 인수인계 노트 생성, 수신자 등록, 알림 발송, 감사 로그 기록을 수행한다.
-     * </p>
+     * 
      *
      * @param request 인수인계 생성 요청
      */
@@ -74,9 +74,9 @@ public class HandoverModify {
 
     /**
      * 인수인계를 수정한다.
-     * <p>
+     * 
      * 제목, 내용 수정과 함께 수신자 목록의 추가/삭제를 처리한다.
-     * </p>
+     * 
      *
      * @param handoverId 수정할 인수인계 ID
      * @param request    수정 요청

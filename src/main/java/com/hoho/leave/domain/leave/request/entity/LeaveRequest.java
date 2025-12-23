@@ -16,9 +16,9 @@ import java.util.List;
 
 /**
  * 휴가 신청 엔티티.
- * <p>
+ * 
  * 사용자가 신청한 휴가 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 
 /**
  * 감사 로그 관리 서비스.
- * <p>
+ * 
  * 시스템 내 모든 중요 행위를 기록하고 조회하는 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor
@@ -55,9 +55,9 @@ public class AuditLogService {
 
     /**
      * 감사 로그 목록을 페이징하여 조회한다.
-     * <p>
+     * 
      * N+1 쿼리 문제를 방지하기 위해 User를 IN 쿼리로 일괄 조회한다.
-     * </p>
+     * 
      *
      * @param page       페이지 번호
      * @param size       페이지 크기

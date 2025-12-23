@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 
 /**
  * 휴가 신청 서비스.
- * <p>
+ * 
  * 휴가 신청의 생성, 조회, 수정, 삭제 등의 비즈니스 로직을 처리한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

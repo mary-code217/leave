@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 /**
  * 휴가 결재 엔티티.
- * <p>
+ * 
  * 휴가 신청에 대한 결재 단계별 승인 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

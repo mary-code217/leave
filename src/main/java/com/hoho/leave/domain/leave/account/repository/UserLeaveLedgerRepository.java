@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * 사용자 휴가 원장 리포지토리.
- * <p>
+ * 
  * 휴가 원장 엔티티에 대한 데이터베이스 접근을 제공한다.
- * </p>
+ * 
  */
 public interface UserLeaveLedgerRepository extends JpaRepository<UserLeaveLedger, Long> {
     /**

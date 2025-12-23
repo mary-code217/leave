@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 감사 로그 목록 응답 DTO.
- * <p>
+ * 
  * 페이징 정보와 함께 감사 로그 목록을 반환한다.
- * </p>
+ * 
  */
 @Data
 public class AuditLogListResponse {

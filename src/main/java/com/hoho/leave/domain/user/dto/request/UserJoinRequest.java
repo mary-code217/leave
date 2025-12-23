@@ -9,9 +9,9 @@ import java.time.LocalDate;
 
 /**
  * 사용자 회원가입 요청 DTO.
- * <p>
+ * 
  * 새로운 사용자 계정 생성 시 필요한 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class UserJoinRequest {

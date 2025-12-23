@@ -13,9 +13,9 @@ import java.time.LocalDate;
 
 /**
  * 사용자 휴가 계정 엔티티.
- * <p>
+ * 
  * 사용자의 휴가 잔여 일수와 휴가 부여 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

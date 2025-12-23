@@ -16,9 +16,9 @@ import java.math.BigDecimal;
 
 /**
  * 사용자 휴가 계정 서비스.
- * <p>
+ * 
  * 사용자의 휴가 계정 생성, 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

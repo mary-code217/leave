@@ -9,9 +9,9 @@ import java.time.LocalDate;
 
 /**
  * 결재자 위임 엔티티.
- * <p>
+ * 
  * 결재 권한을 다른 사용자에게 위임하는 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

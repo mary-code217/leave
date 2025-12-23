@@ -8,9 +8,9 @@ import java.time.LocalDate;
 
 /**
  * 휴가 부여 정책 엔진.
- * <p>
+ * 
  * 사용자의 입사일을 기준으로 휴가 부여 스케줄을 계산한다.
- * </p>
+ * 
  */
 @Service
 public class AccrualPolicyEngine {

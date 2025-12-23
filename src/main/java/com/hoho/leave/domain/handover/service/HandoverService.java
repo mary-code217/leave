@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 
 /**
  * 인수인계 서비스.
- * <p>
+ * 
  * 인수인계 노트의 생성, 수정, 삭제 및 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

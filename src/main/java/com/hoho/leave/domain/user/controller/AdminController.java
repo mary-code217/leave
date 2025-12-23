@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 관리자 컨트롤러.
- * <p>
+ * 
  * 관리자 페이지 접근 관련 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequestMapping("/admin")

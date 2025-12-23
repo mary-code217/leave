@@ -15,9 +15,9 @@ import java.time.YearMonth;
 
 /**
  * 공휴일 컨트롤러.
- * <p>
+ * 
  * 공휴일 생성, 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

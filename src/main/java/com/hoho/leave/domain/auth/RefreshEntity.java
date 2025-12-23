@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * 리프레시 토큰 저장 엔티티.
- * <p>
+ * 
  * 사용자의 리프레시 토큰을 데이터베이스에 저장하여
  * 토큰 갱신 및 로그아웃 시 검증에 사용한다.
- * </p>
+ * 
  */
 @Entity
 @AllArgsConstructor

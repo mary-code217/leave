@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 사용자 휴가 정보 컨트롤러.
- * <p>
+ * 
  * 사용자의 휴가 잔여 일수 및 휴가 계정 정보를 조회한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

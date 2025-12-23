@@ -10,9 +10,9 @@ import java.time.LocalDate;
 
 /**
  * 공휴일 엔티티.
- * <p>
+ * 
  * 공휴일 날짜와 명칭을 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

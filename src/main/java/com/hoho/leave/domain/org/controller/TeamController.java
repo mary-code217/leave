@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 팀(부서) 관리 컨트롤러.
- * <p>
+ * 
  * 조직 내 팀의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

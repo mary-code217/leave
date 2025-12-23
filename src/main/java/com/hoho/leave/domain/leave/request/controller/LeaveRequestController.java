@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 휴가 신청 컨트롤러.
- * <p>
+ * 
  * 휴가 신청의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

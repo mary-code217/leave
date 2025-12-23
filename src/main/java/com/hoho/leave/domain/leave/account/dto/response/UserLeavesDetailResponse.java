@@ -9,9 +9,9 @@ import java.time.LocalDate;
 
 /**
  * 사용자 휴가 정보 상세 응답 DTO.
- * <p>
+ * 
  * 사용자의 휴가 잔여 일수 및 휴가 단계 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class UserLeavesDetailResponse {

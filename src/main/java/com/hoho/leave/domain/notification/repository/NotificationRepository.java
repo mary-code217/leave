@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * 알림 리포지토리.
- * <p>
+ * 
  * 알림 엔티티에 대한 데이터베이스 접근 기능을 제공한다.
- * </p>
+ * 
  */
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     /**

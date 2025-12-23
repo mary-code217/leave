@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  * 휴가 유형 서비스.
- * <p>
+ * 
  * 휴가 유형의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

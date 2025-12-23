@@ -9,9 +9,9 @@ import java.time.LocalDate;
 
 /**
  * 휴가 동시 제한 정책 생성 요청 DTO.
- * <p>
+ * 
  * 팀별, 휴가 유형별 동시 휴가 제한 정책을 생성하기 위한 요청 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveConcurrencyPolicyRequest {

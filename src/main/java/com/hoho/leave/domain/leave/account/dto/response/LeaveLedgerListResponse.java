@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 휴가 원장 목록 응답 DTO.
- * <p>
+ * 
  * 페이징된 휴가 원장 목록 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveLedgerListResponse {

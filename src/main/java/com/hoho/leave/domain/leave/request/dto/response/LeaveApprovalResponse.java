@@ -10,9 +10,9 @@ import java.time.LocalTime;
 
 /**
  * 휴가 결재 응답 DTO.
- * <p>
+ * 
  * 휴가 신청의 결재 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveApprovalResponse {

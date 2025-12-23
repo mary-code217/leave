@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 /**
  * 휴가 원장 상세 응답 DTO.
- * <p>
+ * 
  * 개별 휴가 원장 항목의 상세 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveLedgerDetailResponse {

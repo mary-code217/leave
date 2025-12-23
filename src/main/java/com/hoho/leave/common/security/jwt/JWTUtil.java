@@ -11,9 +11,9 @@ import java.util.Date;
 
 /**
  * JWT 토큰의 생성 및 검증을 담당하는 유틸리티 클래스.
- * <p>
+ * 
  * HS256 알고리즘을 사용하여 토큰을 서명하고 검증한다.
- * </p>
+ * 
  */
 @Component
 public class JWTUtil {

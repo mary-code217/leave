@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 인수인계 관리 API 컨트롤러.
- * <p>
+ * 
  * 휴가 시 업무 인수인계 노트의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

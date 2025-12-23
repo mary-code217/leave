@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 휴가 유형 컨트롤러.
- * <p>
+ * 
  * 휴가 유형의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

@@ -6,9 +6,9 @@ import lombok.Data;
 
 /**
  * 직급 수정 요청 DTO.
- * <p>
+ * 
  * 기존 직급 정보를 수정할 때 사용되는 요청 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class GradeUpdateRequest {

@@ -1,5 +1,6 @@
 package com.hoho.leave.common.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,11 +10,12 @@ import java.time.LocalDateTime;
 
 /**
  * 애플리케이션 전역 예외 처리 핸들러.
- * <p>
+ * 
  * 모든 컨트롤러에서 발생하는 예외를 가로채어 RFC 7807 표준의
  * ProblemDetail 형식으로 일관된 오류 응답을 생성한다.
- * </p>
+ * 
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -25,6 +27,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleException(Exception e) {
+        log.error("Unhandled exception occurred", e);
         return getProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 
@@ -36,6 +39,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({BusinessException.class, FileErrorException.class})
     public ProblemDetail handleBusiness(BusinessException e) {
+        log.warn("Business exception: {}", e.getMessage());
         return getProblemDetail(HttpStatus.BAD_REQUEST, e);
     }
 
@@ -47,6 +51,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DuplicateException.class)
     public ProblemDetail handleDuplicateEmail(DuplicateException e) {
+        log.warn("Duplicate exception: {}", e.getMessage());
         return getProblemDetail(HttpStatus.CONFLICT, e);
     }
 
@@ -58,6 +63,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleNotFound(NotFoundException e) {
+        log.info("Resource not found: {}", e.getMessage());
         return getProblemDetail(HttpStatus.NOT_FOUND, e);
     }
 

@@ -15,9 +15,9 @@ import java.time.LocalDate;
 
 /**
  * 사용자 엔티티.
- * <p>
+ * 
  * 시스템 사용자의 계정 정보와 조직 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

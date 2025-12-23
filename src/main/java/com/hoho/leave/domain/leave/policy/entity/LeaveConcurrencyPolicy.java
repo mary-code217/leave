@@ -12,9 +12,9 @@ import java.time.LocalDate;
 
 /**
  * 휴가 동시 제한 정책 엔티티.
- * <p>
+ * 
  * 팀별, 휴가 유형별 동시 사용 가능 인원수를 제한하는 정책을 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

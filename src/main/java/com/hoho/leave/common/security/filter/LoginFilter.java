@@ -25,10 +25,10 @@ import java.util.Iterator;
 
 /**
  * 사용자 로그인을 처리하는 인증 필터.
- * <p>
+ * 
  * POST /login 요청에서 이메일과 비밀번호를 받아 인증을 수행하고,
  * 성공 시 JWT 액세스 토큰과 리프레시 토큰을 발급한다.
- * </p>
+ * 
  */
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -45,9 +45,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * 사용자 인증을 시도한다.
-     * <p>
+     * 
      * 요청에서 이메일과 비밀번호를 추출하여 AuthenticationManager에 인증을 위임한다.
-     * </p>
+     * 
      *
      * @param request  HTTP 요청
      * @param response HTTP 응답
@@ -69,10 +69,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * 인증 성공 시 호출되어 JWT 토큰을 발급한다.
-     * <p>
+     * 
      * 액세스 토큰은 응답 헤더에, 리프레시 토큰은 HttpOnly 쿠키에 설정한다.
      * 리프레시 토큰은 데이터베이스에도 저장된다.
-     * </p>
+     * 
      *
      * @param request        HTTP 요청
      * @param response       HTTP 응답

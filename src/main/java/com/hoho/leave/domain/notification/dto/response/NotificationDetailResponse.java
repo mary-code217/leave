@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 /**
  * 알림 상세 응답 DTO.
- * <p>
+ * 
  * 개별 알림의 상세 정보를 클라이언트에 전달한다.
- * </p>
+ * 
  */
 @Data
 public class NotificationDetailResponse {

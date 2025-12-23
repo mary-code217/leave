@@ -13,9 +13,9 @@ import java.util.Optional;
 
 /**
  * 휴가 신청 리포지토리.
- * <p>
+ * 
  * 휴가 신청 정보의 데이터 접근을 담당한다.
- * </p>
+ * 
  */
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
     /**

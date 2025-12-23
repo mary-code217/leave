@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 발신 인수인계 목록 응답 DTO.
- * <p>
+ * 
  * 사용자가 작성한 인수인계 목록과 페이징 정보를 반환한다.
- * </p>
+ * 
  */
 @Data
 public class HandoverAuthorListResponse {

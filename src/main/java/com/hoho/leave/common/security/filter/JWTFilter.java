@@ -20,10 +20,10 @@ import java.io.PrintWriter;
 
 /**
  * JWT 액세스 토큰을 검증하는 보안 필터.
- * <p>
+ * 
  * 모든 요청에서 'access' 헤더의 JWT 토큰을 검증하고,
  * 유효한 경우 Spring Security 컨텍스트에 인증 정보를 설정한다.
- * </p>
+ * 
  */
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
@@ -32,10 +32,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
     /**
      * JWT 토큰을 검증하고 인증 정보를 설정한다.
-     * <p>
+     * 
      * 토큰이 없으면 다음 필터로 넘기고, 토큰이 만료되었거나 유효하지 않으면
      * 401 Unauthorized 응답을 반환한다.
-     * </p>
+     * 
      *
      * @param request     HTTP 요청
      * @param response    HTTP 응답

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 직책 관리 컨트롤러.
- * <p>
+ * 
  * 직책의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

@@ -5,9 +5,9 @@ import lombok.Data;
 
 /**
  * 직책 상세 응답 DTO.
- * <p>
+ * 
  * 직책의 상세 정보를 반환하는 응답 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class PositionDetailResponse {

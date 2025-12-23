@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * 직급 엔티티.
- * <p>
+ * 
  * 조직 내 직급 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

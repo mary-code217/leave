@@ -5,10 +5,10 @@ import java.util.Set;
 
 /**
  * 인수인계 수신자 변경 집합.
- * <p>
+ * 
  * 기존 수신자와 새 수신자 목록을 비교하여
  * 추가해야 할 수신자와 삭제해야 할 수신자를 계산한다.
- * </p>
+ * 
  */
 public class RecipientChangeSet {
     private Set<Long> existingIds = new HashSet<>();

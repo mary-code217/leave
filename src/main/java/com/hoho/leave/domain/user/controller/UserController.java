@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 사용자 관리 컨트롤러.
- * <p>
+ * 
  * 사용자 계정의 생성, 조회, 수정, 삭제 기능을 제공한다.
- * </p>
+ * 
  */
 @Tag(name = "User API", description = "유저 도메인 API")
 @RestController

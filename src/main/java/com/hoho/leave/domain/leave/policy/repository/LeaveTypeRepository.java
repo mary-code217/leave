@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * 휴가 유형 리포지토리.
- * <p>
+ * 
  * 휴가 유형 엔티티에 대한 데이터베이스 접근을 담당한다.
- * </p>
+ * 
  */
 public interface LeaveTypeRepository extends JpaRepository<LeaveType, Long> {
     /**

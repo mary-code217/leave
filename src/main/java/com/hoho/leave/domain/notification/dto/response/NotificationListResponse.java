@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 알림 목록 응답 DTO.
- * <p>
+ * 
  * 페이지네이션된 알림 목록과 페이징 정보를 클라이언트에 전달한다.
- * </p>
+ * 
  */
 @Data
 public class NotificationListResponse {

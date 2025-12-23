@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * 공휴일 동기화 서비스.
- * <p>
+ * 
  * 공공데이터 포털 API로부터 공휴일 정보를 가져와 데이터베이스와 동기화한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

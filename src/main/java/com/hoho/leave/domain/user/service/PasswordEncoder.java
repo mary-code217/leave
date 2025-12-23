@@ -2,9 +2,9 @@ package com.hoho.leave.domain.user.service;
 
 /**
  * 비밀번호 인코더 인터페이스.
- * <p>
+ * 
  * 비밀번호 암호화 및 검증 기능을 정의한다.
- * </p>
+ * 
  */
 public interface PasswordEncoder {
     /**

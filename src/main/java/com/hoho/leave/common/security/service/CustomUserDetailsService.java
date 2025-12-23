@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * Spring Security의 UserDetailsService 구현체.
- * <p>
+ * 
  * 데이터베이스에서 사용자 정보를 조회하여 인증에 필요한 UserDetails 객체를 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor
@@ -42,9 +42,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * 이메일을 정규화한다.
-     * <p>
+     * 
      * 공백을 제거하고 소문자로 변환한다.
-     * </p>
+     * 
      *
      * @param email 원본 이메일
      * @return 정규화된 이메일

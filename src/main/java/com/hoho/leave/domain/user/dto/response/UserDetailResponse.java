@@ -8,9 +8,9 @@ import java.time.LocalDate;
 
 /**
  * 사용자 상세 정보 응답 DTO.
- * <p>
+ * 
  * 사용자의 상세 정보를 클라이언트에게 전달한다.
- * </p>
+ * 
  */
 @Data
 public class UserDetailResponse {

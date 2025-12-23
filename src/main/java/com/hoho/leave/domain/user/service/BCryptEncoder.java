@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * BCrypt 비밀번호 인코더 구현체.
- * <p>
+ * 
  * BCrypt 알고리즘을 사용하여 비밀번호를 암호화하고 검증한다.
- * </p>
+ * 
  */
 @Component
 @RequiredArgsConstructor

@@ -22,9 +22,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
  * Spring Security 설정 클래스.
- * <p>
+ * 
  * JWT 기반의 Stateless 인증을 구성하고, 로그인/로그아웃 필터 및 권한 설정을 정의한다.
- * </p>
+ * 
  */
 @Configuration
 @EnableMethodSecurity
@@ -59,9 +59,9 @@ public class SecurityConfig {
 
     /**
      * Security Filter Chain을 구성한다.
-     * <p>
+     * 
      * CSRF 비활성화, JWT 필터 등록, 세션 정책을 STATELESS로 설정한다.
-     * </p>
+     * 
      *
      * @param http HttpSecurity 객체
      * @return 구성된 SecurityFilterChain

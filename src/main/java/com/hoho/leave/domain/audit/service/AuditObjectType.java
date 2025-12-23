@@ -2,9 +2,9 @@ package com.hoho.leave.domain.audit.service;
 
 /**
  * 감사 로그 대상 객체 유형 상수 클래스.
- * <p>
+ * 
  * 감사 로그에서 사용하는 객체 유형 식별자를 중앙 집중화하여 관리한다.
- * </p>
+ * 
  */
 public final class AuditObjectType {
 

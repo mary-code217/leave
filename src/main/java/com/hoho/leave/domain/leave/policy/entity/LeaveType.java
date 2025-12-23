@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 
 /**
  * 휴가 유형 엔티티.
- * <p>
+ * 
  * 휴가의 종류와 정책 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 감사 로그 조회 API 컨트롤러.
- * <p>
+ * 
  * 시스템에서 발생한 모든 감사 로그를 조회하는 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

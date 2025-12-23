@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 사용자 목록 응답 DTO.
- * <p>
+ * 
  * 페이징된 사용자 목록과 페이지 정보를 클라이언트에게 전달한다.
- * </p>
+ * 
  */
 @Data
 public class UserListResponse {

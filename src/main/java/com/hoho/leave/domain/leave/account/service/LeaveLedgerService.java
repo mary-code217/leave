@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * 사용자 휴가 원장 서비스.
- * <p>
+ * 
  * 휴가 원장의 생성, 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

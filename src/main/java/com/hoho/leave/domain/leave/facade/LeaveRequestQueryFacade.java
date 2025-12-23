@@ -13,9 +13,9 @@ import java.util.List;
 
 /**
  * 휴가 신청 조회 파사드.
- * <p>
+ * 
  * 휴가 신청 조회 시 여러 도메인 서비스를 조율한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

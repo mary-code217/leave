@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 휴가 신청 변경 파사드.
- * <p>
+ * 
  * 휴가 신청의 생성, 삭제 시 여러 도메인 서비스를 조율한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

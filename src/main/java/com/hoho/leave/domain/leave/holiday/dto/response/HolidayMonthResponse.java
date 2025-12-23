@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 월별 공휴일 응답 DTO.
- * <p>
+ * 
  * 특정 월의 공휴일 목록 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class HolidayMonthResponse {

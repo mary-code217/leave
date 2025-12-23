@@ -11,9 +11,9 @@ import java.time.LocalDate;
 
 /**
  * 휴가 동시 제한 정책 서비스.
- * <p>
+ * 
  * 휴가 동시 제한 정책의 생성 및 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

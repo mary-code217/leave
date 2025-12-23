@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 /**
  * 휴가 원장 레코드 DTO.
- * <p>
+ * 
  * 휴가 원장 생성에 필요한 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LedgerRecord {

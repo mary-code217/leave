@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * 휴가 동시 제한 정책 리포지토리.
- * <p>
+ * 
  * 휴가 동시 제한 정책 엔티티에 대한 데이터베이스 접근을 담당한다.
- * </p>
+ * 
  */
 public interface LeaveConcurrencyPolicyRepository extends JpaRepository<LeaveConcurrencyPolicy, Long> {
 

@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 사용자 기본 결재자 서비스.
- * <p>
+ * 
  * 사용자별 기본 결재자 설정 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

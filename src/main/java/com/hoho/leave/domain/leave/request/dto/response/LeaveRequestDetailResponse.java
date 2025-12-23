@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * 휴가 신청 상세 응답 DTO.
- * <p>
+ * 
  * 휴가 신청의 상세 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class LeaveRequestDetailResponse {

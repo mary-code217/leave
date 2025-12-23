@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * 시스템 감사 로그를 저장하는 엔티티.
- * <p>
+ * 
  * 누가, 무엇을, 어떤 대상에게 행했는지를 기록하여
  * 시스템의 모든 중요 행위를 추적할 수 있게 한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

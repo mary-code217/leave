@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 휴가 원장 컨트롤러.
- * <p>
+ * 
  * 사용자의 휴가 원장 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @RequiredArgsConstructor
 @RestController

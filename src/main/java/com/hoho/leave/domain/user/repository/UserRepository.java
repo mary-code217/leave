@@ -14,9 +14,9 @@ import org.springframework.data.repository.query.Param;
 
 /**
  * 사용자 레포지토리.
- * <p>
+ * 
  * 사용자 엔티티의 데이터베이스 접근을 담당한다.
- * </p>
+ * 
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

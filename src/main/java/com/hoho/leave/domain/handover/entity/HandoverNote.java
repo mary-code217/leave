@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * 인수인계 노트 엔티티.
- * <p>
+ * 
  * 휴가 시 업무 인수인계 내용을 저장한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

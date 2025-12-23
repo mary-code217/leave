@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 알림 컨트롤러.
- * <p>
+ * 
  * 사용자 알림 조회 및 읽음 처리 API를 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

@@ -9,9 +9,9 @@ import java.util.Optional;
 
 /**
  * 직급 리포지토리.
- * <p>
+ * 
  * 직급 엔티티에 대한 데이터베이스 접근을 담당한다.
- * </p>
+ * 
  */
 public interface GradeRepository extends JpaRepository<Grade, Long> {
 

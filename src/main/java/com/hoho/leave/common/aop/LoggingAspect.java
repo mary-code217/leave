@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * 메서드 실행 시간을 로깅하는 AOP Aspect.
- * <p>
+ * 
  * domain 패키지 하위의 모든 메서드 실행 시간을 측정하여 로그로 기록한다.
- * </p>
+ * 
  */
 @Aspect
 @Slf4j
@@ -19,9 +19,9 @@ public class LoggingAspect {
 
     /**
      * 메서드 실행 시간을 측정하고 로깅한다.
-     * <p>
+     * 
      * com.hoho.leave.domain 패키지 하위의 모든 메서드에 적용된다.
-     * </p>
+     * 
      *
      * @param joinPoint AOP 조인 포인트
      * @return 원본 메서드의 반환값

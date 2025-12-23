@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 휴가 결재 컨트롤러.
- * <p>
+ * 
  * 휴가 신청의 결재 승인, 반려 등 결재 관련 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * 사용자 기본 결재자 엔티티.
- * <p>
+ * 
  * 사용자별 기본 결재선 정보를 관리한다.
- * </p>
+ * 
  */
 @Entity
 @Getter

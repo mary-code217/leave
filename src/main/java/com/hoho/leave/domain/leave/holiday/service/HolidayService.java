@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * 공휴일 서비스.
- * <p>
+ * 
  * 공휴일의 생성, 조회 기능을 제공한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor

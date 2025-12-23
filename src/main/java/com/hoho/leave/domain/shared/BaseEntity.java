@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 
 /**
  * 모든 엔티티의 공통 필드를 정의하는 추상 기본 엔티티.
- * <p>
+ * 
  * JPA Auditing을 사용하여 생성일시와 수정일시를 자동으로 관리한다.
- * </p>
+ * 
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

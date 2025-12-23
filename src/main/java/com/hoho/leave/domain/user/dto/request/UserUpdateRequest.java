@@ -6,9 +6,9 @@ import lombok.Data;
 
 /**
  * 사용자 정보 수정 요청 DTO.
- * <p>
+ * 
  * 사용자 계정 정보 수정 시 필요한 정보를 담는다.
- * </p>
+ * 
  */
 @Data
 public class UserUpdateRequest {

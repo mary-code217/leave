@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 휴가 동시 제한 정책 컨트롤러.
- * <p>
+ * 
  * 휴가 동시 제한 정책의 생성 기능을 제공한다.
- * </p>
+ * 
  */
 @RestController
 @RequiredArgsConstructor

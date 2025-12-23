@@ -14,9 +14,9 @@ import java.util.Collection;
 
 /**
  * Spring Security의 UserDetails 구현체.
- * <p>
+ * 
  * User 엔티티를 래핑하여 인증 및 권한 부여에 필요한 정보를 제공한다.
- * </p>
+ * 
  */
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {

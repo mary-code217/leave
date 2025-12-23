@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * 직책 목록 응답 DTO.
- * <p>
+ * 
  * 직책 목록과 페이징 정보를 반환하는 응답 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class PositionListResponse {

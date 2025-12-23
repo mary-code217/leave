@@ -6,9 +6,9 @@ import jakarta.validation.constraints.*;
 
 /**
  * 팀 생성 요청 DTO.
- * <p>
+ * 
  * 새로운 팀을 등록할 때 사용되는 요청 데이터를 담는다.
- * </p>
+ * 
  */
 @Data
 public class TeamCreateRequest {

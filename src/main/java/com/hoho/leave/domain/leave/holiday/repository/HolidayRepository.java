@@ -9,9 +9,9 @@ import java.util.Optional;
 
 /**
  * 공휴일 리포지토리.
- * <p>
+ * 
  * 공휴일 엔티티에 대한 데이터베이스 접근을 제공한다.
- * </p>
+ * 
  */
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
     /**

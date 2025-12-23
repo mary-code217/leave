@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 휴가 동시 제한 정책 파사드.
- * <p>
+ * 
  * 휴가 동시 제한 정책 생성 시 여러 도메인 서비스를 조율한다.
- * </p>
+ * 
  */
 @Service
 @RequiredArgsConstructor
